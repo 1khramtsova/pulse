@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>JoomPulse · Quiz · Produtos que vendem o ano inteiro</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Albert+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   JoomPulse Quiz Funnel — layout/UX espelhando o ref (Zeely)
+   Composição do ref + estilo de marca JoomPulse.
+   V1 (clara): fundo claro, moldura azul. V2 (escura): fundo
+   escuro + esfera listrada + cartão branco flutuante.
+   ============================================================ */
+:root{
+  --blue:#0a6cf1; --blue-600:#0858d0; --blue-300:#5ea2ff;
+  --green:#2fb344; --orange:#ff9500; --red:#f5333f; --purple:#8b5cf6; --teal:#15b8c4;
+  --grad:linear-gradient(96deg,#0a6cf1 0%,#3b8bff 55%,#5ea2ff 100%);
+  /* card internals */
+  --ink:#0b1220; --ink-soft:#33415c; --mut:#6b7890; --mut2:#9aa7bc;
+  --field:#f5f8fc; --field-line:#e8edf5; --line2:#eef3fb;
+  --accent-soft:#eaf2ff;
+  --card-w:540px;
+}
+html[data-theme="dark"]{
+  --page:#050507;
+  --pulse-op:.5; --pulse-glow:.55; --scrim:rgba(5,5,7,.55);
+  --logo:url("assets/logo-joom.png");
+  --logo-puro:url("assets/logo-puro.png");
+  --page-ink:#ffffff; --page-mut:rgba(255,255,255,.62);
+  --prog-track:rgba(255,255,255,.16);
+  --back-ink:rgba(255,255,255,.92); --back-bd:rgba(255,255,255,.16);
+  --card-bg:#ffffff; --card-bd:0px solid transparent; --card-bd-c:transparent;
+  --card-shadow:0 50px 120px -40px rgba(0,0,0,.9);
+  --chip-bg:rgba(255,255,255,.05); --chip-bd:rgba(255,255,255,.1); --chip-ink:rgba(255,255,255,.8);
+}
+html[data-theme="light"]{
+  --page:#e8eefa;
+  --pulse-op:.20; --pulse-glow:.35; --scrim:rgba(232,238,250,.45);
+  --logo:url("assets/logo-joom-dark.png");
+  --logo-puro:url("assets/logo-puro-dark.png");
+  --page-ink:#0b1220; --page-mut:#52617d;
+  --prog-track:rgba(13,23,38,.12);
+  --back-ink:#3a4a63; --back-bd:rgba(13,23,38,.14);
+  --card-bg:#ffffff; --card-bd:2px solid; --card-bd-c:rgba(10,108,241,.30);
+  --card-shadow:0 40px 90px -34px rgba(10,108,241,.45);
+  --chip-bg:#fff; --chip-bd:#dbe6f7; --chip-ink:#33415c;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%}
+body{
+  font-family:'Albert Sans',system-ui,sans-serif;
+  background:var(--page); color:var(--page-ink);
+  min-height:100dvh; overflow-x:hidden;
+  transition:background-color .45s ease;
+}
+.dim{font-family:'Sora',sans-serif}
+
+/* ----- marca "pulse" da JoomPulse no fundo ----- */
+.pulsebg{
+  position:fixed; top:43%; left:50%; transform:translate(-50%,-50%);
+  width:min(132vw,1240px); aspect-ratio:160/98;
+  background:url("assets/pulse-mark.svg") center/contain no-repeat;
+  opacity:var(--pulse-op); z-index:0; pointer-events:none;
+  animation:breathe 6.5s ease-in-out infinite;
+  will-change:transform,opacity;
+}
+/* brilho difuso atrás da onda (glow) */
+.pulsebg::after{
+  content:""; position:absolute; inset:-6%;
+  background:url("assets/pulse-mark.svg") center/contain no-repeat;
+  filter:blur(34px) saturate(1.3); opacity:var(--pulse-glow); z-index:-1;
+}
+@keyframes breathe{
+  0%,100%{transform:translate(-50%,-50%) scale(1);   opacity:calc(var(--pulse-op) * .82)}
+  50%    {transform:translate(-50%,-50%) scale(1.035);opacity:var(--pulse-op)}
+}
+@media(prefers-reduced-motion:reduce){.pulsebg{animation:none}}
+/* scrim suave pra dar contraste ao texto/cartão sem matar o brilho */
+.scrim{position:fixed;inset:0;z-index:1;pointer-events:none;
+  background:radial-gradient(58% 50% at 50% 46%,var(--scrim),transparent 72%)}
+
+/* ============ TOPO: progresso + voltar + logo ============ */
+.prog{position:fixed;top:0;left:0;right:0;display:flex;gap:6px;padding:14px 18px;z-index:30}
+.prog.hide{opacity:0;pointer-events:none}
+.prog .seg{flex:1;height:3px;border-radius:99px;background:var(--prog-track);overflow:hidden}
+.prog .seg i{display:block;height:100%;width:0;border-radius:99px;background:var(--grad);transition:width .55s cubic-bezier(.4,0,.2,1)}
+
+.back{position:fixed;top:42px;left:22px;z-index:31;width:40px;height:40px;border-radius:50%;
+  display:grid;place-items:center;cursor:pointer;background:transparent;border:0;transition:.18s}
+.back:hover{background:rgba(127,127,160,.14)}
+.back svg{width:22px;height:22px;stroke:var(--back-ink)}
+.back.hide{opacity:0;pointer-events:none}
+
+.brand{position:fixed;top:34px;left:0;right:0;z-index:30;display:flex;flex-direction:column;align-items:center;gap:14px;pointer-events:none}
+.brand .logo{height:30px;width:160px;background:var(--logo) center/contain no-repeat}
+.brand .laurels{display:none}
+.brand .logo-solo{display:block}
+.brand.intro .laurels{display:flex;align-items:center;justify-content:center;gap:34px}
+.brand.intro .logo-solo{display:none}
+.laurel{display:flex;align-items:center;gap:9px;color:var(--page-ink)}
+.laurel svg{width:34px;height:48px;opacity:.85}
+.laurel .lt{font-family:'Sora';line-height:1.05}
+.laurel .lt b{display:block;font-weight:800;font-size:16px}
+.laurel .lt small{display:block;font-size:10.5px;color:var(--page-mut);font-weight:600}
+.laurel .stars{color:var(--orange);font-size:12px;letter-spacing:1px}
+
+/* ============ STAGE ============ */
+.stage{position:relative;z-index:10;min-height:100dvh;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;padding:150px 20px 60px}
+#screens{width:100%;display:flex;justify-content:center}
+.screen{width:100%;max-width:var(--card-w);opacity:0;transform:translateY(16px);transition:opacity .42s ease,transform .42s ease}
+.screen.active{opacity:1;transform:none}
+
+/* ----- CARD (perguntas/intersticiais) ----- */
+.card{background:var(--card-bg);color:var(--ink);border-radius:30px;padding:42px 38px 34px;
+  border:var(--card-bd) var(--card-bd-c);box-shadow:var(--card-shadow);position:relative}
+.card.tight{padding-bottom:30px}
+
+h2.q{font-family:'Sora';font-weight:700;font-size:31px;line-height:1.14;letter-spacing:-.4px;color:var(--ink)}
+.q-sub{color:var(--mut);font-size:16px;margin-top:14px;line-height:1.45}
+
+/* ----- opções: avatar redondo + label + radio ----- */
+.opts{display:flex;flex-direction:column;margin-top:26px}
+.opt{display:flex;align-items:center;gap:16px;cursor:pointer;background:transparent;border:0;width:100%;
+  padding:13px 4px;text-align:left;transition:.14s;border-radius:14px}
+.opt + .opt{border-top:1px solid var(--line2)}
+.opt:hover{background:var(--field)}
+.opt .ic{width:50px;height:50px;border-radius:50%;display:grid;place-items:center;font-size:24px;flex:0 0 auto;
+  color:#fff;box-shadow:inset 0 0 0 1px rgba(255,255,255,.18)}
+.opt .lab{flex:1;font-family:'Sora';font-weight:600;font-size:17.5px;letter-spacing:-.2px;color:var(--ink);line-height:1.25}
+.opt .lab small{display:block;font-family:'Albert Sans';font-weight:500;font-size:13px;color:var(--mut);margin-top:3px}
+.opt .tick{width:26px;height:26px;border-radius:50%;border:2px solid var(--field-line);flex:0 0 auto;
+  display:grid;place-items:center;transition:.16s}
+.opt .tick svg{width:14px;height:14px;stroke:#fff;opacity:0;transform:scale(.5);transition:.16s}
+.opt.multi .tick{border-radius:8px}
+.opt.sel .tick{background:var(--blue);border-color:var(--blue);box-shadow:0 0 0 4px var(--accent-soft)}
+.opt.sel .tick svg{opacity:1;transform:none}
+.opt.sel .lab{color:var(--blue)}
+
+/* ----- busca (select) ----- */
+.search{display:flex;align-items:center;gap:11px;background:var(--field);border:1.5px solid var(--field-line);
+  border-radius:14px;padding:14px 16px;margin-top:22px}
+.search svg{width:19px;height:19px;stroke:var(--mut)}
+.search input{border:0;background:transparent;outline:0;font-family:inherit;font-size:16px;color:var(--ink);width:100%}
+
+/* ============ BOTÃO ============ */
+.cta{width:100%;border:0;cursor:pointer;font-family:'Sora';font-weight:700;font-size:18px;color:#fff;
+  background:var(--grad);padding:19px;border-radius:16px;display:flex;align-items:center;justify-content:center;gap:10px;
+  margin-top:26px;box-shadow:0 18px 38px -14px rgba(10,108,241,.7);transition:.18s}
+.cta:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 24px 50px -14px rgba(10,108,241,.82)}
+.cta:disabled{opacity:.4;cursor:not-allowed}
+.cta svg{width:19px;height:19px;stroke:#fff;transition:.18s}
+.cta:hover:not(:disabled) svg{transform:translateX(4px)}
+.skip{display:block;margin:14px auto 0;background:0;border:0;cursor:pointer;font-family:'Sora';font-weight:600;font-size:14px;color:var(--mut2)}
+.skip:hover{color:var(--blue)}
+
+/* ============ INTRO (page, sem cartão) ============ */
+.page{width:100%;max-width:680px;display:flex;flex-direction:column;align-items:center;text-align:center;color:var(--page-ink)}
+.page h1{font-family:'Sora';font-weight:700;font-size:clamp(32px,5.4vw,52px);line-height:1.1;letter-spacing:-1px;max-width:16ch}
+.page .pload{width:100%;max-width:560px;margin-top:60px}
+.pl-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:14px}
+.pl-head b{font-family:'Sora';font-weight:700;font-size:17px;color:var(--page-ink)}
+.pl-head .pct{font-family:'Sora';font-weight:800;font-size:17px;color:var(--page-ink)}
+.pl-track{height:6px;border-radius:99px;background:var(--prog-track);overflow:hidden}
+.pl-track i{display:block;height:100%;width:0;border-radius:99px;background:var(--grad)}
+.chips{margin-top:34px;display:flex;flex-direction:column;gap:12px;align-items:center;width:100%;max-width:380px}
+.chip{width:100%;padding:16px;border-radius:16px;background:var(--chip-bg);border:1px solid var(--chip-bd);
+  color:var(--chip-ink);font-family:'Sora';font-weight:700;font-size:17px;
+  opacity:0;transform:translateY(10px);transition:.5s;display:flex;justify-content:space-between}
+.chip.on{opacity:1;transform:none}
+.chip b{color:var(--green)}
+.page .pcta{margin-top:42px;width:100%;max-width:420px}
+.page .micro{margin-top:16px;font-size:13.5px;color:var(--page-mut);font-weight:600}
+/* loading steps reused on analyzing page */
+.load-steps{margin:30px 0 6px;width:100%;max-width:420px;display:flex;flex-direction:column;gap:13px}
+.lstep{display:flex;align-items:center;gap:12px;font-size:15px;color:var(--page-mut);font-weight:500;opacity:.5;transition:.4s;text-align:left}
+.lstep.on{opacity:1;color:var(--page-ink)}
+.lstep .lic{width:24px;height:24px;border-radius:50%;flex:0 0 auto;display:grid;place-items:center;
+  border:2px solid var(--prog-track);transition:.3s}
+.lstep.on .lic{background:var(--green);border-color:var(--green)}
+.lstep .lic svg{width:13px;height:13px;stroke:#fff;opacity:0;transition:.3s}
+.lstep.on .lic svg{opacity:1}
+.lstep .spin{width:15px;height:15px;border:2px solid var(--prog-track);border-top-color:var(--blue);border-radius:50%;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ============ INTERSTICIAIS (dentro do cartão) ============ */
+.badge-pill{display:inline-flex;align-items:center;gap:7px;align-self:flex-start;font-family:'Sora';font-weight:700;
+  font-size:12px;letter-spacing:.4px;padding:7px 13px;border-radius:999px;margin-bottom:14px;
+  background:rgba(47,179,68,.12);color:#1f9d36;border:1px solid rgba(47,179,68,.28)}
+.eyebrow{display:inline-flex;align-items:center;gap:7px;font-family:'Sora';font-weight:700;font-size:11px;letter-spacing:1.3px;
+  text-transform:uppercase;color:var(--blue);background:var(--accent-soft);padding:6px 12px;border-radius:999px;margin-bottom:14px}
+.eyebrow .dot{width:7px;height:7px;border-radius:50%;background:var(--blue);animation:pulse 1.9s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(10,108,241,.5)}70%{box-shadow:0 0 0 8px rgba(10,108,241,0)}100%{box-shadow:0 0 0 0 rgba(10,108,241,0)}}
+.inter h2{font-family:'Sora';font-weight:700;font-size:28px;line-height:1.16;letter-spacing:-.4px;color:var(--ink)}
+.inter .lead{color:var(--mut);font-size:15.5px;margin-top:12px;line-height:1.5}
+
+/* social proof grid */
+.proof-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:22px 0 6px}
+.pcell{aspect-ratio:1;border-radius:14px;position:relative;overflow:hidden;display:grid;place-items:center;
+  font-family:'Sora';font-weight:800;font-size:22px;color:#fff}
+.pcell .tag{position:absolute;left:6px;bottom:6px;background:var(--blue);color:#fff;font-family:'Sora';font-weight:700;
+  font-size:10px;padding:3px 7px;border-radius:7px}
+.proof-feat{margin-top:18px;text-align:center;color:var(--mut);font-size:13px;font-weight:600}
+.proof-logos{display:flex;justify-content:center;gap:20px;margin-top:12px;flex-wrap:wrap}
+.proof-logos span{font-family:'Sora';font-weight:800;font-size:16px;color:var(--ink-soft)}
+
+/* chart */
+.chart{margin-top:24px;background:var(--field);border:1px solid var(--field-line);border-radius:18px;padding:22px 20px}
+.chart .ch-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}
+.chart .ch-head b{font-family:'Sora';font-weight:700;font-size:15px;color:var(--ink)}
+.chart .ch-up{font-family:'Sora';font-weight:800;font-size:13px;color:var(--green);background:rgba(47,179,68,.12);padding:6px 11px;border-radius:8px}
+.bars{display:flex;align-items:flex-end;gap:24px;height:170px;padding-top:8px}
+.bargrp{flex:1;display:flex;flex-direction:column;align-items:center;gap:9px;height:100%}
+.bargrp .bar{width:100%;max-width:90px;border-radius:14px 14px 7px 7px;align-self:center;height:0;transition:height 1s cubic-bezier(.3,1,.4,1);position:relative}
+.bargrp .bar.a{background:linear-gradient(180deg,#c9d4e6,#aab8d0)}
+.bargrp .bar.b{background:var(--grad)}
+.bargrp .bv{position:absolute;top:-24px;left:0;right:0;text-align:center;font-family:'Sora';font-weight:800;font-size:14px;color:var(--ink)}
+.bargrp .blab{font-size:12.5px;font-weight:600;color:var(--mut)}
+
+/* agree / emoji */
+.emoji-row{display:flex;justify-content:space-between;gap:8px;margin-top:30px}
+.emo{flex:1;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:9px;background:0;border:0}
+.emo .face{width:100%;aspect-ratio:1;max-width:62px;border-radius:50%;display:grid;place-items:center;font-size:30px;
+  background:var(--field);border:2px solid var(--field-line);transition:.18s;filter:grayscale(.35);opacity:.7}
+.emo:hover .face{transform:translateY(-3px)}
+.emo.sel .face{border-color:var(--blue);background:var(--accent-soft);filter:none;opacity:1;transform:scale(1.08);box-shadow:0 12px 26px -10px rgba(10,108,241,.6)}
+.emo small{font-size:10px;font-weight:600;color:var(--mut2);line-height:1.15;height:24px}
+.emo.sel small{color:var(--blue)}
+
+/* testimonial */
+.tcard{margin-top:8px;border-radius:20px;overflow:hidden;border:1px solid var(--field-line)}
+.tcard .ttop{background:var(--grad);padding:24px;color:#fff}
+.tcard .ttop .ttitle{font-family:'Sora';font-weight:800;font-size:25px;letter-spacing:-.5px;line-height:1.12}
+.tcard .tbody{padding:20px}
+.tcard .who{display:flex;align-items:center;gap:12px}
+.tcard .who i{width:46px;height:46px;border-radius:50%;background:var(--grad);display:grid;place-items:center;color:#fff;font-weight:800;font-family:'Sora';font-style:normal}
+.tcard .who b{font-family:'Sora';font-size:15px;color:var(--ink);display:block}
+.tcard .who small{font-size:12.5px;color:var(--mut)}
+.tcard .who .stars{margin-left:auto;color:var(--orange);letter-spacing:1px}
+.tcard .quote{margin-top:14px;font-size:15px;color:var(--ink-soft);line-height:1.5}
+.tcard .mini{display:flex;gap:12px;margin-top:16px;padding-top:16px;border-top:1px solid var(--line2)}
+.tcard .mini div{flex:1}
+.tcard .mini b{font-family:'Sora';font-weight:800;font-size:18px;color:var(--green)}
+.tcard .mini small{display:block;font-size:11px;color:var(--mut);font-weight:600}
+
+/* feature */
+.feat-il{margin:4px auto 8px;width:104px;height:104px;border-radius:28px;background:var(--grad);display:grid;place-items:center;
+  box-shadow:0 22px 44px -16px rgba(10,108,241,.7);position:relative}
+.feat-il::after{content:"";position:absolute;inset:-8px;border-radius:34px;border:2px solid rgba(10,108,241,.25);animation:halo 2.4s infinite}
+@keyframes halo{0%{transform:scale(1);opacity:.7}100%{transform:scale(1.18);opacity:0}}
+.feat-il svg{width:52px;height:52px;stroke:#fff}
+.feats{display:flex;flex-direction:column;gap:13px;margin-top:22px}
+.feat{display:flex;align-items:center;gap:13px;font-family:'Sora';font-size:15.5px;font-weight:600;color:var(--ink)}
+.feat .fk{width:30px;height:30px;border-radius:9px;background:rgba(47,179,68,.13);display:grid;place-items:center;flex:0 0 auto}
+.feat .fk svg{width:16px;height:16px;stroke:var(--green)}
+
+/* result */
+.result{text-align:center}
+.result .celebrate{font-size:48px}
+.result h2{font-family:'Sora';font-weight:700;font-size:28px;letter-spacing:-.4px;color:var(--ink);line-height:1.16;margin-top:4px}
+.summary{margin-top:22px;background:var(--field);border:1px solid var(--field-line);border-radius:18px;padding:8px 18px;text-align:left}
+.summary .srow{display:flex;justify-content:space-between;align-items:center;padding:13px 0;border-bottom:1px dashed var(--field-line)}
+.summary .srow:last-child{border:0}
+.summary .srow span{color:var(--mut);font-size:14px;font-weight:600}
+.summary .srow b{font-family:'Sora';font-size:14.5px;color:var(--ink);text-align:right;max-width:58%}
+.summary .srow b.hl{color:var(--blue)}
+.vs{display:flex;gap:12px;margin-top:18px}
+.vs .col{flex:1;border-radius:16px;padding:16px 15px;text-align:left}
+.vs .col.no{background:#fef2f3;border:1px solid #fbd5d8}
+.vs .col.yes{background:rgba(47,179,68,.08);border:1.5px solid rgba(47,179,68,.4)}
+.vs .col h4{font-family:'Sora';font-size:13px;font-weight:700;margin-bottom:11px;color:var(--ink)}
+.vs .col li{list-style:none;font-size:13px;font-weight:500;color:var(--ink-soft);display:flex;gap:8px;align-items:flex-start;margin-bottom:9px;line-height:1.3}
+.vs .col li svg{width:15px;height:15px;flex:0 0 auto;margin-top:1px}
+.guarantee{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:16px;color:var(--mut);font-size:12.5px;font-weight:600}
+.guarantee svg{width:16px;height:16px;stroke:var(--green)}
+
+/* puro credit no rodapé do cartão */
+.copartner{display:flex;align-items:center;justify-content:center;gap:10px;margin-top:24px;padding-top:18px;
+  border-top:1px solid var(--line2);font-family:'Sora';font-size:10.5px;color:var(--mut2);font-weight:600;letter-spacing:.3px}
+.copartner .pl{height:14px;width:74px;background:var(--logo-puro) center/contain no-repeat;opacity:.85}
+
+/* ============ VERSION SWITCH ============ */
+.switch{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);z-index:50;display:flex;gap:4px;padding:5px;
+  border-radius:999px;background:rgba(127,127,160,.18);backdrop-filter:blur(14px);border:1px solid var(--chip-bd)}
+.switch button{font-family:'Sora';font-weight:600;font-size:12.5px;border:0;cursor:pointer;padding:8px 16px;border-radius:999px;
+  color:var(--page-mut);background:transparent;transition:.2s;white-space:nowrap}
+.switch button.on{background:var(--blue);color:#fff;box-shadow:0 6px 18px -6px rgba(10,108,241,.7)}
+
+@media(max-width:560px){
+  .card{padding:30px 22px 26px;border-radius:24px}
+  h2.q,.inter h2{font-size:26px}
+  .opt .lab{font-size:17px}
+  .stage{padding:128px 16px 56px}
+  .brand.intro .laurels{gap:18px}
+  .laurel .lt b{font-size:14px}
+}
+</style>
+</head>
+<body>
+
+<div class="pulsebg"></div>
+<div class="scrim"></div>
+
+<div class="prog hide" id="prog"></div>
+<button class="back hide" id="back" onclick="goBack()" aria-label="Voltar">
+  <svg viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+</button>
+<div class="brand intro dim" id="brand">
+  <div class="laurels">
+    <span class="laurel">__LAUREL_L__<span class="lt"><b>4,9 <span class="stars">★★★★★</span></b><small>na App Store</small></span></span>
+    <div class="logo" role="img" aria-label="JoomPulse"></div>
+    <span class="laurel"><span class="lt" style="text-align:right"><b>+50.000</b><small>sellers crescendo</small></span>__LAUREL_R__</span>
+  </div>
+  <div class="logo logo-solo" role="img" aria-label="JoomPulse"></div>
+</div>
+
+<main class="stage"><div id="screens"></div></main>
+
+<div class="switch dim">
+  <button id="bLight" onclick="setTheme('light')">☀︎ V1 · Clara</button>
+  <button id="bDark" class="on" onclick="setTheme('dark')">☾ V2 · Escura</button>
+</div>
+
+<script>
+/* laurel svg */
+const LAUREL_L = '<svg viewBox="0 0 40 56" fill="currentColor"><path d="M30 4C16 12 10 30 18 52" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/><g opacity=".9"><ellipse cx="26" cy="11" rx="6" ry="3" transform="rotate(38 26 11)"/><ellipse cx="20" cy="20" rx="6" ry="3" transform="rotate(30 20 20)"/><ellipse cx="16" cy="30" rx="6" ry="3" transform="rotate(18 16 30)"/><ellipse cx="15" cy="41" rx="5.5" ry="2.8" transform="rotate(6 15 41)"/></g></svg>';
+const LAUREL_R = LAUREL_L.replace('<svg ','<svg style="transform:scaleX(-1)" ');
+
+/* ===================== DATA ===================== */
+const SCREENS = [
+  { type:'intro' },
+  { type:'single', step:true, q:'Onde você vende hoje?',
+    sub:'Vamos calibrar as recomendações pro seu canal principal.',
+    opts:[{ic:'🛒',lab:'Mercado Livre'},{ic:'🧡',lab:'Shopee'},{ic:'🛍️',lab:'Loja própria / site'},
+          {ic:'🔀',lab:'Vendo em mais de um canal'},{ic:'🌱',lab:'Ainda não vendo — quero começar'}]},
+  { type:'single', step:true, q:'Qual é o faturamento mensal do seu negócio?',
+    sub:'Fica entre nós — serve só pra dimensionar o seu plano.',
+    opts:[{ic:'🌱',lab:'Até R$ 10 mil'},{ic:'📦',lab:'R$ 10 mil – R$ 30 mil'},{ic:'📈',lab:'R$ 30 mil – R$ 60 mil'},
+          {ic:'🚀',lab:'R$ 60 mil – R$ 100 mil'},{ic:'💰',lab:'R$ 100 mil – R$ 300 mil'},{ic:'🏆',lab:'Acima de R$ 300 mil'}]},
+  { type:'proof' },
+  { type:'single', step:true, q:'Quantos produtos (SKUs) você tem hoje?',
+    opts:[{ic:'1️⃣',lab:'1 – 10 produtos'},{ic:'🔟',lab:'11 – 50 produtos'},{ic:'📚',lab:'51 – 200 produtos'},
+          {ic:'🗄️',lab:'201 – 1.000 produtos'},{ic:'🏭',lab:'Mais de 1.000 produtos'}]},
+  { type:'select', step:true, q:'Em qual categoria principal você vende?',
+    sub:'Escolha onde está a maior parte do seu faturamento.',
+    opts:['Moda e Acessórios','Casa e Decoração','Beleza e Cuidados','Saúde e Bem-estar','Eletrônicos e Acessórios',
+          'Esporte e Lazer','Bebês e Crianças','Pet Shop','Automotivo','Ferramentas e Construção',
+          'Papelaria e Escritório','Brinquedos','Suplementos','Cama, Mesa e Banho','Outra categoria'] },
+  { type:'chart' },
+  { type:'multi', step:true, q:'O que mais te impede de encontrar o produto certo?',
+    sub:'Pode marcar mais de uma opção.',
+    opts:[{ic:'🧩',lab:'Falta de dados confiáveis'},{ic:'⏳',lab:'Demoro muito pra pesquisar'},{ic:'🤔',lab:'Não sei por onde começar'},
+          {ic:'😰',lab:'Medo de investir e não vender'},{ic:'⚔️',lab:'Concorrência muito alta'}]},
+  { type:'agree', statement:'Já perdi dinheiro comprando estoque de um produto que simplesmente não vendeu.' },
+  { type:'single', step:true, q:'Há quanto tempo você vende online?',
+    opts:[{ic:'🐣',lab:'Menos de 1 ano'},{ic:'📆',lab:'1 – 2 anos'},{ic:'🧭',lab:'3 – 5 anos'},{ic:'🎖️',lab:'Mais de 5 anos'}]},
+  { type:'testimonial' },
+  { type:'single', step:true, q:'Qual é o seu maior desafio hoje?',
+    opts:[{ic:'🎯',lab:'Encontrar produtos vencedores pra revender'},{ic:'📉',lab:'Vendas estagnadas'},{ic:'💸',lab:'Margem de lucro baixa'},
+          {ic:'⚔️',lab:'Concorrência e guerra de preço'},{ic:'🧩',lab:'Escalar sem perder o controle'}]},
+  { type:'single', step:true, q:'Você já perdeu dinheiro investindo no produto errado?',
+    opts:[{ic:'😣',lab:'Sim, já aconteceu comigo'},{ic:'😬',lab:'Não, mas tenho muito medo disso'},{ic:'😌',lab:'Nunca, sempre acerto'}]},
+  { type:'feature' },
+  { type:'single', step:true, q:'Qual é a sua meta de faturamento nos próximos 6 meses?',
+    sub:'Vamos montar um plano de produtos compatível com a sua meta.',
+    opts:[{ic:'✨',lab:'Começar do jeito certo'},{ic:'⚡',lab:'Dobrar meu faturamento atual'},{ic:'🎯',lab:'Chegar a R$ 50 mil / mês'},
+          {ic:'🚀',lab:'Chegar a R$ 100 mil / mês'},{ic:'👑',lab:'Ultrapassar R$ 300 mil / mês'}]},
+  { type:'analyzing' },
+  { type:'result' },
+];
+
+const PALETTE = ['#0a6cf1','#2fb344','#ff9500','#f5333f','#8b5cf6','#15b8c4'];
+const av = i => `background:linear-gradient(135deg,${PALETTE[i%PALETTE.length]},${PALETTE[(i+2)%PALETTE.length]})`;
+
+const I = {
+  check:'<svg viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-10"/></svg>',
+  arrow:'<svg viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>',
+  search:'<svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg>',
+  shield:'<svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/><path d="M9 12l2 2 4-4"/></svg>',
+  spark:'<svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2.5 2.5M15.5 15.5L18 18M18 6l-2.5 2.5M8.5 15.5L6 18"/><circle cx="12" cy="12" r="3"/></svg>',
+  x:'<svg viewBox="0 0 24 24" fill="none" stroke="#e0566a" stroke-width="2.6" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>',
+  ok:'<svg viewBox="0 0 24 24" fill="none" stroke="#2fb344" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-10"/></svg>',
+};
+
+/* ===================== ENGINE ===================== */
+let idx = 0;
+const answers = {};
+const root = document.documentElement;
+const screensEl = document.getElementById('screens');
+const backEl = document.getElementById('back');
+const progEl = document.getElementById('prog');
+const brandEl = document.getElementById('brand');
+
+const stepIndexes = SCREENS.map((s,i)=>s.step?i:-1).filter(i=>i>=0);
+const totalSteps = stepIndexes.length;
+const SEGS = 3;
+progEl.innerHTML = Array.from({length:SEGS},()=>'<div class="seg"><i></i></div>').join('');
+brandEl.innerHTML = brandEl.innerHTML.replace('__LAUREL_L__',LAUREL_L).replace('__LAUREL_R__',LAUREL_R);
+document.querySelectorAll('.logo').forEach(()=>{});
+
+function setTheme(t){
+  root.setAttribute('data-theme',t);
+  document.getElementById('bLight').classList.toggle('on',t==='light');
+  document.getElementById('bDark').classList.toggle('on',t==='dark');
+}
+
+function setProgress(p){ // p 0..1
+  [...progEl.querySelectorAll('.seg i')].forEach((bar,k)=>{
+    bar.style.width = Math.max(0,Math.min(1,p*SEGS-k))*100+'%';
+  });
+}
+
+function render(){
+  const s = SCREENS[idx];
+  const isQuiz = !!s.step;
+  const isIntro = s.type==='intro';
+  backEl.classList.toggle('hide', idx<=1 || s.type==='analyzing' || s.type==='result');
+  progEl.classList.toggle('hide', isIntro || s.type==='analyzing' || s.type==='result');
+  brandEl.classList.toggle('intro', isIntro);
+  // logo: mostra a versão "solo" (com lauréis escondidos) fora do intro
+  if(s.step){ setProgress((stepIndexes.indexOf(idx)+1)/totalSteps); }
+
+  screensEl.innerHTML = '';
+  const el = document.createElement('div');
+  el.className = 'screen';
+  el.innerHTML = BUILD[s.type](s);
+  screensEl.appendChild(el);
+  requestAnimationFrame(()=>el.classList.add('active'));
+  AFTER[s.type] && AFTER[s.type](s,el);
+  restore(s,el);
+  window.scrollTo(0,0);
+}
+function next(){ if(idx<SCREENS.length-1){ idx++; render(); } }
+function goBack(){ if(idx>0){ idx--; render(); } }
+
+function restore(s,el){
+  const a = answers[idx]; if(!a) return;
+  const cta = el.querySelector('#cta');
+  if((s.type==='single'||s.type==='select') && a.i!=null){
+    el.querySelector(`.opt[data-i="${a.i}"]`)?.classList.add('sel');
+  } else if(s.type==='multi' && a.multi){
+    a.multi.forEach(i=>el.querySelector(`.opt[data-i="${i}"]`)?.classList.add('sel'));
+    if(cta) cta.disabled = a.multi.length===0;
+  } else if(s.type==='agree' && a.emo!=null){
+    el.querySelector(`.emo[data-i="${a.emo}"]`)?.classList.add('sel');
+  }
+}
+
+function foot(label='Continuar', disabled=false, skip=false){
+  return `<button class="cta" id="cta" ${disabled?'disabled':''} onclick="next()">${label} ${I.arrow}</button>
+    ${skip?`<button class="skip" onclick="next()">Pular esta pergunta</button>`:''}`;
+}
+
+/* ===================== BUILDERS ===================== */
+const BUILD = {
+  intro:()=>`
+    <div class="page dim">
+      <h1>Descubra os produtos que vão vender o ano inteiro</h1>
+      <div class="pload">
+        <div class="pl-head"><b>Analisando seu potencial de faturamento</b><span class="pct" id="pct">0%</span></div>
+        <div class="pl-track"><i id="plfill"></i></div>
+      </div>
+      <p class="micro">⏱️ Leva menos de 2 minutos · 100% gratuito</p>
+    </div>`,
+
+  single:(s)=>`
+    <div class="card">
+      <h2 class="q">${s.q}</h2>
+      ${s.sub?`<p class="q-sub">${s.sub}</p>`:''}
+      <div class="opts">
+        ${s.opts.map((o,i)=>`<button class="opt" data-i="${i}" onclick="pick(${i})">
+          <span class="ic" style="${av(i)}">${o.ic}</span><span class="lab">${o.lab}</span>
+          <span class="tick">${I.check}</span></button>`).join('')}
+      </div>
+    </div>`,
+
+  multi:(s)=>`
+    <div class="card">
+      <h2 class="q">${s.q}</h2>
+      ${s.sub?`<p class="q-sub">${s.sub}</p>`:''}
+      <div class="opts">
+        ${s.opts.map((o,i)=>`<button class="opt multi" data-i="${i}" onclick="pickMulti(${i})">
+          <span class="ic" style="${av(i)}">${o.ic}</span><span class="lab">${o.lab}</span>
+          <span class="tick">${I.check}</span></button>`).join('')}
+      </div>
+      ${foot('Continuar',true)}
+    </div>`,
+
+  select:(s)=>`
+    <div class="card">
+      <h2 class="q">${s.q}</h2>
+      ${s.sub?`<p class="q-sub">${s.sub}</p>`:''}
+      <div class="search">${I.search}<input id="srch" placeholder="Buscar categoria…" oninput="filterCats(this.value)" autocomplete="off"></div>
+      <div class="opts" style="margin-top:14px">
+        ${s.opts.map((o,i)=>`<button class="opt" data-i="${i}" data-name="${o.toLowerCase()}" onclick="pick(${i})">
+          <span class="lab">${o}</span><span class="tick">${I.check}</span></button>`).join('')}
+      </div>
+    </div>`,
+
+  proof:()=>`
+    <div class="card inter">
+      <span class="badge-pill">★ Avaliação 4,9 / 5</span>
+      <h2>Já ajudamos <span style="color:var(--blue)">+50.000 sellers</span> a crescer no ML e Shopee</h2>
+      <div class="proof-grid">
+        ${[['JC',0,'+R$ 4,2k'],['RM',1,'+R$ 9,1k'],['AL',2,'+R$ 3,2k'],['PS',3,'+R$ 12k'],['MT',4,'+R$ 6,7k'],['CF',5,'+R$ 18k']]
+          .map(c=>`<div class="pcell" style="${av(c[1])}">${c[0]}<span class="tag">${c[2]}</span></div>`).join('')}
+      </div>
+      <div class="proof-feat">Sellers em destaque em:</div>
+      <div class="proof-logos"><span>Mercado&nbsp;Livre</span><span>Shopee</span><span>Amazon</span></div>
+      ${foot('Continuar')}
+    </div>`,
+
+  chart:()=>`
+    <div class="card inter">
+      <span class="badge-pill">📊 Resultado comprovado</span>
+      <h2>Sellers que usam o JoomPulse crescem mais rápido</h2>
+      <p class="lead">Faturamento médio mensal antes e depois de usar nossa inteligência de produtos.</p>
+      <div class="chart">
+        <div class="ch-head"><b>Faturamento médio / mês</b><span class="ch-up">▲ +312%</span></div>
+        <div class="bars">
+          <div class="bargrp"><div class="bar a" data-h="34"><span class="bv">R$ 12k</span></div><span class="blab">Sem JoomPulse</span></div>
+          <div class="bargrp"><div class="bar b" data-h="100"><span class="bv">R$ 48k</span></div><span class="blab">Com JoomPulse</span></div>
+        </div>
+      </div>
+      ${foot('Quero crescer assim')}
+    </div>`,
+
+  agree:(s)=>`
+    <div class="card inter">
+      <span class="eyebrow"><span class="dot"></span>Um momento de sinceridade</span>
+      <h2>“${s.statement}”</h2>
+      <div class="emoji-row">
+        ${[['😣','Discordo totalmente'],['🙁','Discordo'],['😐','Mais ou menos'],['🙂','Concordo'],['🤝','Concordo muito']]
+          .map((e,i)=>`<button class="emo" data-i="${i}" onclick="pickEmo(${i})"><span class="face">${e[0]}</span><small>${e[1]}</small></button>`).join('')}
+      </div>
+      <p class="lead" style="text-align:center;margin-top:22px">O JoomPulse foi feito justamente pra acabar com esse risco.</p>
+    </div>`,
+
+  testimonial:()=>`
+    <div class="card inter tight">
+      <span class="badge-pill">💬 História real de seller</span>
+      <div class="tcard">
+        <div class="ttop"><div class="ttitle">De R$ 0 a R$ 270 mil<br>em apenas 7 meses</div></div>
+        <div class="tbody">
+          <div class="who"><i>CF</i><div><b>Carla Freitas</b><small>Seller · Casa e Decoração · SP</small></div><span class="stars">★★★★★</span></div>
+          <p class="quote">“Eu vivia comprando estoque no feeling e encalhava. Com o JoomPulse achei 3 produtos com demanda comprovada e mudei o jogo.”</p>
+          <div class="mini"><div><b>+270k</b><small>em 7 meses</small></div><div><b>3</b><small>produtos campeões</small></div><div><b>0</b><small>estoque encalhado</small></div></div>
+        </div>
+      </div>
+      ${foot('Continuar')}
+    </div>`,
+
+  feature:()=>`
+    <div class="card inter" style="text-align:center">
+      <div class="feat-il">${I.spark}</div>
+      <h2 style="max-width:18ch;margin:0 auto">Deixe o JoomPulse encontrar o produto certo pra você</h2>
+      <p class="lead">Pare de adivinhar. Nossa inteligência cruza milhões de dados pra te entregar o que realmente vende.</p>
+      <div class="feats" style="text-align:left">
+        ${['Dados reais de vendas e demanda','Tendências por categoria atualizadas','Análise de concorrência e preço','Margem e potencial de lucro estimados']
+          .map(f=>`<div class="feat"><span class="fk">${I.check}</span>${f}</div>`).join('')}
+      </div>
+      ${foot('Ver meu plano')}
+    </div>`,
+
+  analyzing:()=>`
+    <div class="page dim">
+      <h1 style="font-size:clamp(28px,5vw,44px)">Montando seu plano de produtos vencedores</h1>
+      <div class="pload" style="margin-top:42px">
+        <div class="pl-head"><b>Cruzando suas respostas</b><span class="pct" id="pct">0%</span></div>
+        <div class="pl-track"><i id="plfill"></i></div>
+      </div>
+      <div class="load-steps" id="lsteps">
+        ${['Lendo seu perfil de seller','Filtrando categorias compatíveis','Selecionando produtos com demanda','Estimando seu potencial de lucro']
+          .map(t=>`<div class="lstep"><span class="lic">${I.check}</span><span>${t}</span></div>`).join('')}
+      </div>
+    </div>`,
+
+  result:()=>{
+    const cat = answers[5]?.label || 'sua categoria';
+    const canal = answers[1]?.label || 'seu canal';
+    const meta = answers[14]?.label || 'sua meta';
+    return `
+    <div class="card result">
+      <div class="celebrate">🎉</div>
+      <h2>Seu plano JoomPulse está pronto</h2>
+      <p class="q-sub" style="text-align:center">Com base no seu perfil, encontramos uma oportunidade clara de crescimento.</p>
+      <div class="summary">
+        <div class="srow"><span>Canal principal</span><b>${canal}</b></div>
+        <div class="srow"><span>Categoria foco</span><b>${cat}</b></div>
+        <div class="srow"><span>Meta 6 meses</span><b>${meta}</b></div>
+        <div class="srow"><span>Produtos vencedores encontrados</span><b class="hl">14 produtos</b></div>
+        <div class="srow"><span>Potencial estimado</span><b class="hl">+ R$ 38 mil / mês</b></div>
+      </div>
+      <div class="vs">
+        <div class="col no"><h4>Sem o JoomPulse</h4><li>${I.x} Comprar no achismo</li><li>${I.x} Estoque encalhado</li><li>${I.x} Margem apertada</li></div>
+        <div class="col yes"><h4>Com o JoomPulse</h4><li>${I.ok} Produtos com demanda</li><li>${I.ok} Giro rápido</li><li>${I.ok} Mais lucro</li></div>
+      </div>
+      <button class="cta" onclick="alert('Próximo passo: cadastro / oferta JoomPulse')">Quero meu plano de produtos ${I.arrow}</button>
+      <div class="guarantee">${I.shield} 7 dias de garantia · cancele quando quiser</div>
+      <div class="copartner"><span>Powered by JoomPulse</span><span style="opacity:.4">·</span><i class="pl"></i></div>
+    </div>`;
+  },
+};
+
+/* ===================== INTERAÇÕES ===================== */
+function pick(i){
+  const s = SCREENS[idx];
+  document.querySelectorAll('.opt').forEach(o=>o.classList.remove('sel'));
+  document.querySelector(`.opt[data-i="${i}"]`).classList.add('sel');
+  answers[idx] = { i, label: s.opts[i].lab || s.opts[i] };
+  setTimeout(next, 280);
+}
+function pickMulti(i){
+  document.querySelector(`.opt[data-i="${i}"]`).classList.toggle('sel');
+  const sel = [...document.querySelectorAll('.opt.sel')].map(o=>+o.dataset.i);
+  answers[idx] = { multi: sel };
+  document.getElementById('cta').disabled = sel.length===0;
+}
+function pickEmo(i){
+  document.querySelectorAll('.emo').forEach(o=>o.classList.remove('sel'));
+  document.querySelector(`.emo[data-i="${i}"]`).classList.add('sel');
+  answers[idx] = { emo:i };
+  setTimeout(next, 340);
+}
+function filterCats(v){
+  v = v.toLowerCase().trim();
+  document.querySelectorAll('.opt').forEach(o=>{ o.style.display = o.dataset.name.includes(v)?'':'none'; });
+}
+
+/* ---- loaders ---- */
+const AFTER = {
+  intro:(s,el)=>runLoader(el,()=>setTimeout(next,450), 3000),
+  analyzing:(s,el)=>runLoader(el,()=>setTimeout(next,500), 2600),
+  chart:(s,el)=>setTimeout(()=>el.querySelectorAll('.bar').forEach(b=>b.style.height=b.dataset.h+'%'),120),
+};
+
+function runLoader(el, done, total=2800){
+  const fill = el.querySelector('#plfill');
+  const pct = el.querySelector('#pct');
+  const chips = [...el.querySelectorAll('.chip')];
+  const steps = [...el.querySelectorAll('.lstep')];
+  function setSteps(p){
+    const k = Math.min(steps.length-1, Math.floor(p*steps.length));
+    steps.forEach((st,j)=>{ st.classList.toggle('on', j<=k && (j<k || p>=1)); if(j<k) st.classList.add('on'); });
+  }
+  const t0 = performance.now();
+  function tick(now){
+    const p = Math.min(1,(now-t0)/total);
+    const eased = p<.5?2*p*p:1-Math.pow(-2*p+2,2)/2;
+    if(fill) fill.style.width = eased*100+'%';
+    if(pct) pct.textContent = Math.round(eased*100)+'%';
+    chips.forEach(c=>{ if(eased>=+c.dataset.at) c.classList.add('on'); });
+    if(steps.length) setSteps(eased);
+    if(p<1) requestAnimationFrame(tick);
+    else { steps.forEach(st=>st.classList.add('on')); done&&done(); }
+  }
+  requestAnimationFrame(tick);
+}
+
+render();
+</script>
+</body>
+</html>
