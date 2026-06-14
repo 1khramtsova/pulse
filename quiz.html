@@ -1,0 +1,1949 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>JoomPulse · Descubra seu potencial de vendas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Albert+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ── THEME TOKENS ──────────────────────────────────── */
+:root {
+  --grad: linear-gradient(96deg,#ffb088 0%,#c98bdc 45%,#7c5cf0 100%);
+  --blue: #2563eb;
+  --blue2: #1d4ed8;
+  --orange: #ff7a2f;
+  --purple: #8b5cf6;
+  --green: #22c55e;
+  --green-bg: #f0fdf4;
+  --font-h: 'Sora', sans-serif;
+  --font-b: 'Albert Sans', sans-serif;
+}
+
+/* LIGHT THEME (default) */
+[data-theme="light"] {
+  --bg: #f0f4ff;
+  --bg-watermark: rgba(37,99,235,0.06);
+  --card-bg: #ffffff;
+  --card-border: 2px solid #2563eb;
+  --card-shadow: 0 24px 64px -16px rgba(37,99,235,0.18), 0 4px 16px rgba(37,99,235,0.08);
+  --txt: #0f0b1e;
+  --txt-muted: #5a6480;
+  --txt-sub: #8892a4;
+  --progress-bg: #dde4f5;
+  --progress-active: #2563eb;
+  --option-bg: #f8faff;
+  --option-border: #d4ddf7;
+  --option-hover-bg: #eef2ff;
+  --option-hover-border: #2563eb;
+  --option-selected-bg: #eef2ff;
+  --option-selected-border: #2563eb;
+  --option-check: #2563eb;
+  --btn-bg: #2563eb;
+  --btn-color: #fff;
+  --back-color: #8892a4;
+  --header-border: rgba(37,99,235,0.12);
+  --inter-bg: linear-gradient(145deg,#f0f4ff,#e8edff);
+  --badge-bg: rgba(37,99,235,0.08);
+  --badge-color: #2563eb;
+  --feedback-bg: #f0fdf4;
+  --feedback-border: #bbf7d0;
+  --feedback-color: #166534;
+  --loading-bar-bg: #dde4f5;
+  --stat-bg: #f8faff;
+  --theme-toggle-bg: #e8edff;
+}
+
+/* DARK THEME */
+[data-theme="dark"] {
+  --bg: #0a0612;
+  --bg-watermark: rgba(139,92,246,0.08);
+  --card-bg: #170d28;
+  --card-border: 2px solid rgba(255,255,255,0.22);
+  --card-shadow: 0 24px 80px -16px rgba(0,0,0,0.7), 0 4px 20px rgba(0,0,0,0.4);
+  --txt: #f3eefb;
+  --txt-muted: #a795c4;
+  --txt-sub: #7d6c9b;
+  --progress-bg: rgba(255,255,255,0.1);
+  --progress-active: var(--grad);
+  --option-bg: rgba(255,255,255,0.04);
+  --option-border: rgba(255,255,255,0.1);
+  --option-hover-bg: rgba(139,92,246,0.1);
+  --option-hover-border: rgba(139,92,246,0.5);
+  --option-selected-bg: rgba(139,92,246,0.15);
+  --option-selected-border: rgba(139,92,246,0.7);
+  --option-check: #a78bfa;
+  --btn-bg: var(--grad);
+  --btn-color: #fff;
+  --back-color: #7d6c9b;
+  --header-border: rgba(255,255,255,0.08);
+  --inter-bg: linear-gradient(145deg,#120a20,#1d1133);
+  --badge-bg: rgba(139,92,246,0.15);
+  --badge-color: #a78bfa;
+  --feedback-bg: rgba(34,197,94,0.08);
+  --feedback-border: rgba(34,197,94,0.25);
+  --feedback-color: #4ade80;
+  --loading-bar-bg: rgba(255,255,255,0.08);
+  --stat-bg: rgba(255,255,255,0.04);
+  --theme-toggle-bg: rgba(255,255,255,0.08);
+}
+
+/* ── RESET ─────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { height: 100%; }
+body {
+  min-height: 100%;
+  background: var(--bg);
+  color: var(--txt);
+  font-family: var(--font-b);
+  -webkit-font-smoothing: antialiased;
+  transition: background .35s, color .35s;
+  overflow-x: hidden;
+}
+
+/* ── WATERMARK BG ───────────────────────────────────── */
+.bg-watermark {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 0;
+}
+.bg-watermark::before {
+  content: 'JP';
+  font-family: var(--font-h);
+  font-weight: 800;
+  font-size: clamp(320px, 55vw, 700px);
+  color: var(--bg-watermark);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  letter-spacing: -8px;
+  user-select: none;
+  line-height: 1;
+}
+[data-theme="dark"] .bg-watermark::before {
+  background: var(--grad);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  opacity: .06;
+}
+
+/* ── LAYOUT ─────────────────────────────────────────── */
+.quiz-shell {
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── HEADER ─────────────────────────────────────────── */
+.qheader {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  padding: 0 20px;
+  background: var(--bg);
+  border-bottom: 1px solid var(--header-border);
+  transition: background .35s;
+}
+.qheader-inner {
+  max-width: 520px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  height: 56px;
+}
+.btn-back {
+  width: 36px;
+  height: 36px;
+  border: none;
+  background: transparent;
+  color: var(--back-color);
+  cursor: pointer;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: .18s;
+  flex-shrink: 0;
+}
+.btn-back:hover { color: var(--txt); background: var(--option-bg); }
+.btn-back.hidden { visibility: hidden; pointer-events: none; }
+
+.brand-logo {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  text-decoration: none;
+  flex-shrink: 0;
+}
+.brand-logo .lj {
+  font-family: var(--font-h);
+  font-weight: 800;
+  font-size: 17px;
+  background: var(--grad);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.brand-logo .lp {
+  font-family: var(--font-h);
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--txt-muted);
+  opacity: .7;
+}
+
+/* Progress bar */
+.progress-wrap {
+  flex: 1;
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+.prog-seg {
+  flex: 1;
+  height: 4px;
+  border-radius: 99px;
+  background: var(--progress-bg);
+  overflow: hidden;
+  transition: background .3s;
+}
+.prog-seg-fill {
+  height: 100%;
+  border-radius: 99px;
+  width: 0%;
+  transition: width .5s cubic-bezier(.4,0,.2,1);
+}
+[data-theme="light"] .prog-seg-fill { background: var(--blue); }
+[data-theme="dark"] .prog-seg-fill { background: var(--grad); }
+
+/* Theme toggle */
+.btn-theme {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  border: none;
+  background: var(--theme-toggle-bg);
+  color: var(--txt-muted);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: .18s;
+}
+.btn-theme:hover { color: var(--txt); }
+
+/* ── MAIN CONTENT AREA ──────────────────────────────── */
+.quiz-body {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 20px 40px;
+  position: relative;
+}
+
+/* ── CARD ───────────────────────────────────────────── */
+.card {
+  background: var(--card-bg);
+  border: var(--card-border);
+  border-radius: 24px;
+  box-shadow: var(--card-shadow);
+  width: 100%;
+  max-width: 520px;
+  overflow: hidden;
+  transition: background .35s, border .35s, box-shadow .35s;
+}
+
+/* ── STEPS ──────────────────────────────────────────── */
+.step {
+  display: none;
+  animation: stepIn .4s cubic-bezier(.4,0,.2,1);
+}
+.step.active { display: block; }
+@keyframes stepIn {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── SPLASH SCREEN ──────────────────────────────────── */
+.splash {
+  padding: 48px 32px 40px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+}
+.splash-logo {
+  font-family: var(--font-h);
+  font-weight: 800;
+  font-size: 28px;
+  background: var(--grad);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  margin-bottom: 8px;
+}
+.splash-tagline {
+  font-family: var(--font-h);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  color: var(--txt-muted);
+  margin-bottom: 32px;
+}
+.splash-headline {
+  font-family: var(--font-h);
+  font-weight: 800;
+  font-size: clamp(22px, 5vw, 30px);
+  line-height: 1.15;
+  letter-spacing: -.5px;
+  color: var(--txt);
+  margin-bottom: 12px;
+}
+.splash-headline .g {
+  background: var(--grad);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.splash-sub {
+  font-size: 15px;
+  color: var(--txt-muted);
+  margin-bottom: 32px;
+  line-height: 1.55;
+}
+
+/* Splash loading sim */
+.splash-loading {
+  width: 100%;
+  max-width: 340px;
+  margin-bottom: 32px;
+}
+.sl-label {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--font-h);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--txt-muted);
+  margin-bottom: 8px;
+}
+.sl-bar {
+  height: 8px;
+  background: var(--loading-bar-bg);
+  border-radius: 99px;
+  overflow: hidden;
+  margin-bottom: 16px;
+}
+.sl-fill {
+  height: 100%;
+  border-radius: 99px;
+  width: 0%;
+  transition: width .4s ease;
+}
+[data-theme="light"] .sl-fill { background: var(--blue); }
+[data-theme="dark"] .sl-fill { background: var(--grad); }
+
+.sl-items {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.sl-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--stat-bg);
+  border-radius: 12px;
+  padding: 10px 14px;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity .3s, transform .3s;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--txt-muted);
+}
+.sl-item.show { opacity: 1; transform: translateY(0); }
+.sl-item .val {
+  font-family: var(--font-h);
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--txt);
+  margin-left: auto;
+}
+[data-theme="light"] .sl-item .val { color: var(--blue); }
+[data-theme="dark"] .sl-item .val {
+  background: var(--grad);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.btn-start {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  max-width: 340px;
+  padding: 17px 28px;
+  border-radius: 16px;
+  border: none;
+  cursor: pointer;
+  font-family: var(--font-h);
+  font-weight: 700;
+  font-size: 16px;
+  color: #fff;
+  background: var(--blue);
+  box-shadow: 0 12px 30px -8px rgba(37,99,235,.55);
+  transition: .2s;
+  opacity: 0;
+}
+[data-theme="dark"] .btn-start { background: var(--grad); box-shadow: 0 12px 30px -8px rgba(139,92,246,.5); }
+.btn-start.show { opacity: 1; }
+.btn-start:hover { transform: translateY(-2px); box-shadow: 0 18px 40px -8px rgba(37,99,235,.65); }
+[data-theme="dark"] .btn-start:hover { box-shadow: 0 18px 40px -8px rgba(139,92,246,.65); }
+
+/* Social proof badges */
+.splash-social {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-bottom: 28px;
+}
+.ss-badge {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  background: var(--badge-bg);
+  border-radius: 10px;
+  padding: 8px 14px;
+  font-family: var(--font-h);
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--badge-color);
+}
+
+/* ── QUESTION CARD ──────────────────────────────────── */
+.q-inner {
+  padding: 32px 28px 28px;
+}
+.q-step-label {
+  font-family: var(--font-h);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  color: var(--txt-sub);
+  margin-bottom: 12px;
+}
+[data-theme="light"] .q-step-label { color: var(--blue); opacity: .7; }
+.q-title {
+  font-family: var(--font-h);
+  font-weight: 700;
+  font-size: clamp(18px, 4vw, 22px);
+  line-height: 1.25;
+  letter-spacing: -.3px;
+  color: var(--txt);
+  margin-bottom: 6px;
+}
+.q-sub {
+  font-size: 14px;
+  color: var(--txt-muted);
+  margin-bottom: 22px;
+  line-height: 1.5;
+}
+
+/* Options */
+.options {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+.opt {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: var(--option-bg);
+  border: 1.5px solid var(--option-border);
+  border-radius: 14px;
+  padding: 14px 16px;
+  cursor: pointer;
+  transition: .18s;
+  position: relative;
+  user-select: none;
+}
+.opt:hover {
+  background: var(--option-hover-bg);
+  border-color: var(--option-hover-border);
+  transform: translateX(2px);
+}
+.opt.selected {
+  background: var(--option-selected-bg);
+  border-color: var(--option-selected-border);
+}
+.opt-icon {
+  font-size: 22px;
+  flex-shrink: 0;
+  width: 32px;
+  text-align: center;
+}
+.opt-text {
+  flex: 1;
+  font-size: 14.5px;
+  font-weight: 600;
+  color: var(--txt);
+  line-height: 1.3;
+}
+.opt-desc {
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--txt-muted);
+  margin-top: 2px;
+}
+.opt-radio {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 2px solid var(--option-border);
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: .18s;
+}
+.opt.selected .opt-radio {
+  border-color: var(--option-check);
+  background: var(--option-check);
+}
+[data-theme="dark"] .opt.selected .opt-radio {
+  background: var(--grad);
+  border-color: transparent;
+}
+.opt-radio::after {
+  content: '';
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #fff;
+  opacity: 0;
+  transition: .15s;
+}
+.opt.selected .opt-radio::after { opacity: 1; }
+
+/* Feedback message */
+.opt-feedback {
+  background: var(--feedback-bg);
+  border: 1px solid var(--feedback-border);
+  border-radius: 12px;
+  padding: 12px 16px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--feedback-color);
+  line-height: 1.45;
+  display: none;
+  margin-bottom: 16px;
+  animation: fadeUp .3s ease;
+}
+.opt-feedback.show { display: block; }
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Continue button */
+.btn-cont {
+  width: 100%;
+  padding: 16px;
+  border-radius: 14px;
+  border: none;
+  cursor: pointer;
+  font-family: var(--font-h);
+  font-weight: 700;
+  font-size: 15.5px;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: .2s;
+  opacity: 0;
+  pointer-events: none;
+}
+[data-theme="light"] .btn-cont { background: var(--blue); box-shadow: 0 8px 24px -6px rgba(37,99,235,.5); }
+[data-theme="dark"] .btn-cont { background: var(--grad); box-shadow: 0 8px 24px -6px rgba(139,92,246,.45); }
+.btn-cont.show { opacity: 1; pointer-events: auto; }
+.btn-cont:hover { transform: translateY(-1px); }
+
+/* ── INTERMEDIATE SCREEN ─────────────────────────────── */
+.inter-inner {
+  padding: 36px 28px 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0;
+}
+.inter-icon {
+  font-size: 52px;
+  margin-bottom: 18px;
+  animation: iconBounce .6s cubic-bezier(.34,1.56,.64,1);
+}
+@keyframes iconBounce {
+  from { opacity: 0; transform: scale(.5); }
+  to   { opacity: 1; transform: scale(1); }
+}
+.inter-eyebrow {
+  font-family: var(--font-h);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.4px;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+  padding: 5px 12px;
+  border-radius: 99px;
+  background: var(--badge-bg);
+  color: var(--badge-color);
+}
+.inter-title {
+  font-family: var(--font-h);
+  font-weight: 800;
+  font-size: clamp(20px, 4.5vw, 26px);
+  line-height: 1.2;
+  letter-spacing: -.4px;
+  color: var(--txt);
+  margin-bottom: 12px;
+}
+.inter-title .g {
+  background: var(--grad);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.inter-body {
+  font-size: 14.5px;
+  color: var(--txt-muted);
+  line-height: 1.6;
+  max-width: 360px;
+  margin-bottom: 24px;
+}
+
+/* Stats row */
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  width: 100%;
+  margin-bottom: 24px;
+}
+.stat-box {
+  background: var(--stat-bg);
+  border-radius: 14px;
+  padding: 14px 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+.stat-num {
+  font-family: var(--font-h);
+  font-weight: 800;
+  font-size: 20px;
+  line-height: 1;
+}
+[data-theme="light"] .stat-num { color: var(--blue); }
+[data-theme="dark"] .stat-num {
+  background: var(--grad);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.stat-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--txt-muted);
+  text-align: center;
+  line-height: 1.3;
+}
+
+/* Avatar row */
+.avatar-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 16px;
+}
+.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 2.5px solid var(--card-bg);
+  background: var(--grad);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-h);
+  font-weight: 700;
+  font-size: 14px;
+  color: #fff;
+  margin-left: -12px;
+  flex-shrink: 0;
+}
+.avatar:first-child { margin-left: 0; }
+.avatar-more {
+  background: var(--stat-bg);
+  color: var(--txt-muted);
+  font-size: 11px;
+  font-weight: 700;
+}
+.avatar-caption {
+  font-size: 13px;
+  color: var(--txt-muted);
+  font-weight: 600;
+}
+
+/* Feature list */
+.feature-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  margin-bottom: 24px;
+  text-align: left;
+}
+.feat-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  background: var(--stat-bg);
+  border-radius: 12px;
+  padding: 12px 14px;
+}
+.feat-icon { font-size: 20px; flex-shrink: 0; }
+.feat-text { font-size: 13.5px; font-weight: 600; color: var(--txt); line-height: 1.4; }
+.feat-text span { color: var(--txt-muted); font-weight: 400; display: block; font-size: 12px; margin-top: 2px; }
+
+/* Testimonial */
+.testimonial {
+  background: var(--stat-bg);
+  border-radius: 16px;
+  padding: 18px 20px;
+  text-align: left;
+  width: 100%;
+  margin-bottom: 24px;
+}
+.testi-text {
+  font-size: 14px;
+  color: var(--txt);
+  line-height: 1.6;
+  font-style: italic;
+  margin-bottom: 14px;
+}
+.testi-author {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.testi-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--grad);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-h);
+  font-weight: 700;
+  font-size: 13px;
+  color: #fff;
+  flex-shrink: 0;
+}
+.testi-name { font-size: 13px; font-weight: 700; color: var(--txt); }
+.testi-role { font-size: 11.5px; color: var(--txt-muted); }
+.testi-stars { color: #f59e0b; font-size: 13px; margin-top: 2px; }
+
+/* ── LOADING SCREEN ─────────────────────────────────── */
+.loading-inner {
+  padding: 40px 28px 36px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.loading-title {
+  font-family: var(--font-h);
+  font-weight: 800;
+  font-size: clamp(20px, 4vw, 24px);
+  letter-spacing: -.3px;
+  color: var(--txt);
+  margin-bottom: 6px;
+  line-height: 1.2;
+}
+.loading-title .g {
+  background: var(--grad);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.loading-sub {
+  font-size: 14px;
+  color: var(--txt-muted);
+  margin-bottom: 28px;
+}
+.loading-bar-wrap {
+  width: 100%;
+  max-width: 400px;
+  margin-bottom: 8px;
+}
+.loading-bar-label {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--font-h);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--txt-muted);
+  margin-bottom: 8px;
+}
+.loading-bar {
+  height: 8px;
+  background: var(--loading-bar-bg);
+  border-radius: 99px;
+  overflow: hidden;
+  margin-bottom: 28px;
+}
+.loading-fill {
+  height: 100%;
+  border-radius: 99px;
+  width: 0%;
+  transition: width .5s ease;
+}
+[data-theme="light"] .loading-fill { background: var(--blue); }
+[data-theme="dark"] .loading-fill { background: var(--grad); }
+
+.loading-facts {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  max-width: 400px;
+}
+.lf-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--stat-bg);
+  border-radius: 12px;
+  padding: 12px 16px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--txt-muted);
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity .4s, transform .4s;
+}
+.lf-item.show { opacity: 1; transform: translateY(0); }
+.lf-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  background: var(--loading-bar-bg);
+  transition: .4s;
+}
+.lf-item.show .lf-dot { background: var(--green); }
+[data-theme="dark"] .lf-item.show .lf-dot { background: var(--purple); }
+.lf-check {
+  margin-left: auto;
+  opacity: 0;
+  transition: .3s;
+  color: var(--green);
+  font-size: 16px;
+}
+.lf-item.done .lf-check { opacity: 1; }
+
+/* ── RESULT SCREEN ──────────────────────────────────── */
+.result-inner {
+  padding: 32px 28px 28px;
+}
+.result-top {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin-bottom: 28px;
+}
+.result-badge {
+  background: var(--badge-bg);
+  color: var(--badge-color);
+  font-family: var(--font-h);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  padding: 6px 14px;
+  border-radius: 99px;
+  margin-bottom: 14px;
+}
+.result-title {
+  font-family: var(--font-h);
+  font-weight: 800;
+  font-size: clamp(22px, 5vw, 28px);
+  line-height: 1.15;
+  letter-spacing: -.5px;
+  color: var(--txt);
+  margin-bottom: 10px;
+}
+.result-title .g {
+  background: var(--grad);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.result-sub {
+  font-size: 14.5px;
+  color: var(--txt-muted);
+  line-height: 1.55;
+  max-width: 360px;
+}
+.result-metrics {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  margin-bottom: 20px;
+}
+.metric-box {
+  background: var(--stat-bg);
+  border-radius: 16px;
+  padding: 18px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.metric-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--txt-sub);
+  text-transform: uppercase;
+  letter-spacing: .5px;
+}
+.metric-val {
+  font-family: var(--font-h);
+  font-weight: 800;
+  font-size: 22px;
+  line-height: 1;
+}
+[data-theme="light"] .metric-val { color: var(--blue); }
+[data-theme="dark"] .metric-val {
+  background: var(--grad);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.metric-trend {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--green);
+}
+.result-plan {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+.plan-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 13px 16px;
+  background: var(--stat-bg);
+  border-radius: 13px;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--txt);
+}
+.plan-icon { font-size: 18px; flex-shrink: 0; }
+
+.btn-cta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  padding: 18px;
+  border-radius: 16px;
+  border: none;
+  cursor: pointer;
+  font-family: var(--font-h);
+  font-weight: 700;
+  font-size: 16px;
+  color: #fff;
+  text-decoration: none;
+  transition: .2s;
+  margin-bottom: 12px;
+}
+[data-theme="light"] .btn-cta { background: var(--blue); box-shadow: 0 12px 30px -8px rgba(37,99,235,.55); }
+[data-theme="dark"] .btn-cta { background: var(--grad); box-shadow: 0 12px 30px -8px rgba(139,92,246,.5); }
+.btn-cta:hover { transform: translateY(-2px); }
+
+.result-guarantee {
+  text-align: center;
+  font-size: 12px;
+  color: var(--txt-sub);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+/* ── COUNTDOWN TIMER (result page) ─────────────────── */
+.countdown-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: rgba(239,68,68,.08);
+  border: 1px solid rgba(239,68,68,.2);
+  border-radius: 12px;
+  padding: 10px 16px;
+  margin-bottom: 16px;
+  font-family: var(--font-h);
+  font-size: 13px;
+  font-weight: 700;
+  color: #ef4444;
+}
+.countdown-time {
+  font-size: 17px;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── RESPONSIVE ─────────────────────────────────────── */
+@media (max-width: 420px) {
+  .q-inner { padding: 24px 20px 20px; }
+  .splash { padding: 36px 22px 32px; }
+  .inter-inner { padding: 28px 20px 24px; }
+  .loading-inner { padding: 32px 20px 28px; }
+  .result-inner { padding: 24px 20px 20px; }
+  .stats-row { grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .result-metrics { grid-template-columns: repeat(2, 1fr); }
+}
+</style>
+</head>
+<body data-theme="light">
+
+<div class="bg-watermark"></div>
+
+<div class="quiz-shell">
+
+  <!-- HEADER -->
+  <header class="qheader">
+    <div class="qheader-inner">
+      <button class="btn-back hidden" id="btnBack" onclick="goBack()" aria-label="Voltar">
+        <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
+      </button>
+
+      <a href="index.html" class="brand-logo">
+        <span class="lj">Joom</span><span class="lp">Pulse</span>
+      </a>
+
+      <div class="progress-wrap" id="progressWrap">
+        <div class="prog-seg"><div class="prog-seg-fill" id="prog0"></div></div>
+        <div class="prog-seg"><div class="prog-seg-fill" id="prog1"></div></div>
+        <div class="prog-seg"><div class="prog-seg-fill" id="prog2"></div></div>
+      </div>
+
+      <button class="btn-theme" id="btnTheme" onclick="toggleTheme()" title="Alternar tema">
+        <svg id="iconSun" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path stroke-linecap="round" d="M12 2v2M12 20v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M2 12h2M20 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+        <svg id="iconMoon" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="display:none"><path stroke-linecap="round" stroke-linejoin="round" d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- QUIZ BODY -->
+  <main class="quiz-body">
+    <div class="card">
+
+      <!-- ═══ STEP 0: SPLASH ═══ -->
+      <div class="step active" id="step0">
+        <div class="splash">
+          <div class="splash-logo">JoomPulse</div>
+          <div class="splash-tagline">Inteligência de produto para Mercado Livre</div>
+
+          <div class="splash-social">
+            <div class="ss-badge">
+              <span>⭐</span> 4.8 App Store
+            </div>
+            <div class="ss-badge">
+              <span>🏆</span> +12.000 vendedores
+            </div>
+          </div>
+
+          <h1 class="splash-headline">
+            Descubra os produtos que <span class="g">vendem o ano inteiro</span>
+          </h1>
+          <p class="splash-sub">Em 2 minutos vamos criar sua análise personalizada com os melhores produtos para o seu perfil.</p>
+
+          <div class="splash-loading">
+            <div class="sl-label">
+              <span id="slText">Explorando seu potencial...</span>
+              <span id="slPct">0%</span>
+            </div>
+            <div class="sl-bar"><div class="sl-fill" id="slFill"></div></div>
+            <div class="sl-items">
+              <div class="sl-item" id="slItem0">
+                <span>📦</span> Produtos trending agora
+                <span class="val" id="slV0">—</span>
+              </div>
+              <div class="sl-item" id="slItem1">
+                <span>📈</span> Crescimento médio no ML
+                <span class="val" id="slV1">—</span>
+              </div>
+              <div class="sl-item" id="slItem2">
+                <span>💰</span> Potencial de receita
+                <span class="val" id="slV2">—</span>
+              </div>
+            </div>
+          </div>
+
+          <button class="btn-start" id="btnStart" onclick="goTo(1)">
+            Começar análise gratuita
+            <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- ═══ STEP 1: Você já vende? ═══ -->
+      <div class="step" id="step1">
+        <div class="q-inner">
+          <div class="q-step-label">Pergunta 1 de 8</div>
+          <h2 class="q-title">Você já tem uma loja no Mercado Livre hoje?</h2>
+          <p class="q-sub">Isso nos ajuda a personalizar melhor as recomendações para você.</p>
+          <div class="options">
+            <div class="opt" onclick="selectOpt(this,'q1','sim','Ótimo! Você já tem experiência no ML — vamos turbinar suas vendas! 🚀')">
+              <div class="opt-icon">🏪</div>
+              <div class="opt-text">Sim, já vendo no ML<div class="opt-desc">Tenho minha loja ativa</div></div>
+              <div class="opt-radio"></div>
+            </div>
+            <div class="opt" onclick="selectOpt(this,'q1','nao','Perfeito! Vamos descobrir os melhores produtos para você começar com o pé direito! 💡')">
+              <div class="opt-icon">🌱</div>
+              <div class="opt-text">Ainda não vendo<div class="opt-desc">Quero começar ou estou pesquisando</div></div>
+              <div class="opt-radio"></div>
+            </div>
+            <div class="opt" onclick="selectOpt(this,'q1','outro','Entendido! Vamos encontrar as melhores oportunidades para você! 🎯')">
+              <div class="opt-icon">🔄</div>
+              <div class="opt-text">Vendo em outros marketplaces<div class="opt-desc">Shopee, Amazon, Shein, etc.</div></div>
+              <div class="opt-radio"></div>
+            </div>
+          </div>
+          <div class="opt-feedback" id="fb-q1"></div>
+          <button class="btn-cont" id="cont-q1" onclick="goTo(2)">
+            Continuar <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- ═══ STEP 2: INTERMEDIATE — Social Proof ═══ -->
+      <div class="step" id="step2">
+        <div class="inter-inner">
+          <div class="inter-icon">🎯</div>
+          <div class="inter-eyebrow">Você está no lugar certo</div>
+          <h2 class="inter-title">+12.000 vendedores já descobriram seus <span class="g">produtos campeões</span></h2>
+          <p class="inter-body">O JoomPulse analisa dados reais do Mercado Livre para encontrar produtos com alta demanda e baixa concorrência — antes de qualquer um.</p>
+
+          <div class="avatar-row">
+            <div class="avatar">MR</div>
+            <div class="avatar">JC</div>
+            <div class="avatar">FS</div>
+            <div class="avatar">LT</div>
+            <div class="avatar avatar-more">+12k</div>
+          </div>
+          <p class="avatar-caption" style="margin-bottom:22px">Vendedores ativos no JoomPulse</p>
+
+          <div class="stats-row">
+            <div class="stat-box">
+              <div class="stat-num">3.2x</div>
+              <div class="stat-label">mais vendas em média</div>
+            </div>
+            <div class="stat-box">
+              <div class="stat-num">87%</div>
+              <div class="stat-label">acertam o produto certo</div>
+            </div>
+            <div class="stat-box">
+              <div class="stat-num">14d</div>
+              <div class="stat-label">para ver resultados</div>
+            </div>
+          </div>
+
+          <button class="btn-cont show" onclick="goTo(3)">
+            Continuar <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- ═══ STEP 3: Faturamento ═══ -->
+      <div class="step" id="step3">
+        <div class="q-inner">
+          <div class="q-step-label">Pergunta 2 de 8</div>
+          <h2 class="q-title">Qual é o faturamento mensal do seu negócio?</h2>
+          <p class="q-sub">Selecione a faixa que melhor representa sua situação atual.</p>
+          <div class="options">
+            <div class="opt" onclick="selectOpt(this,'q2','0','Ótimo começo! Muitos dos nossos melhores vendedores começaram do zero! 💪')">
+              <div class="opt-icon">🌱</div>
+              <div class="opt-text">Ainda não faturei<div class="opt-desc">Estou começando</div></div>
+              <div class="opt-radio"></div>
+            </div>
+            <div class="opt" onclick="selectOpt(this,'q2','5k','Bom começo! Com os produtos certos você pode dobrar isso em 3 meses! 📈')">
+              <div class="opt-icon">💵</div>
+              <div class="opt-text">Até R$5.000/mês</div>
+              <div class="opt-radio"></div>
+            </div>
+            <div class="opt" onclick="selectOpt(this,'q2','20k','Você está crescendo! Vamos identificar os produtos que vão escalar seu negócio! 🚀')">
+              <div class="opt-icon">💰</div>
+              <div class="opt-text">R$5.000 – R$20.000/mês</div>
+              <div class="opt-radio"></div>
+            </div>
+            <div class="opt" onclick="selectOpt(this,'q2','50k','Impressionante! Você é um vendedor experiente — vamos encontrar suas próximas estrelas! ⭐')">
+              <div class="opt-icon">🏆</div>
+              <div class="opt-text">R$20.000 – R$50.000/mês</div>
+              <div class="opt-radio"></div>
+            </div>
+            <div class="opt" onclick="selectOpt(this,'q2','50k+','Você é top seller! Vamos manter você sempre um passo à frente da concorrência! 🥇')">
+              <div class="opt-icon">💎</div>
+              <div class="opt-text">Acima de R$50.000/mês</div>
+              <div class="opt-radio"></div>
+            </div>
+          </div>
+          <div class="opt-feedback" id="fb-q2"></div>
+          <button class="btn-cont" id="cont-q2" onclick="goTo(4)">
+            Continuar <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- ═══ STEP 4: SKUs ═══ -->
+      <div class="step" id="step4">
+        <div class="q-inner">
+          <div class="q-step-label">Pergunta 3 de 8</div>
+          <h2 class="q-title">Quantos produtos (SKUs) você tem atualmente?</h2>
+          <p class="q-sub">Isso nos ajuda a entender a complexidade do seu catálogo.</p>
+          <div class="options">
+            <div class="opt" onclick="selectOpt(this,'q3','1','Foco total! Com o produto certo você pode dominar uma categoria! 🎯')">
+              <div class="opt-icon">1️⃣</div>
+              <div class="opt-text">1 produto</div>
+              <div class="opt-radio"></div>
+            </div>
+            <div class="opt" onclick="selectOpt(this,'q3','2-10','Portfólio diversificado! Vamos identificar quais têm mais potencial! 🔍')">
+              <div class="opt-icon">📦</div>
+              <div class="opt-text">2 a 10 produtos</div>
+              <div class="opt-radio"></div>
+            </div>
+            <div class="opt" onclick="selectOpt(this,'q3','11-50','Ótimo mix! Vamos otimizar seu catálogo com os produtos mais rentáveis! 💡')">
+              <div class="opt-icon">🗂️</div>
+              <div class="opt-text">11 a 50 produtos</div>
+              <div class="opt-radio"></div>
+            </div>
+            <div class="opt" onclick="selectOpt(this,'q3','51-200','Catálogo robusto! Vamos garantir que você está apostando nos campeões! 🏆')">
+              <div class="opt-icon">🏭</div>
+              <div class="opt-text">51 a 200 produtos</div>
+              <div class="opt-radio"></div>
+            </div>
+            <div class="opt" onclick="selectOpt(this,'q3','200+','Operação grande! O JoomPulse foi feito para escalar negócios como o seu! 🚀')">
+              <div class="opt-icon">🌐</div>
+              <div class="opt-text">Mais de 200 produtos</div>
+              <div class="opt-radio"></div>
+            </div>
+          </div>
+          <div class="opt-feedback" id="fb-q3"></div>
+          <button class="btn-cont" id="cont-q3" onclick="goTo(5)">
+            Continuar <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- ═══ STEP 5: INTERMEDIATE — Features ═══ -->
+      <div class="step" id="step5">
+        <div class="inter-inner">
+          <div class="inter-icon">🔬</div>
+          <div class="inter-eyebrow">Como o JoomPulse funciona</div>
+          <h2 class="inter-title">Tecnologia que <span class="g">analisa o mercado</span> por você</h2>
+          <p class="inter-body">Enquanto você responde, nossa IA já está mapeando oportunidades do Mercado Livre em tempo real.</p>
+
+          <div class="feature-list">
+            <div class="feat-item">
+              <div class="feat-icon">📊</div>
+              <div class="feat-text">Análise de demanda em tempo real
+                <span>Monitoramos buscas, vendas e tendências 24h por dia</span>
+              </div>
+            </div>
+            <div class="feat-item">
+              <div class="feat-icon">🎯</div>
+              <div class="feat-text">Score de oportunidade por produto
+                <span>Calculamos demanda ÷ concorrência para cada nicho</span>
+              </div>
+            </div>
+            <div class="feat-item">
+              <div class="feat-icon">⚡</div>
+              <div class="feat-text">Alertas de produtos em alta
+                <span>Você recebe antes da concorrência entrar no mercado</span>
+              </div>
+            </div>
+          </div>
+
+          <button class="btn-cont show" onclick="goTo(6)">
+            Continuar <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- ═══ STEP 6: Categoria ═══ -->
+      <div class="step" id="step6">
+        <div class="q-inner">
+          <div class="q-step-label">Pergunta 4 de 8</div>
+          <h2 class="q-title">Em qual categoria principal você vende?</h2>
+          <p class="q-sub">Escolha a que representa a maior parte do seu faturamento.</p>
+          <div class="options">
+            <div class="opt" onclick="selectOpt(this,'q4','eletro','Categoria quente! Há muitas oportunidades em eletrônicos agora! ⚡')">
+              <div class="opt-icon">📱</div>
+              <div class="opt-text">Eletrônicos & Tecnologia</div>
+              <div class="opt-radio"></div>
+            </div>
+            <div class="opt" onclick="selectOpt(this,'q4','moda','Tendência constante! Moda é uma das categorias com maior volume no ML! 👗')">
+              <div class="opt-icon">👕</div>
+              <div class="opt-text">Moda & Acessórios</div>
+              <div class="opt-radio"></div>
+            </div>
+            <div class="opt" onclick="selectOpt(this,'q4','casa','Em alta! A categoria de casa e jardim cresceu 47% no último trimestre! 🏡')">
+              <div class="opt-icon">🏠</div>
+              <div class="opt-text">Casa, Jardim & Decoração</div>
+              <div class="opt-radio"></div>
+            </div>
+            <div class="opt" onclick="selectOpt(this,'q4','saude','Mercado crescente! Saúde e beleza tem margens excelentes! 💊')">
+              <div class="opt-icon">💊</div>
+              <div class="opt-text">Saúde & Beleza</div>
+              <div class="opt-radio"></div>
+            </div>
+            <div class="opt" onclick="selectOpt(this,'q4','esporte','Ótimo nicho! Esportes tem demanda constante e fiel! 🏋️')">
+              <div class="opt-icon">⚽</div>
+              <div class="opt-text">Esporte & Lazer</div>
+              <div class="opt-radio"></div>
+            </div>
+            <div class="opt" onclick="selectOpt(this,'q4','auto','Nicho poderoso! Peças e acessórios automotivos têm ticket médio alto! 🚗')">
+              <div class="opt-icon">🚗</div>
+              <div class="opt-text">Automotivo</div>
+              <div class="opt-radio"></div>
+            </div>
+            <div class="opt" onclick="selectOpt(this,'q4','outros','Perfeito! Vamos encontrar as melhores oportunidades para a sua categoria! 🎯')">
+              <div class="opt-icon">📦</div>
+              <div class="opt-text">Outra categoria</div>
+              <div class="opt-radio"></div>
+            </div>
+          </div>
+          <div class="opt-feedback" id="fb-q4"></div>
+          <button class="btn-cont" id="cont-q4" onclick="goTo(7)">
+            Continuar <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- ═══ STEP 7: Tempo de venda ═══ -->
+      <div class="step" id="step7">
+        <div class="q-inner">
+          <div class="q-step-label">Pergunta 5 de 8</div>
+          <h2 class="q-title">Há quanto tempo você vende no Mercado Livre?</h2>
+          <p class="q-sub">Sua experiência define a melhor estratégia para você.</p>
+          <div class="options">
+            <div class="opt" onclick="selectOpt(this,'q5','novo','Momento perfeito! Começar com os produtos certos faz toda a diferença! 🌟')">
+              <div class="opt-icon">🌱</div>
+              <div class="opt-text">Ainda não comecei<div class="opt-desc">Quero entrar no ML</div></div>
+              <div class="opt-radio"></div>
+            </div>
+            <div class="opt" onclick="selectOpt(this,'q5','6m','Ótimo! Você ainda está na fase de descoberta — o JoomPulse vai acelerar seu crescimento! 🚀')">
+              <div class="opt-icon">📅</div>
+              <div class="opt-text">Menos de 6 meses</div>
+              <div class="opt-radio"></div>
+            </div>
+            <div class="opt" onclick="selectOpt(this,'q5','2a','Você já tem uma base sólida! Hora de escalar com os produtos certos! 📈')">
+              <div class="opt-icon">🏅</div>
+              <div class="opt-text">6 meses a 2 anos</div>
+              <div class="opt-radio"></div>
+            </div>
+            <div class="opt" onclick="selectOpt(this,'q5','5a','Você é um veterano! Vamos manter você sempre na frente da concorrência! 🏆')">
+              <div class="opt-icon">⭐</div>
+              <div class="opt-text">2 a 5 anos</div>
+              <div class="opt-radio"></div>
+            </div>
+            <div class="opt" onclick="selectOpt(this,'q5','5a+','Top seller de longa data! Sua experiência + nossa IA = combinação imbatível! 💎')">
+              <div class="opt-icon">💎</div>
+              <div class="opt-text">Mais de 5 anos</div>
+              <div class="opt-radio"></div>
+            </div>
+          </div>
+          <div class="opt-feedback" id="fb-q5"></div>
+          <button class="btn-cont" id="cont-q5" onclick="goTo(8)">
+            Continuar <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- ═══ STEP 8: Maior desafio ═══ -->
+      <div class="step" id="step8">
+        <div class="q-inner">
+          <div class="q-step-label">Pergunta 6 de 8</div>
+          <h2 class="q-title">Qual é o seu maior desafio no Mercado Livre?</h2>
+          <p class="q-sub">Seja honesto — isso vai tornar sua análise muito mais precisa.</p>
+          <div class="options">
+            <div class="opt" onclick="selectOpt(this,'q6','produto','Esse é o desafio #1! 78% dos vendedores perdem dinheiro com produto errado — e é exatamente o que o JoomPulse resolve! 🎯')">
+              <div class="opt-icon">🔍</div>
+              <div class="opt-text">Encontrar o produto certo para vender<div class="opt-desc">Não sei o que vai vender bem</div></div>
+              <div class="opt-radio"></div>
+            </div>
+            <div class="opt" onclick="selectOpt(this,'q6','concorrencia','Entendemos! A concorrência é feroz — mas nosso score de oportunidade te coloca à frente! ⚔️')">
+              <div class="opt-icon">⚔️</div>
+              <div class="opt-text">Muita concorrência no meu nicho</div>
+              <div class="opt-radio"></div>
+            </div>
+            <div class="opt" onclick="selectOpt(this,'q6','preco','Preço é ciência! Vamos encontrar produtos onde você tem margem para competir! 💰')">
+              <div class="opt-icon">💰</div>
+              <div class="opt-text">Precificação e margem baixa<div class="opt-desc">Dificuldade para ter lucro</div></div>
+              <div class="opt-radio"></div>
+            </div>
+            <div class="opt" onclick="selectOpt(this,'q6','trafego','Visibilidade é crucial! Produto certo + bom anúncio = explosão de tráfego! 📣')">
+              <div class="opt-icon">📣</div>
+              <div class="opt-text">Pouca visibilidade nos anúncios</div>
+              <div class="opt-radio"></div>
+            </div>
+            <div class="opt" onclick="selectOpt(this,'q6','estoque','Gestão de estoque inteligente começa com a escolha certa do produto! 📦')">
+              <div class="opt-icon">📦</div>
+              <div class="opt-text">Gestão de estoque e logística</div>
+              <div class="opt-radio"></div>
+            </div>
+          </div>
+          <div class="opt-feedback" id="fb-q6"></div>
+          <button class="btn-cont" id="cont-q6" onclick="goTo(9)">
+            Continuar <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- ═══ STEP 9: INTERMEDIATE — Testimonial ═══ -->
+      <div class="step" id="step9">
+        <div class="inter-inner">
+          <div class="inter-icon">💬</div>
+          <div class="inter-eyebrow">Resultado real</div>
+          <h2 class="inter-title">Vendedores como você já <span class="g">transformaram</span> seus resultados</h2>
+
+          <div class="testimonial">
+            <div class="testi-text">"Eu estava perdendo dinheiro investindo em produtos errados. Com o JoomPulse descobri um nicho que ninguém estava explorando e faturei R$28.000 no meu primeiro mês com o produto novo."</div>
+            <div class="testi-author">
+              <div class="testi-avatar">MR</div>
+              <div>
+                <div class="testi-name">Marcos Rodrigues</div>
+                <div class="testi-role">Vendedor — Eletrônicos, SP</div>
+                <div class="testi-stars">★★★★★</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="testimonial">
+            <div class="testi-text">"Em 3 semanas identifiquei 5 produtos com alta demanda e baixa concorrência. Meu faturamento cresceu 3x. Melhor investimento que fiz para minha loja."</div>
+            <div class="testi-author">
+              <div class="testi-avatar" style="background:linear-gradient(135deg,#f59e0b,#ef4444)">JC</div>
+              <div>
+                <div class="testi-name">Juliana Costa</div>
+                <div class="testi-role">Vendedora — Moda, RJ</div>
+                <div class="testi-stars">★★★★★</div>
+              </div>
+            </div>
+          </div>
+
+          <button class="btn-cont show" onclick="goTo(10)">
+            Ver próxima pergunta <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- ═══ STEP 10: Obstáculo ═══ -->
+      <div class="step" id="step10">
+        <div class="q-inner">
+          <div class="q-step-label">Pergunta 7 de 8</div>
+          <h2 class="q-title">O que mais te impede de encontrar o produto certo?</h2>
+          <p class="q-sub">Selecione o principal obstáculo que você enfrenta hoje.</p>
+          <div class="options">
+            <div class="opt" onclick="selectOpt(this,'q7','dados','Dados são a chave! O JoomPulse te entrega análises prontas — sem precisar de planilhas! 📊')">
+              <div class="opt-icon">📊</div>
+              <div class="opt-text">Falta de dados confiáveis<div class="opt-desc">Não sei o que está vendendo de verdade</div></div>
+              <div class="opt-radio"></div>
+            </div>
+            <div class="opt" onclick="selectOpt(this,'q7','tempo','Tempo é precioso! Com o JoomPulse, você encontra oportunidades em minutos, não horas! ⏰')">
+              <div class="opt-icon">⏰</div>
+              <div class="opt-text">Falta de tempo para pesquisar<div class="opt-desc">Pesquisa manual demora muito</div></div>
+              <div class="opt-radio"></div>
+            </div>
+            <div class="opt" onclick="selectOpt(this,'q7','capital','Capital inteligente! Com os produtos certos, você investe menos e ganha mais! 💵')">
+              <div class="opt-icon">💵</div>
+              <div class="opt-text">Capital limitado para testar<div class="opt-desc">Não posso arriscar no produto errado</div></div>
+              <div class="opt-radio"></div>
+            </div>
+            <div class="opt" onclick="selectOpt(this,'q7','nicho','Nicho saturado? Existem centenas de sub-nichos inexplorados — e vamos te mostrar quais! 💡')">
+              <div class="opt-icon">🔐</div>
+              <div class="opt-text">Nichos muito saturados<div class="opt-desc">Tudo parece concorrido demais</div></div>
+              <div class="opt-radio"></div>
+            </div>
+          </div>
+          <div class="opt-feedback" id="fb-q7"></div>
+          <button class="btn-cont" id="cont-q7" onclick="goTo(11)">
+            Continuar <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- ═══ STEP 11: Perdeu dinheiro? ═══ -->
+      <div class="step" id="step11">
+        <div class="q-inner">
+          <div class="q-step-label">Pergunta 8 de 8</div>
+          <h2 class="q-title">Você já perdeu dinheiro investindo no produto errado?</h2>
+          <p class="q-sub">Seja direto — 78% dos vendedores já passaram por isso.</p>
+          <div class="options">
+            <div class="opt" onclick="selectOpt(this,'q8','sim-muito','Isso nunca mais vai acontecer! O JoomPulse existe para evitar exatamente isso. Vamos te mostrar como! 💪')">
+              <div class="opt-icon">😤</div>
+              <div class="opt-text">Sim, já perdi bastante<div class="opt-desc">Foi uma experiência frustrante</div></div>
+              <div class="opt-radio"></div>
+            </div>
+            <div class="opt" onclick="selectOpt(this,'q8','sim-pouco','Entendemos! Qualquer perda é evitável com os dados certos. Vamos te proteger! 🛡️')">
+              <div class="opt-icon">😕</div>
+              <div class="opt-text">Sim, alguma coisa<div class="opt-desc">Pequenas perdas aqui e ali</div></div>
+              <div class="opt-radio"></div>
+            </div>
+            <div class="opt" onclick="selectOpt(this,'q8','nao','Incrível! Você tem sorte — ou toma boas decisões. Vamos garantir que continue assim! ✅')">
+              <div class="opt-icon">✅</div>
+              <div class="opt-text">Não, ainda não<div class="opt-desc">Tenho sido cuidadoso</div></div>
+              <div class="opt-radio"></div>
+            </div>
+            <div class="opt" onclick="selectOpt(this,'q8','nao-comecei','Ótimo! Vamos garantir que você comece com o pé direito desde o primeiro produto! 🌟')">
+              <div class="opt-icon">🌱</div>
+              <div class="opt-text">Ainda não comecei a vender</div>
+              <div class="opt-radio"></div>
+            </div>
+          </div>
+          <div class="opt-feedback" id="fb-q8"></div>
+          <button class="btn-cont" id="cont-q8" onclick="goTo(12)">
+            Ver minha análise <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- ═══ STEP 12: LOADING A ═══ -->
+      <div class="step" id="step12">
+        <div class="loading-inner">
+          <div class="loading-title">Analisando seu <span class="g">perfil de vendedor</span>...</div>
+          <p class="loading-sub">Cruzando seus dados com +2 milhões de produtos no ML</p>
+          <div class="loading-bar-wrap">
+            <div class="loading-bar-label">
+              <span id="ldText">Identificando oportunidades...</span>
+              <span id="ldPct">0%</span>
+            </div>
+            <div class="loading-bar"><div class="loading-fill" id="ldFill"></div></div>
+          </div>
+          <div class="loading-facts">
+            <div class="lf-item" id="lf0">
+              <div class="lf-dot"></div>
+              Mapeando categorias com maior demanda
+              <span class="lf-check">✓</span>
+            </div>
+            <div class="lf-item" id="lf1">
+              <div class="lf-dot"></div>
+              Calculando score de oportunidade
+              <span class="lf-check">✓</span>
+            </div>
+            <div class="lf-item" id="lf2">
+              <div class="lf-dot"></div>
+              Analisando concorrência nos nichos
+              <span class="lf-check">✓</span>
+            </div>
+            <div class="lf-item" id="lf3">
+              <div class="lf-dot"></div>
+              Identificando produtos em alta
+              <span class="lf-check">✓</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══ STEP 13: Meta de receita ═══ -->
+      <div class="step" id="step13">
+        <div class="q-inner">
+          <div class="q-step-label">Última etapa</div>
+          <h2 class="q-title">Qual é sua meta de faturamento nos próximos 6 meses?</h2>
+          <p class="q-sub">Isso define o plano personalizado que vamos criar para você.</p>
+          <div class="options">
+            <div class="opt" onclick="selectOpt(this,'q9','10k','Meta alcançável! Com os produtos certos você chega lá em 60-90 dias! 🎯')">
+              <div class="opt-icon">🎯</div>
+              <div class="opt-text">Até R$10.000/mês<div class="opt-desc">Começar bem e crescer</div></div>
+              <div class="opt-radio"></div>
+            </div>
+            <div class="opt" onclick="selectOpt(this,'q9','30k','Meta ambiciosa e alcançável! Temos cases de sucesso exatamente nessa faixa! 🚀')">
+              <div class="opt-icon">🚀</div>
+              <div class="opt-text">R$10.000 – R$30.000/mês</div>
+              <div class="opt-radio"></div>
+            </div>
+            <div class="opt" onclick="selectOpt(this,'q9','100k','Esse é o nível das grandes operações! Vamos traçar o caminho para chegar lá! 🏆')">
+              <div class="opt-icon">🏆</div>
+              <div class="opt-text">R$30.000 – R$100.000/mês</div>
+              <div class="opt-radio"></div>
+            </div>
+            <div class="opt" onclick="selectOpt(this,'q9','100k+','Visão grande! Você pensa como os maiores sellers do Brasil! 💎')">
+              <div class="opt-icon">💎</div>
+              <div class="opt-text">Acima de R$100.000/mês<div class="opt-desc">Quero escalar de verdade</div></div>
+              <div class="opt-radio"></div>
+            </div>
+          </div>
+          <div class="opt-feedback" id="fb-q9"></div>
+          <button class="btn-cont" id="cont-q9" onclick="goTo(14)">
+            Gerar meu plano <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- ═══ STEP 14: LOADING B — Final ═══ -->
+      <div class="step" id="step14">
+        <div class="loading-inner">
+          <div class="loading-title">Preparando sua <span class="g">análise personalizada</span>...</div>
+          <p class="loading-sub">Quase lá! Estamos montando seu plano exclusivo</p>
+          <div class="loading-bar-wrap">
+            <div class="loading-bar-label">
+              <span id="ld2Text">Gerando recomendações...</span>
+              <span id="ld2Pct">0%</span>
+            </div>
+            <div class="loading-bar"><div class="loading-fill" id="ld2Fill"></div></div>
+          </div>
+          <div class="loading-facts">
+            <div class="lf-item" id="lf2a">
+              <div class="lf-dot"></div>
+              Selecionando os melhores produtos para você
+              <span class="lf-check">✓</span>
+            </div>
+            <div class="lf-item" id="lf2b">
+              <div class="lf-dot"></div>
+              Calculando projeção de receita
+              <span class="lf-check">✓</span>
+            </div>
+            <div class="lf-item" id="lf2c">
+              <div class="lf-dot"></div>
+              Montando estratégia personalizada
+              <span class="lf-check">✓</span>
+            </div>
+            <div class="lf-item" id="lf2d">
+              <div class="lf-dot"></div>
+              Finalizando seu plano de crescimento
+              <span class="lf-check">✓</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══ STEP 15: RESULT ═══ -->
+      <div class="step" id="step15">
+        <div class="result-inner">
+          <div class="result-top">
+            <div class="result-badge">✅ Sua análise está pronta</div>
+            <h2 class="result-title">Seu plano de crescimento <span class="g">personalizado</span></h2>
+            <p class="result-sub">Baseado no seu perfil, identificamos oportunidades de alto potencial para você escalar no Mercado Livre.</p>
+          </div>
+
+          <div class="result-metrics">
+            <div class="metric-box">
+              <div class="metric-label">Produtos identificados</div>
+              <div class="metric-val">47</div>
+              <div class="metric-trend">↑ alto potencial</div>
+            </div>
+            <div class="metric-box">
+              <div class="metric-label">Potencial de receita</div>
+              <div class="metric-val" id="metaVal">R$28k</div>
+              <div class="metric-trend">↑ em 90 dias</div>
+            </div>
+            <div class="metric-box">
+              <div class="metric-label">Score de oportunidade</div>
+              <div class="metric-val">9.4</div>
+              <div class="metric-trend">↑ acima da média</div>
+            </div>
+            <div class="metric-box">
+              <div class="metric-label">Concorrência no nicho</div>
+              <div class="metric-val">Baixa</div>
+              <div class="metric-trend">✓ janela aberta</div>
+            </div>
+          </div>
+
+          <div class="result-plan">
+            <div class="plan-item">
+              <div class="plan-icon">📦</div>
+              Acesso a +500 produtos trending em tempo real
+            </div>
+            <div class="plan-item">
+              <div class="plan-icon">📊</div>
+              Análise de demanda e concorrência por produto
+            </div>
+            <div class="plan-item">
+              <div class="plan-icon">⚡</div>
+              Alertas de oportunidades antes da concorrência
+            </div>
+            <div class="plan-item">
+              <div class="plan-icon">🎯</div>
+              Score de oportunidade para cada nicho
+            </div>
+          </div>
+
+          <div class="countdown-wrap">
+            <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path stroke-linecap="round" d="M12 6v6l4 2"/></svg>
+            Oferta especial expira em <span class="countdown-time" id="countdown">10:00</span>
+          </div>
+
+          <a href="index.html" class="btn-cta">
+            Acessar JoomPulse gratuitamente
+            <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+
+          <div class="result-guarantee">
+            <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+            Grátis para começar · Sem cartão de crédito
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /.card -->
+  </main>
+</div><!-- /.quiz-shell -->
+
+<script>
+// ── STATE ─────────────────────────────────────────────
+let currentStep = 0;
+const totalSteps = 16;
+const answers = {};
+
+// Progress: we have 3 segments. Map steps to segments.
+// Questions are spread across steps 1-13 (real questions), intermediates, loadings
+const STEPS_WITH_BACK = [1,2,3,4,5,6,7,8,9,10,11,13]; // allow back on these
+
+function getProgressForStep(s) {
+  // Segment 0: steps 0-5, Segment 1: steps 6-10, Segment 2: steps 11-15
+  const segs = [0, 0, 0];
+  if (s >= 1)  segs[0] = Math.min(100, ((s-0) / 5) * 100);
+  if (s >= 6)  { segs[0] = 100; segs[1] = Math.min(100, ((s-5) / 5) * 100); }
+  if (s >= 11) { segs[0] = 100; segs[1] = 100; segs[2] = Math.min(100, ((s-10) / 5) * 100); }
+  return segs;
+}
+
+function updateProgress(s) {
+  const segs = getProgressForStep(s);
+  document.getElementById('prog0').style.width = segs[0] + '%';
+  document.getElementById('prog1').style.width = segs[1] + '%';
+  document.getElementById('prog2').style.width = segs[2] + '%';
+}
+
+function goTo(s) {
+  document.getElementById('step' + currentStep).classList.remove('active');
+  currentStep = s;
+  const el = document.getElementById('step' + s);
+  el.classList.add('active');
+  updateProgress(s);
+
+  const backBtn = document.getElementById('btnBack');
+  if (STEPS_WITH_BACK.includes(s)) {
+    backBtn.classList.remove('hidden');
+  } else {
+    backBtn.classList.add('hidden');
+  }
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+
+  // Trigger special step behaviors
+  if (s === 12) startLoading1();
+  if (s === 14) startLoading2();
+  if (s === 15) startCountdown();
+}
+
+function goBack() {
+  const prevMap = {2:1,3:2,4:3,5:4,6:5,7:6,8:7,9:8,10:9,11:10,13:11};
+  const prev = prevMap[currentStep];
+  if (prev !== undefined) goTo(prev);
+}
+
+// ── OPTION SELECTION ──────────────────────────────────
+function selectOpt(el, qid, val, feedback) {
+  // Clear previous selection in same group
+  const opts = el.closest('.options').querySelectorAll('.opt');
+  opts.forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+  answers[qid] = val;
+
+  const fb = document.getElementById('fb-' + qid);
+  if (fb) {
+    fb.textContent = '✨ ' + feedback;
+    fb.classList.add('show');
+  }
+
+  const btn = document.getElementById('cont-' + qid);
+  if (btn) {
+    btn.classList.add('show');
+  }
+
+  // Update result meta value based on q9 answer
+  if (qid === 'q9') {
+    const metaMap = {'10k':'R$10k','30k':'R$30k','100k':'R$100k','100k+':'R$150k+'};
+    const mv = document.getElementById('metaVal');
+    if (mv) mv.textContent = metaMap[val] || 'R$30k';
+  }
+}
+
+// ── SPLASH LOADING SIMULATION ─────────────────────────
+function runSplashLoad() {
+  const fill = document.getElementById('slFill');
+  const pct = document.getElementById('slPct');
+  const txt = document.getElementById('slText');
+  const labels = ['Analisando o mercado...','Verificando tendências...','Quase pronto!'];
+  const vals = [
+    { el: 'slItem0', v: 'slV0', text: '2.847', delay: 800 },
+    { el: 'slItem1', v: 'slV1', text: '+34%', delay: 1600 },
+    { el: 'slItem2', v: 'slV2', text: 'R$28k', delay: 2400 },
+  ];
+
+  let p = 0;
+  const interval = setInterval(() => {
+    p += 2;
+    if (p > 100) { clearInterval(interval); return; }
+    fill.style.width = p + '%';
+    pct.textContent = p + '%';
+    const li = Math.floor((p / 100) * labels.length);
+    txt.textContent = labels[Math.min(li, labels.length - 1)];
+  }, 40);
+
+  vals.forEach(v => {
+    setTimeout(() => {
+      document.getElementById(v.el).classList.add('show');
+      document.getElementById(v.v).textContent = v.text;
+    }, v.delay);
+  });
+
+  setTimeout(() => {
+    document.getElementById('btnStart').classList.add('show');
+  }, 3000);
+}
+
+// ── LOADING 1 ─────────────────────────────────────────
+function startLoading1() {
+  const fill = document.getElementById('ldFill');
+  const pct = document.getElementById('ldPct');
+  const txt = document.getElementById('ldText');
+  const phases = [
+    { t: 'Identificando oportunidades...', p: 25 },
+    { t: 'Calculando scores...', p: 55 },
+    { t: 'Filtrando nichos...', p: 80 },
+    { t: 'Concluindo análise...', p: 100 },
+  ];
+
+  const items = ['lf0','lf1','lf2','lf3'];
+  items.forEach((id, i) => {
+    setTimeout(() => document.getElementById(id).classList.add('show'), i * 900 + 400);
+    setTimeout(() => document.getElementById(id).classList.add('done'), i * 900 + 1100);
+  });
+
+  let phaseIdx = 0;
+  function runPhase() {
+    if (phaseIdx >= phases.length) {
+      setTimeout(() => goTo(13), 600);
+      return;
+    }
+    const ph = phases[phaseIdx++];
+    txt.textContent = ph.t;
+    fill.style.width = ph.p + '%';
+    pct.textContent = ph.p + '%';
+    setTimeout(runPhase, phaseIdx === phases.length ? 800 : 900);
+  }
+  setTimeout(runPhase, 300);
+}
+
+// ── LOADING 2 ─────────────────────────────────────────
+function startLoading2() {
+  const fill = document.getElementById('ld2Fill');
+  const pct = document.getElementById('ld2Pct');
+  const txt = document.getElementById('ld2Text');
+  const phases = [
+    { t: 'Gerando recomendações...', p: 30 },
+    { t: 'Calculando projeções...', p: 60 },
+    { t: 'Montando estratégia...', p: 85 },
+    { t: 'Finalizando plano...', p: 100 },
+  ];
+
+  const items = ['lf2a','lf2b','lf2c','lf2d'];
+  items.forEach((id, i) => {
+    setTimeout(() => document.getElementById(id).classList.add('show'), i * 800 + 400);
+    setTimeout(() => document.getElementById(id).classList.add('done'), i * 800 + 1000);
+  });
+
+  let phaseIdx = 0;
+  function runPhase() {
+    if (phaseIdx >= phases.length) {
+      setTimeout(() => goTo(15), 600);
+      return;
+    }
+    const ph = phases[phaseIdx++];
+    txt.textContent = ph.t;
+    fill.style.width = ph.p + '%';
+    pct.textContent = ph.p + '%';
+    setTimeout(runPhase, 800);
+  }
+  setTimeout(runPhase, 300);
+}
+
+// ── COUNTDOWN ─────────────────────────────────────────
+function startCountdown() {
+  let secs = 10 * 60; // 10 minutes
+  const el = document.getElementById('countdown');
+  const tick = () => {
+    if (secs <= 0) return;
+    secs--;
+    const m = Math.floor(secs / 60);
+    const s = secs % 60;
+    el.textContent = String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0');
+  };
+  setInterval(tick, 1000);
+}
+
+// ── THEME TOGGLE ──────────────────────────────────────
+function toggleTheme() {
+  const body = document.body;
+  const isDark = body.getAttribute('data-theme') === 'dark';
+  body.setAttribute('data-theme', isDark ? 'light' : 'dark');
+  document.getElementById('iconSun').style.display = isDark ? '' : 'none';
+  document.getElementById('iconMoon').style.display = isDark ? 'none' : '';
+}
+
+// Check for ?theme=dark param
+(function() {
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('theme') === 'dark') {
+    document.body.setAttribute('data-theme', 'dark');
+    document.getElementById('iconSun').style.display = 'none';
+    document.getElementById('iconMoon').style.display = '';
+  }
+})();
+
+// ── INIT ──────────────────────────────────────────────
+window.addEventListener('DOMContentLoaded', () => {
+  updateProgress(0);
+  setTimeout(runSplashLoad, 500);
+});
+</script>
+</body>
+</html>
