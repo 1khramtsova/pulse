@@ -26,8 +26,7 @@
 }
 html[data-theme="dark"]{
   --page:#050507;
-  --sphere-stripe:rgba(33,120,72,.16);
-  --sphere-mask:78%;
+  --pulse-op:.5; --pulse-glow:.55; --scrim:rgba(5,5,7,.55);
   --logo:url("assets/logo-joom.png");
   --logo-puro:url("assets/logo-puro.png");
   --page-ink:#ffffff; --page-mut:rgba(255,255,255,.62);
@@ -39,8 +38,7 @@ html[data-theme="dark"]{
 }
 html[data-theme="light"]{
   --page:#e8eefa;
-  --sphere-stripe:rgba(10,108,241,.10);
-  --sphere-mask:74%;
+  --pulse-op:.20; --pulse-glow:.35; --scrim:rgba(232,238,250,.45);
   --logo:url("assets/logo-joom-dark.png");
   --logo-puro:url("assets/logo-puro-dark.png");
   --page-ink:#0b1220; --page-mut:#52617d;
@@ -60,22 +58,29 @@ body{
 }
 .dim{font-family:'Sora',sans-serif}
 
-/* ----- esfera listrada de fundo (igual ao ref) ----- */
-.sphere{
-  position:fixed; top:42%; left:50%; transform:translate(-50%,-50%);
-  width:min(96vw,920px); height:min(96vw,920px); border-radius:50%;
-  background:repeating-linear-gradient(0deg,var(--sphere-stripe) 0 20px,transparent 20px 46px);
-  -webkit-mask:radial-gradient(circle at 50% 50%,#000 var(--sphere-mask),transparent calc(var(--sphere-mask) + 8%));
-          mask:radial-gradient(circle at 50% 50%,#000 var(--sphere-mask),transparent calc(var(--sphere-mask) + 8%));
-  z-index:0; pointer-events:none;
+/* ----- marca "pulse" da JoomPulse no fundo ----- */
+.pulsebg{
+  position:fixed; top:43%; left:50%; transform:translate(-50%,-50%);
+  width:min(132vw,1240px); aspect-ratio:160/98;
+  background:url("assets/pulse-mark.svg") center/contain no-repeat;
+  opacity:var(--pulse-op); z-index:0; pointer-events:none;
+  animation:breathe 6.5s ease-in-out infinite;
+  will-change:transform,opacity;
 }
-/* "raio Z" diagonal sutil dentro da esfera */
-.sphere::after{
-  content:""; position:absolute; inset:18%;
-  background:linear-gradient(115deg,transparent 44%,var(--sphere-stripe) 44% 56%,transparent 56%);
-  border-radius:50%;
-  -webkit-mask:radial-gradient(circle,#000 70%,transparent 72%); mask:radial-gradient(circle,#000 70%,transparent 72%);
+/* brilho difuso atrás da onda (glow) */
+.pulsebg::after{
+  content:""; position:absolute; inset:-6%;
+  background:url("assets/pulse-mark.svg") center/contain no-repeat;
+  filter:blur(34px) saturate(1.3); opacity:var(--pulse-glow); z-index:-1;
 }
+@keyframes breathe{
+  0%,100%{transform:translate(-50%,-50%) scale(1);   opacity:calc(var(--pulse-op) * .82)}
+  50%    {transform:translate(-50%,-50%) scale(1.035);opacity:var(--pulse-op)}
+}
+@media(prefers-reduced-motion:reduce){.pulsebg{animation:none}}
+/* scrim suave pra dar contraste ao texto/cartão sem matar o brilho */
+.scrim{position:fixed;inset:0;z-index:1;pointer-events:none;
+  background:radial-gradient(58% 50% at 50% 46%,var(--scrim),transparent 72%)}
 
 /* ============ TOPO: progresso + voltar + logo ============ */
 .prog{position:fixed;top:0;left:0;right:0;display:flex;gap:6px;padding:14px 18px;z-index:30}
@@ -296,7 +301,8 @@ h2.q{font-family:'Sora';font-weight:800;font-size:33px;line-height:1.1;letter-sp
 </head>
 <body>
 
-<div class="sphere"></div>
+<div class="pulsebg"></div>
+<div class="scrim"></div>
 
 <div class="prog hide" id="prog"></div>
 <button class="back hide" id="back" onclick="goBack()" aria-label="Voltar">
