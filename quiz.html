@@ -4,581 +4,590 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>JoomPulse · Quiz</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
-@font-face { font-family:"Franie"; src:url("Franie-SemiBold.otf") format("opentype"); font-weight:700; font-display:swap; }
-@font-face { font-family:"Franie"; src:url("Franie-Light.otf") format("opentype"); font-weight:300; font-display:swap; }
+@font-face{font-family:"Franie";src:url("Franie-SemiBold.otf") format("opentype");font-weight:700;font-display:swap}
+@font-face{font-family:"Franie";src:url("Franie-Light.otf") format("opentype");font-weight:300;font-display:swap}
 
-/* ── TOKENS ── */
-:root {
-  --blue:#0074FF; --blue2:#4096FF; --green:#50B848; --orange:#FF9D00; --red:#FF1010;
-  --primary:#1677FF;
-  --fh:"Franie","Inter",system-ui,sans-serif;
-  --fb:"Inter",system-ui,sans-serif;
-}
-[data-theme="light"] {
-  --bg:#F0F4FA; --card:#fff; --card-border:2px solid #0074FF;
-  --card-shadow:0 2px 8px rgba(0,116,255,.08),0 8px 32px rgba(0,116,255,.12);
-  --txt:#000A1A; --sub:rgba(0,10,26,.55); --hint:rgba(0,10,26,.38);
-  --seg-bg:#DDE8F5; --seg-fill:#0074FF;
-  --opt-bg:#F7FAFF; --opt-bdr:rgba(0,116,255,.18);
-  --opt-hover:#EEF5FF; --opt-hover-bdr:#0074FF;
-  --opt-sel:#E6F0FF; --opt-sel-bdr:#0074FF;
-  --radio-bdr:rgba(0,10,26,.25); --radio-sel:#0074FF;
-  --fb-bg:#F6FFED; --fb-bdr:#b7eb8f; --fb-txt:#237804;
-  --stat-bg:#F0F6FF; --sep:rgba(0,10,26,.08);
-  --back:rgba(0,10,26,.3); --toggle-bg:#E6EEFF;
-  --header-bdr:rgba(0,116,255,.1);
-}
-[data-theme="dark"] {
-  --bg:#000A1A; --card:#0D1929; --card-border:2px solid rgba(255,255,255,.16);
-  --card-shadow:0 8px 40px rgba(0,0,0,.6),0 2px 8px rgba(0,0,0,.4);
-  --txt:#FFFFFF; --sub:rgba(255,255,255,.6); --hint:rgba(255,255,255,.35);
-  --seg-bg:rgba(255,255,255,.1); --seg-fill:#1677FF;
-  --opt-bg:rgba(255,255,255,.04); --opt-bdr:rgba(255,255,255,.1);
-  --opt-hover:rgba(0,116,255,.1); --opt-hover-bdr:rgba(0,116,255,.5);
-  --opt-sel:rgba(0,116,255,.18); --opt-sel-bdr:#1677FF;
-  --radio-bdr:rgba(255,255,255,.3); --radio-sel:#4096FF;
-  --fb-bg:rgba(80,184,72,.1); --fb-bdr:rgba(80,184,72,.3); --fb-txt:#73d13d;
-  --stat-bg:rgba(255,255,255,.05); --sep:rgba(255,255,255,.08);
-  --back:rgba(255,255,255,.3); --toggle-bg:rgba(255,255,255,.08);
-  --header-bdr:rgba(255,255,255,.07);
+:root{
+  --blue:#0074FF;--blue2:#3b8eff;--green:#50B848;--orange:#FF9D00;--red:#FF1010;
+  --fh:"Franie","Inter",sans-serif;--fb:"Inter",sans-serif;
 }
 
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{height:100%;-webkit-tap-highlight-color:transparent}
-body{min-height:100%;background:var(--bg);color:var(--txt);font-family:var(--fb);
-  -webkit-font-smoothing:antialiased;transition:background .3s,color .3s;overflow-x:hidden}
 
-/* ── WATERMARK ── */
-.wm{position:fixed;inset:0;pointer-events:none;z-index:0;
-  display:flex;align-items:center;justify-content:center;overflow:hidden}
-.wm svg{width:clamp(360px,65vw,800px);height:auto;opacity:.05}
-[data-theme="dark"] .wm svg{opacity:.07;filter:brightness(2) saturate(.3)}
+/* ═══ BACKGROUND ═══ */
+body{
+  min-height:100vh;font-family:var(--fb);-webkit-font-smoothing:antialiased;
+  background:#030F1E;color:#fff;overflow-x:hidden;
+  background-image:
+    radial-gradient(ellipse 900px 700px at 75% -5%,  rgba(0,116,255,.42),  transparent 65%),
+    radial-gradient(ellipse 600px 500px at -5% 95%,  rgba(80,184,72,.2),   transparent 60%),
+    radial-gradient(ellipse 500px 400px at 105% 60%, rgba(255,157,0,.12),  transparent 60%),
+    radial-gradient(ellipse 400px 300px at 40% 110%, rgba(0,116,255,.15),  transparent 55%);
+  background-attachment:fixed;
+}
 
-/* ── LAYOUT ── */
+/* animated blob layer */
+.aurora{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+.blob{position:absolute;border-radius:50%;filter:blur(90px);opacity:.55;animation:drift 18s ease-in-out infinite}
+.b1{width:600px;height:600px;background:radial-gradient(circle,#0050cc,transparent 70%);top:-150px;right:-100px;animation-delay:0s}
+.b2{width:500px;height:500px;background:radial-gradient(circle,#50B848,transparent 70%);bottom:-200px;left:-150px;animation-delay:-6s}
+.b3{width:350px;height:350px;background:radial-gradient(circle,#FF9D00,transparent 70%);top:40%;right:5%;opacity:.25;animation-delay:-12s}
+@keyframes drift{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(30px,-40px) scale(1.06)}66%{transform:translate(-20px,30px) scale(.95)}}
+
+/* grid overlay */
+body::before{
+  content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background-image:linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);
+  background-size:48px 48px;
+}
+
+/* ═══ LAYOUT ═══ */
 .shell{position:relative;z-index:1;min-height:100vh;display:flex;flex-direction:column}
 
-/* ── HEADER ── */
-.hdr{
-  position:sticky;top:0;z-index:50;
-  background:var(--bg);border-bottom:1px solid var(--header-bdr);
-  transition:background .3s;
-}
-.hdr-inner{max-width:560px;margin:0 auto;padding:0 16px;
-  height:52px;display:flex;align-items:center;gap:12px}
+/* ═══ HEADER ═══ */
+.hdr{position:sticky;top:0;z-index:50;padding:0 16px}
+.hdr-inner{max-width:540px;margin:0 auto;height:56px;display:flex;align-items:center;gap:12px}
 
-.btn-back{width:32px;height:32px;border:none;background:transparent;color:var(--back);
-  cursor:pointer;border-radius:8px;display:flex;align-items:center;justify-content:center;
-  transition:.15s;flex-shrink:0}
-.btn-back:hover{color:var(--txt);background:var(--opt-bg)}
+.btn-back{width:36px;height:36px;border:none;background:rgba(255,255,255,.08);
+  backdrop-filter:blur(8px);color:rgba(255,255,255,.65);cursor:pointer;
+  border-radius:10px;display:flex;align-items:center;justify-content:center;
+  border:1px solid rgba(255,255,255,.1);transition:.15s;flex-shrink:0}
+.btn-back:hover{color:#fff;background:rgba(255,255,255,.14)}
 .btn-back.hidden{visibility:hidden;pointer-events:none}
 
-.logo-wrap{display:flex;align-items:center;gap:7px;flex-shrink:0}
-.logo-mark{height:20px;width:auto}
-.logo-name{font-family:var(--fh);font-weight:700;font-size:15px;color:var(--txt);
-  letter-spacing:-.2px;line-height:1}
-[data-theme="dark"] .logo-mark{filter:brightness(10) saturate(0)}
+.logo-wrap{display:flex;align-items:center;gap:8px;flex-shrink:0}
+.logo-mark{height:22px;width:auto}
+.logo-name{font-family:var(--fh);font-weight:700;font-size:15px;color:#fff;letter-spacing:-.1px}
 
 /* Progress */
-.prog{flex:1;display:flex;gap:4px}
-.seg{flex:1;height:3px;border-radius:99px;background:var(--seg-bg);overflow:hidden}
-.seg-fill{height:100%;border-radius:99px;background:var(--seg-fill);width:0%;
-  transition:width .5s cubic-bezier(.4,0,.2,1)}
+.prog{flex:1;display:flex;gap:5px}
+.seg{flex:1;height:3px;border-radius:99px;background:rgba(255,255,255,.12);overflow:hidden}
+.seg-fill{height:100%;border-radius:99px;
+  background:linear-gradient(90deg,#0074FF,#50B848);
+  box-shadow:0 0 8px rgba(0,116,255,.7);
+  width:0%;transition:width .55s cubic-bezier(.4,0,.2,1)}
 
-/* Lang + theme toggles */
-.hdr-actions{display:flex;gap:6px;flex-shrink:0}
-.btn-icon{height:30px;padding:0 10px;border:none;border-radius:7px;
-  background:var(--toggle-bg);color:var(--sub);cursor:pointer;font-family:var(--fb);
+/* Lang / theme */
+.hdr-r{display:flex;gap:6px;flex-shrink:0}
+.pill{height:30px;padding:0 11px;border:1px solid rgba(255,255,255,.15);
+  border-radius:99px;background:rgba(255,255,255,.07);backdrop-filter:blur(8px);
+  color:rgba(255,255,255,.55);cursor:pointer;font-family:var(--fb);
   font-size:12px;font-weight:600;display:flex;align-items:center;gap:5px;
   transition:.15s;letter-spacing:.3px}
-.btn-icon:hover{color:var(--txt)}
-.btn-icon.active{color:var(--txt)}
+.pill.on{color:#fff;background:rgba(0,116,255,.3);border-color:rgba(0,116,255,.5);
+  box-shadow:0 0 12px rgba(0,116,255,.4)}
+.pill:hover{color:#fff}
 
-/* ── MAIN ── */
-.body{flex:1;display:flex;align-items:center;justify-content:center;padding:20px 16px 40px}
+/* ═══ MAIN ═══ */
+.body{flex:1;display:flex;align-items:center;justify-content:center;padding:12px 16px 40px}
 
-/* ── CARD ── */
-.card{background:var(--card);border:var(--card-border);border-radius:20px;
-  box-shadow:var(--card-shadow);width:100%;max-width:500px;overflow:hidden;
-  transition:background .3s,border .3s,box-shadow .3s}
+/* ═══ CARD ═══ */
+.card{
+  background:#fff;color:#000A1A;border-radius:26px;width:100%;max-width:500px;
+  box-shadow:0 32px 80px rgba(0,0,0,.55),0 8px 24px rgba(0,0,0,.3),
+    0 0 0 1px rgba(255,255,255,.06),
+    0 40px 60px rgba(0,116,255,.18);
+  overflow:hidden;
+}
 
-/* ── STEP TRANSITIONS ── */
+/* ═══ STEP TRANSITIONS ═══ */
 .step{display:none}
-.step.active{display:block;animation:stepIn .32s cubic-bezier(.4,0,.2,1)}
-.step.leaving{animation:stepOut .22s cubic-bezier(.4,0,.2,1) forwards}
-@keyframes stepIn{from{opacity:0;transform:translateX(24px)}to{opacity:1;transform:translateX(0)}}
-@keyframes stepOut{from{opacity:1;transform:translateX(0)}to{opacity:0;transform:translateX(-24px)}}
+.step.active{display:block;animation:sIn .3s cubic-bezier(.4,0,.2,1)}
+.step.out{animation:sOut .2s cubic-bezier(.4,0,.2,1) forwards}
+@keyframes sIn{from{opacity:0;transform:translateY(20px) scale(.98)}to{opacity:1;transform:none}}
+@keyframes sOut{from{opacity:1;transform:none}to{opacity:0;transform:translateY(-16px) scale(.98)}}
 
-/* ── SPLASH ── */
-.splash{padding:40px 28px 36px;display:flex;flex-direction:column;align-items:center;text-align:center}
-.splash-logo{height:32px;width:auto;margin-bottom:28px}
-[data-theme="dark"] .splash-logo{filter:brightness(0) invert(1)}
-.splash-h{font-family:var(--fh);font-weight:700;font-size:clamp(22px,5vw,28px);
-  line-height:1.15;letter-spacing:-.3px;color:var(--txt);margin-bottom:10px}
-.splash-h em{font-style:normal;color:var(--blue)}
-[data-theme="dark"] .splash-h em{color:var(--blue2)}
-.splash-sub{font-size:14.5px;color:var(--sub);line-height:1.55;margin-bottom:28px;max-width:340px}
+/* ═══ SPLASH ═══ */
+.splash{padding:44px 28px 40px;display:flex;flex-direction:column;align-items:center;text-align:center}
+.sp-logo{height:30px;margin-bottom:32px}
+.sp-h{font-family:var(--fh);font-weight:700;font-size:clamp(24px,5.5vw,32px);
+  line-height:1.1;letter-spacing:-.4px;color:#000A1A;margin-bottom:10px}
+.sp-h em{font-style:normal;
+  background:linear-gradient(120deg,#0074FF,#50B848);
+  -webkit-background-clip:text;background-clip:text;color:transparent}
+.sp-sub{font-size:15px;color:rgba(0,10,26,.6);line-height:1.55;margin-bottom:28px}
 
-/* Splash social proof row */
-.social-row{display:flex;align-items:center;gap:16px;flex-wrap:wrap;
-  justify-content:center;margin-bottom:24px}
-.social-pill{display:flex;align-items:center;gap:6px;background:var(--stat-bg);
-  border-radius:99px;padding:6px 12px;font-size:12.5px;font-weight:600;color:var(--sub)}
-.social-pill .dot{width:6px;height:6px;border-radius:50%;background:var(--green);flex-shrink:0}
+/* Pills row */
+.sp-pills{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:28px}
+.sp-pill{display:inline-flex;align-items:center;gap:6px;background:#F0F6FF;
+  border:1px solid rgba(0,116,255,.15);border-radius:99px;
+  padding:7px 14px;font-size:12.5px;font-weight:600;color:#0050cc}
+.sp-pill .dot{width:6px;height:6px;border-radius:50%;background:var(--green);flex-shrink:0}
 
-/* Loading bar */
-.ld-wrap{width:100%;max-width:320px;margin-bottom:24px}
-.ld-top{display:flex;justify-content:space-between;font-size:12px;font-weight:600;
-  color:var(--hint);margin-bottom:8px}
-.ld-bar{height:6px;background:var(--seg-bg);border-radius:99px;overflow:hidden}
-.ld-fill{height:100%;background:var(--blue);border-radius:99px;width:0%;transition:width .4s ease}
-[data-theme="dark"] .ld-fill{background:var(--primary)}
+/* Loading sim */
+.sp-ld{width:100%;max-width:340px;margin-bottom:28px}
+.sp-ld-top{display:flex;justify-content:space-between;font-size:12px;font-weight:600;
+  color:rgba(0,10,26,.45);margin-bottom:9px}
+.sp-ld-bar{height:7px;background:#E8F0FF;border-radius:99px;overflow:hidden;margin-bottom:16px}
+.sp-ld-fill{height:100%;background:linear-gradient(90deg,#0074FF,#50B848);
+  border-radius:99px;width:0%;transition:width .35s ease}
+.sp-stats{display:flex;flex-direction:column;gap:8px}
+.sp-stat{display:flex;align-items:center;justify-content:space-between;
+  background:#F7FAFF;border-radius:11px;padding:10px 14px;
+  opacity:0;transform:translateY(8px);transition:opacity .3s,transform .3s}
+.sp-stat.show{opacity:1;transform:none}
+.sp-stat-l{font-size:13px;font-weight:500;color:rgba(0,10,26,.65)}
+.sp-stat-v{font-family:var(--fh);font-weight:700;font-size:16px;
+  background:linear-gradient(120deg,#0074FF,#50B848);
+  -webkit-background-clip:text;background-clip:text;color:transparent}
 
-.ld-items{display:flex;flex-direction:column;gap:8px;width:100%;max-width:320px}
-.ld-item{display:flex;align-items:center;justify-content:space-between;
-  background:var(--stat-bg);border-radius:10px;padding:10px 14px;
-  opacity:0;transform:translateY(8px);transition:opacity .3s,transform .3s;
-  font-size:13px;color:var(--sub);font-weight:500}
-.ld-item.show{opacity:1;transform:translateY(0)}
-.ld-val{font-family:var(--fh);font-weight:700;font-size:15px;color:var(--blue)}
-[data-theme="dark"] .ld-val{color:var(--blue2)}
-
-/* ── QUESTION ── */
-.q-inner{padding:28px 24px 24px}
-.q-meta{font-size:11.5px;font-weight:700;letter-spacing:1.1px;text-transform:uppercase;
-  color:var(--blue);opacity:.8;margin-bottom:14px}
-[data-theme="dark"] .q-meta{color:var(--blue2)}
-.q-h{font-family:var(--fh);font-weight:700;font-size:clamp(19px,4.5vw,24px);
-  line-height:1.2;letter-spacing:-.3px;color:var(--txt);margin-bottom:18px}
-.q-sub{font-size:14px;color:var(--sub);line-height:1.5;margin-top:-10px;margin-bottom:18px}
+/* ═══ QUESTION ═══ */
+.q{padding:28px 24px 24px}
+.q-step{font-size:11px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;
+  color:#0074FF;margin-bottom:14px;opacity:.8}
+.q-h{font-family:var(--fh);font-weight:700;font-size:clamp(20px,5vw,26px);
+  line-height:1.18;letter-spacing:-.4px;color:#000A1A;margin-bottom:20px}
 
 /* Options */
-.opts{display:flex;flex-direction:column;gap:8px;margin-bottom:16px}
-.opt{display:flex;align-items:center;gap:12px;background:var(--opt-bg);
-  border:1.5px solid var(--opt-bdr);border-radius:12px;padding:13px 16px;
-  cursor:pointer;transition:background .15s,border-color .15s,transform .1s;
-  user-select:none;-webkit-user-select:none}
-.opt:hover{background:var(--opt-hover);border-color:var(--opt-hover-bdr)}
-.opt:active{transform:scale(.985)}
-.opt.sel{background:var(--opt-sel);border-color:var(--opt-sel-bdr)}
-.opt-em{font-size:20px;flex-shrink:0;width:28px;text-align:center;line-height:1}
+.opts{display:flex;flex-direction:column;gap:9px;margin-bottom:16px}
+.opt{
+  display:flex;align-items:center;gap:13px;
+  padding:14px 18px 14px 16px;border-radius:13px;cursor:pointer;
+  border:1.5px solid #E8EEFF;background:#F9FBFF;
+  transition:all .18s cubic-bezier(.4,0,.2,1);user-select:none;-webkit-user-select:none;
+}
+.opt:hover{border-color:#0074FF;background:#EEF6FF;transform:translateX(3px)}
+.opt:active{transform:scale(.975)}
+
+/* SELECTED = solid blue fill — the key dopamine hit */
+.opt.sel{
+  background:#0074FF;border-color:#0074FF;
+  box-shadow:0 8px 28px rgba(0,116,255,.42),0 2px 8px rgba(0,116,255,.3);
+  transform:translateX(3px);
+}
+.opt.sel .opt-em{filter:none}
+.opt.sel .opt-label{color:#fff}
+.opt.sel .opt-desc{color:rgba(255,255,255,.75)}
+.opt.sel .radio{border-color:#fff;background:#fff}
+.opt.sel .radio-dot{opacity:1;background:#0074FF}
+
+.opt-em{font-size:22px;flex-shrink:0;width:30px;text-align:center;line-height:1}
 .opt-body{flex:1;min-width:0}
-.opt-label{font-size:14.5px;font-weight:600;color:var(--txt);line-height:1.3}
-.opt-desc{font-size:12px;color:var(--sub);margin-top:2px;line-height:1.35}
-.radio{width:20px;height:20px;border-radius:50%;border:2px solid var(--radio-bdr);
-  flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:.15s}
-.opt.sel .radio{border-color:var(--radio-sel);background:var(--radio-sel)}
-.radio-dot{width:7px;height:7px;border-radius:50%;background:#fff;opacity:0;transition:.12s}
-.opt.sel .radio-dot{opacity:1}
+.opt-label{font-size:14.5px;font-weight:600;color:#000A1A;line-height:1.3;transition:color .18s}
+.opt-desc{font-size:12px;color:rgba(0,10,26,.5);margin-top:2px;line-height:1.35;transition:color .18s}
+.radio{width:21px;height:21px;border-radius:50%;border:2px solid #C8D6F5;
+  flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:.18s;background:#fff}
+.radio-dot{width:8px;height:8px;border-radius:50%;opacity:0;transition:.15s}
 
 /* Feedback */
-.feedback{background:var(--fb-bg);border:1px solid var(--fb-bdr);border-radius:10px;
-  padding:11px 15px;font-size:13px;font-weight:600;color:var(--fb-txt);
-  line-height:1.45;display:none;margin-bottom:14px;
-  animation:fbIn .25s cubic-bezier(.4,0,.2,1)}
+.feedback{background:#F0FFF4;border:1px solid #b7eb8f;border-radius:10px;
+  padding:11px 15px;font-size:13px;font-weight:600;color:#237804;
+  display:none;margin-bottom:12px;animation:fbIn .25s ease}
 .feedback.show{display:block}
-@keyframes fbIn{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fbIn{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
 
-/* Continue button (for intermediates & last question) */
-.btn-cont{width:100%;padding:15px;border-radius:12px;border:none;cursor:pointer;
-  font-family:var(--fh);font-weight:700;font-size:15px;color:#fff;
-  background:var(--primary);display:flex;align-items:center;justify-content:center;gap:8px;
-  transition:.18s;opacity:0;pointer-events:none}
-.btn-cont.show{opacity:1;pointer-events:auto}
-.btn-cont:hover{background:#4096FF;transform:translateY(-1px)}
-
-/* Auto-advance indicator */
-.auto-hint{font-size:11.5px;color:var(--hint);text-align:center;margin-bottom:10px;
-  opacity:0;transition:opacity .3s;letter-spacing:.2px}
+/* Auto-hint */
+.auto-hint{font-size:11.5px;color:rgba(0,10,26,.35);text-align:center;margin-bottom:4px;
+  opacity:0;transition:opacity .3s}
 .auto-hint.show{opacity:1}
 
-/* ── INTERMEDIATE ── */
-.inter-inner{padding:36px 24px 28px;display:flex;flex-direction:column;align-items:center;text-align:center}
-.inter-icon{font-size:52px;margin-bottom:18px;animation:iconPop .5s cubic-bezier(.34,1.56,.64,1)}
-@keyframes iconPop{from{opacity:0;transform:scale(.5) rotate(-10deg)}to{opacity:1;transform:scale(1) rotate(0)}}
-.inter-tag{font-size:11px;font-weight:700;letter-spacing:1.3px;text-transform:uppercase;
-  color:var(--blue);background:var(--stat-bg);border-radius:99px;
-  padding:5px 12px;margin-bottom:14px}
-[data-theme="dark"] .inter-tag{color:var(--blue2)}
-.inter-h{font-family:var(--fh);font-weight:700;font-size:clamp(20px,4.8vw,26px);
-  line-height:1.2;letter-spacing:-.3px;color:var(--txt);margin-bottom:10px}
-.inter-h em{font-style:normal;color:var(--blue)}
-[data-theme="dark"] .inter-h em{color:var(--blue2)}
-.inter-body{font-size:14px;color:var(--sub);line-height:1.6;max-width:360px;margin-bottom:22px}
+/* ═══ CONTINUE BTN (inter screens only) ═══ */
+.btn-cont{width:100%;padding:15px;border-radius:13px;border:none;cursor:pointer;
+  font-family:var(--fh);font-weight:700;font-size:15.5px;color:#fff;
+  background:#0074FF;display:flex;align-items:center;justify-content:center;gap:8px;
+  box-shadow:0 8px 24px rgba(0,116,255,.45);transition:.18s}
+.btn-cont:hover{background:#0065e0;transform:translateY(-1px);box-shadow:0 12px 32px rgba(0,116,255,.55)}
 
-/* Stats grid */
-.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;width:100%;margin-bottom:22px}
-.stat{background:var(--stat-bg);border-radius:12px;padding:14px 10px;
-  display:flex;flex-direction:column;align-items:center;gap:4px}
-.stat-n{font-family:var(--fh);font-weight:700;font-size:20px;color:var(--blue);line-height:1}
-[data-theme="dark"] .stat-n{color:var(--blue2)}
-.stat-l{font-size:11px;font-weight:600;color:var(--sub);text-align:center;line-height:1.3}
+/* ═══ INTERMEDIATE ═══ */
+.inter{padding:36px 24px 28px;display:flex;flex-direction:column;align-items:center;text-align:center}
+.inter-icon{font-size:56px;margin-bottom:18px;animation:icoIn .5s cubic-bezier(.34,1.56,.64,1)}
+@keyframes icoIn{from{opacity:0;transform:scale(.4) rotate(-15deg)}to{opacity:1;transform:none}}
+.inter-tag{font-size:10.5px;font-weight:700;letter-spacing:1.3px;text-transform:uppercase;
+  color:#0074FF;background:#EEF6FF;border-radius:99px;padding:5px 13px;margin-bottom:14px}
+.inter-h{font-family:var(--fh);font-weight:700;font-size:clamp(21px,5vw,27px);
+  line-height:1.18;letter-spacing:-.35px;color:#000A1A;margin-bottom:10px}
+.inter-h em{font-style:normal;
+  background:linear-gradient(120deg,#0074FF,#50B848);
+  -webkit-background-clip:text;background-clip:text;color:transparent}
+.inter-body{font-size:14.5px;color:rgba(0,10,26,.6);line-height:1.6;max-width:380px;margin-bottom:24px}
 
-/* Avatar row */
-.avs{display:flex;align-items:center;margin-bottom:12px}
-.av{width:38px;height:38px;border-radius:50%;border:2.5px solid var(--card);
-  background:var(--blue);display:flex;align-items:center;justify-content:center;
-  font-family:var(--fh);font-weight:700;font-size:13px;color:#fff;
+/* Stats */
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;width:100%;margin-bottom:22px}
+.stat{
+  background:linear-gradient(145deg,#F0F6FF,#EAF2FF);
+  border:1px solid rgba(0,116,255,.1);border-radius:14px;
+  padding:16px 10px;display:flex;flex-direction:column;align-items:center;gap:5px
+}
+.stat-n{font-family:var(--fh);font-weight:700;font-size:22px;
+  background:linear-gradient(120deg,#0074FF,#0053b8);
+  -webkit-background-clip:text;background-clip:text;color:transparent;line-height:1}
+.stat-l{font-size:11px;font-weight:600;color:rgba(0,10,26,.5);text-align:center;line-height:1.3}
+
+/* Avatars */
+.avs{display:flex;align-items:center;margin-bottom:10px}
+.av{width:38px;height:38px;border-radius:50%;border:2.5px solid #fff;
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--fh);font-weight:700;font-size:12.5px;color:#fff;
   margin-left:-10px;flex-shrink:0}
 .av:first-child{margin-left:0}
-.av.more{background:var(--stat-bg);color:var(--sub);font-size:11px}
-.avs-cap{font-size:12.5px;color:var(--sub);font-weight:600;margin-bottom:20px}
+.avs-cap{font-size:12.5px;color:rgba(0,10,26,.5);font-weight:600;margin-bottom:22px}
 
-/* Feature list */
-.feats{display:flex;flex-direction:column;gap:8px;width:100%;margin-bottom:22px;text-align:left}
-.feat{display:flex;align-items:flex-start;gap:12px;background:var(--stat-bg);
-  border-radius:10px;padding:12px 14px}
-.feat-ic{font-size:18px;flex-shrink:0;margin-top:1px}
-.feat-tx{font-size:13.5px;font-weight:600;color:var(--txt);line-height:1.35}
-.feat-tx small{display:block;font-weight:400;color:var(--sub);font-size:12px;margin-top:2px}
+/* Features */
+.feats{display:flex;flex-direction:column;gap:9px;width:100%;margin-bottom:22px;text-align:left}
+.feat{display:flex;align-items:flex-start;gap:12px;
+  background:#F7FAFF;border:1px solid rgba(0,116,255,.08);border-radius:12px;padding:13px 15px}
+.feat-ic{font-size:20px;flex-shrink:0}
+.feat-tx{font-size:13.5px;font-weight:600;color:#000A1A;line-height:1.35}
+.feat-tx small{display:block;font-weight:400;color:rgba(0,10,26,.5);font-size:12px;margin-top:2px}
 
 /* Testimonial */
-.testi{background:var(--stat-bg);border-radius:14px;padding:16px 18px;
-  text-align:left;width:100%;margin-bottom:22px}
-.testi-q{font-size:14px;color:var(--txt);line-height:1.6;font-style:italic;margin-bottom:12px}
+.testi{background:#F7FAFF;border:1px solid rgba(0,116,255,.1);border-radius:14px;
+  padding:17px 18px;text-align:left;width:100%;margin-bottom:16px}
+.testi-q{font-size:13.5px;color:#000A1A;line-height:1.65;font-style:italic;margin-bottom:12px}
 .testi-au{display:flex;align-items:center;gap:10px}
-.testi-av{width:34px;height:34px;border-radius:50%;background:var(--blue);
+.testi-av{width:34px;height:34px;border-radius:50%;background:#0074FF;
   display:flex;align-items:center;justify-content:center;
   font-family:var(--fh);font-weight:700;font-size:12px;color:#fff;flex-shrink:0}
-.testi-name{font-size:13px;font-weight:700;color:var(--txt)}
-.testi-role{font-size:11.5px;color:var(--sub)}
-.testi-stars{color:#FAAD14;font-size:12px;margin-top:1px;letter-spacing:.5px}
+.testi-name{font-size:13px;font-weight:700;color:#000A1A}
+.testi-role{font-size:11.5px;color:rgba(0,10,26,.5)}
+.testi-stars{color:#FAAD14;font-size:12px;margin-top:2px}
 
-/* ── LOADING SCREEN ── */
-.loading-inner{padding:40px 24px 36px;display:flex;flex-direction:column;align-items:center;text-align:center}
-.loading-h{font-family:var(--fh);font-weight:700;font-size:clamp(20px,4.5vw,25px);
-  color:var(--txt);margin-bottom:6px;line-height:1.2}
-.loading-h em{font-style:normal;color:var(--blue)}
-[data-theme="dark"] .loading-h em{color:var(--blue2)}
-.loading-sub{font-size:14px;color:var(--sub);margin-bottom:28px}
-.ld2-bar{height:6px;background:var(--seg-bg);border-radius:99px;overflow:hidden;
-  width:100%;max-width:380px;margin-bottom:6px}
-.ld2-fill{height:100%;background:var(--blue);border-radius:99px;width:0%;transition:width .6s ease}
-[data-theme="dark"] .ld2-fill{background:var(--primary)}
-.ld2-label{display:flex;justify-content:space-between;font-size:11.5px;font-weight:600;
-  color:var(--hint);width:100%;max-width:380px;margin-bottom:22px}
-.facts{display:flex;flex-direction:column;gap:8px;width:100%;max-width:380px}
-.fact{display:flex;align-items:center;gap:10px;background:var(--stat-bg);
-  border-radius:10px;padding:11px 14px;font-size:13px;font-weight:600;color:var(--sub);
+/* ═══ LOADING ═══ */
+.loading{padding:40px 24px 36px;display:flex;flex-direction:column;align-items:center;text-align:center}
+.ld-h{font-family:var(--fh);font-weight:700;font-size:clamp(21px,5vw,26px);
+  color:#000A1A;margin-bottom:6px;line-height:1.18;letter-spacing:-.3px}
+.ld-h em{font-style:normal;
+  background:linear-gradient(120deg,#0074FF,#50B848);
+  -webkit-background-clip:text;background-clip:text;color:transparent}
+.ld-sub{font-size:14px;color:rgba(0,10,26,.55);margin-bottom:26px}
+.ld-track{width:100%;max-width:400px;height:7px;background:#E8F0FF;border-radius:99px;overflow:hidden;margin-bottom:7px}
+.ld-fill{height:100%;background:linear-gradient(90deg,#0074FF,#50B848);
+  border-radius:99px;width:0%;transition:width .6s ease;
+  box-shadow:0 0 10px rgba(0,116,255,.5)}
+.ld-meta{display:flex;justify-content:space-between;font-size:12px;font-weight:600;
+  color:rgba(0,10,26,.4);width:100%;max-width:400px;margin-bottom:22px}
+.facts{display:flex;flex-direction:column;gap:9px;width:100%;max-width:400px}
+.fact{display:flex;align-items:center;gap:10px;background:#F7FAFF;
+  border:1px solid rgba(0,116,255,.08);border-radius:11px;
+  padding:12px 15px;font-size:13px;font-weight:600;color:rgba(0,10,26,.7);
   opacity:0;transform:translateY(8px);transition:opacity .35s,transform .35s}
-.fact.show{opacity:1;transform:translateY(0)}
-.fact-dot{width:7px;height:7px;border-radius:50%;background:var(--seg-bg);
-  flex-shrink:0;transition:.35s}
-.fact.done .fact-dot{background:var(--green)}
-.fact-check{margin-left:auto;color:var(--green);font-size:15px;opacity:0;transition:.25s}
+.fact.show{opacity:1;transform:none}
+.fact-dot{width:8px;height:8px;border-radius:50%;background:#E8F0FF;flex-shrink:0;transition:.4s}
+.fact.done .fact-dot{background:#50B848;box-shadow:0 0 6px rgba(80,184,72,.6)}
+.fact-check{margin-left:auto;color:#50B848;font-size:15px;opacity:0;transition:.25s;font-weight:700}
 .fact.done .fact-check{opacity:1}
 
-/* ── RESULT ── */
-.result-inner{padding:28px 24px 24px}
-.result-tag{display:inline-flex;align-items:center;gap:6px;
-  background:rgba(80,184,72,.1);color:var(--green);
-  font-size:11.5px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;
+/* Social proof post (Zeely-style inside loading) */
+.proof-post{background:#fff;border:1px solid #E8EEFF;border-radius:14px;
+  padding:14px 16px;text-align:left;width:100%;max-width:400px;margin-bottom:16px}
+.pp-top{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.pp-av{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#0074FF,#50B848);
+  flex-shrink:0;display:flex;align-items:center;justify-content:center;
+  font-family:var(--fh);font-weight:700;font-size:13px;color:#fff}
+.pp-name{font-size:13px;font-weight:700;color:#000A1A}
+.pp-date{font-size:11px;color:rgba(0,10,26,.4);margin-top:1px}
+.pp-body{font-size:13px;color:rgba(0,10,26,.75);line-height:1.55;margin-bottom:10px}
+.pp-num{font-family:var(--fh);font-weight:700;font-size:22px;
+  background:linear-gradient(120deg,#0074FF,#50B848);
+  -webkit-background-clip:text;background-clip:text;color:transparent}
+.pp-reactions{display:flex;align-items:center;gap:8px;font-size:12px;color:rgba(0,10,26,.4)}
+
+/* ═══ RESULT ═══ */
+.result{padding:28px 24px 24px}
+.res-tag{display:inline-flex;align-items:center;gap:6px;
+  background:#F0FFF4;border:1px solid #b7eb8f;color:#237804;
+  font-size:11px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;
   padding:5px 12px;border-radius:99px;margin-bottom:14px}
-.result-h{font-family:var(--fh);font-weight:700;font-size:clamp(21px,5vw,26px);
-  line-height:1.2;letter-spacing:-.3px;color:var(--txt);margin-bottom:8px}
-.result-h em{font-style:normal;color:var(--blue)}
-[data-theme="dark"] .result-h em{color:var(--blue2)}
-.result-sub{font-size:14px;color:var(--sub);line-height:1.55;margin-bottom:22px}
-.metrics{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:18px}
-.metric{background:var(--stat-bg);border-radius:12px;padding:14px 14px}
-.metric-l{font-size:11px;font-weight:600;color:var(--hint);text-transform:uppercase;
-  letter-spacing:.4px;margin-bottom:4px}
-.metric-v{font-family:var(--fh);font-weight:700;font-size:21px;color:var(--blue);line-height:1}
-[data-theme="dark"] .metric-v{color:var(--blue2)}
-.metric-t{font-size:11.5px;font-weight:600;color:var(--green);margin-top:3px}
-.plan-list{display:flex;flex-direction:column;gap:7px;margin-bottom:20px}
-.plan-li{display:flex;align-items:center;gap:11px;background:var(--stat-bg);
-  border-radius:10px;padding:12px 14px;font-size:13.5px;font-weight:600;color:var(--txt)}
-.plan-ic{font-size:16px;flex-shrink:0}
-.countdown{display:flex;align-items:center;justify-content:center;gap:8px;
-  background:rgba(255,77,79,.08);border:1px solid rgba(255,77,79,.2);
-  border-radius:10px;padding:10px;margin-bottom:14px;font-size:13px;
-  font-weight:700;color:#ff4d4f}
-.cdt{font-size:16px;font-variant-numeric:tabular-nums}
+.res-h{font-family:var(--fh);font-weight:700;font-size:clamp(22px,5.5vw,28px);
+  line-height:1.15;letter-spacing:-.4px;color:#000A1A;margin-bottom:8px}
+.res-h em{font-style:normal;
+  background:linear-gradient(120deg,#0074FF,#50B848);
+  -webkit-background-clip:text;background-clip:text;color:transparent}
+.res-sub{font-size:14.5px;color:rgba(0,10,26,.6);line-height:1.55;margin-bottom:22px}
+.metrics{display:grid;grid-template-columns:repeat(2,1fr);gap:9px;margin-bottom:18px}
+.metric{background:linear-gradient(145deg,#F0F6FF,#EAF2FF);
+  border:1px solid rgba(0,116,255,.1);border-radius:13px;padding:14px}
+.met-l{font-size:11px;font-weight:600;color:rgba(0,10,26,.45);text-transform:uppercase;letter-spacing:.4px;margin-bottom:5px}
+.met-v{font-family:var(--fh);font-weight:700;font-size:22px;
+  background:linear-gradient(120deg,#0074FF,#0053b8);
+  -webkit-background-clip:text;background-clip:text;color:transparent;line-height:1}
+.met-t{font-size:11.5px;font-weight:600;color:#50B848;margin-top:4px}
+.plan-list{display:flex;flex-direction:column;gap:8px;margin-bottom:20px}
+.plan-li{display:flex;align-items:center;gap:11px;background:#F7FAFF;
+  border:1px solid rgba(0,116,255,.08);border-radius:11px;padding:12px 15px;
+  font-size:13.5px;font-weight:600;color:#000A1A}
+.plan-ic{font-size:17px;flex-shrink:0}
+.cdown{display:flex;align-items:center;justify-content:center;gap:8px;
+  background:rgba(255,77,79,.06);border:1px solid rgba(255,77,79,.2);
+  border-radius:11px;padding:10px;margin-bottom:14px;
+  font-size:13px;font-weight:700;color:#cf1322}
+.cdt{font-size:17px;font-variant-numeric:tabular-nums}
 .btn-cta{display:flex;align-items:center;justify-content:center;gap:9px;
   width:100%;padding:17px;border-radius:13px;border:none;cursor:pointer;
   font-family:var(--fh);font-weight:700;font-size:16px;color:#fff;
-  background:var(--primary);transition:.18s;text-decoration:none;margin-bottom:10px}
-.btn-cta:hover{background:var(--blue2);transform:translateY(-1px)}
-.result-guar{text-align:center;font-size:12px;color:var(--hint);
+  background:#0074FF;text-decoration:none;
+  box-shadow:0 8px 28px rgba(0,116,255,.5);transition:.18s;margin-bottom:11px}
+.btn-cta:hover{background:#0065e0;transform:translateY(-2px);box-shadow:0 14px 38px rgba(0,116,255,.6)}
+.res-guar{text-align:center;font-size:12px;color:rgba(0,10,26,.4);
   display:flex;align-items:center;justify-content:center;gap:5px}
 
-/* ── RESPONSIVE ── */
-@media(max-width:400px){
-  .q-inner,.inter-inner,.loading-inner,.result-inner{padding-left:18px;padding-right:18px}
+@media(max-width:420px){
+  .q,.inter,.loading,.result{padding-left:18px;padding-right:18px}
   .splash{padding-left:20px;padding-right:20px}
 }
 </style>
 </head>
-<body data-theme="light">
+<body>
 
-<!-- Watermark -->
-<div class="wm">
-  <svg viewBox="0 0 52 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M11.7828 15.734H14.2074C14.4593 15.734 14.7018 15.7244 14.9443 15.705C15.9997 14.9551 16.9505 13.9053 17.7777 13.0248C19.1801 11.525 20.3971 10.2285 22.0991 10.2285C22.3843 10.2285 22.7409 10.301 23.0023 10.3736C23.1782 10.1511 23.3494 9.92368 23.5205 9.70597C23.6394 9.55116 23.7582 9.39634 23.8771 9.24636C23.9009 9.21734 23.9199 9.19316 23.9436 9.16413C23.4207 8.94642 22.7504 8.77708 22.0991 8.77708C19.8029 8.77708 18.2626 10.422 16.7698 12.0137C15.2295 13.6586 13.6369 15.4921 11.0792 15.734H11.7828Z" fill="#50B848"/>
-    <path d="M16.6039 16.914C17.1031 17.1946 17.5547 17.5091 17.9778 17.8526C21.957 18.7815 23.9917 20.4167 25.6318 21.7374C26.2451 22.2309 26.8251 22.6953 27.4384 23.0679C27.7711 22.7486 28.1134 22.3954 28.4747 22.0132C27.8329 21.6794 27.2197 21.1859 26.5018 20.6102C24.7143 19.1733 22.4989 17.3881 18.1395 16.4109C18.1252 16.4157 18.1062 16.4254 18.0919 16.4351C17.6213 16.6286 17.1269 16.7931 16.6039 16.9189V16.914Z" fill="#FF9D00"/>
-    <path d="M40.3159 17.1853H39.8357C39.7311 17.1853 39.6313 17.1853 39.5315 17.1757C39.503 17.1757 39.4697 17.1757 39.4364 17.1757C39.0038 17.2047 38.5902 17.2531 38.1908 17.3256C38.0292 17.3547 37.8723 17.3837 37.7202 17.4176C36.7361 18.1094 35.8899 18.9221 35.0865 19.6962C33.5414 21.1911 32.2008 22.478 30.2944 22.478C30.1946 22.478 30.0947 22.478 29.9996 22.4684C29.9378 22.5361 29.876 22.6038 29.8095 22.6667C29.4719 23.0247 29.1392 23.373 28.8159 23.702C29.2675 23.8375 29.7524 23.9149 30.2896 23.9149C32.7522 23.9149 34.4257 22.299 36.042 20.7412C37.4397 19.3914 38.8754 18.0126 40.9292 17.4369C40.9292 17.4369 41.3237 17.2821 41.9037 17.195H40.3111L40.3159 17.1853Z" fill="#FF9D00"/>
-    <path d="M39.3867 17.1756C39.3867 17.1756 39.3772 17.1756 39.3725 17.1756C39.3725 17.1756 39.363 17.1756 39.3582 17.1756L38.0841 17.1127C37.932 17.103 37.7799 17.0885 37.6325 17.074C37.6087 17.074 37.5849 17.074 37.5612 17.0692C37.3853 17.0547 37.2094 17.0401 37.0335 17.0208C36.9717 17.016 36.9051 17.0063 36.8433 17.0014C36.6864 16.9821 36.5248 16.9676 36.3727 16.9482C36.2776 16.9386 36.1825 16.924 36.0874 16.9095C35.9686 16.895 35.8497 16.8757 35.7309 16.8612C35.5122 16.8273 35.303 16.7934 35.0938 16.7595C35.0843 16.7595 35.0748 16.7596 35.0653 16.7547C32.3222 17.94 30.4301 19.9429 28.7995 21.67C28.6902 21.7862 28.5808 21.9023 28.4715 22.0184C28.1102 22.4006 27.7679 22.7538 27.4351 23.0731C26.4938 23.9729 25.6333 24.5728 24.7015 24.5728C23.4227 24.5728 22.4766 23.2714 21.2834 21.6265C20.3754 20.3735 19.358 18.9753 17.9746 17.8529C17.5515 17.5094 17.0998 17.195 16.6007 16.9144C16.6007 16.9144 16.5674 16.924 16.5531 16.924C15.8258 17.0934 15.0461 17.1853 14.2046 17.1853H12.6406C16.5674 17.5433 18.4642 20.1509 20.1519 22.4731C21.4688 24.2874 22.7143 26 24.7015 26C26.2656 26 27.5159 25.0082 28.8185 23.6971C29.1465 23.3682 29.4746 23.0198 29.8121 22.6618C29.8739 22.5941 29.9357 22.5312 30.0023 22.4635C31.8754 20.4848 34.1383 18.1867 37.7181 17.4127C38.26 17.2966 38.8305 17.2143 39.439 17.1756C39.4248 17.1756 39.4057 17.1756 39.3915 17.1756H39.3867Z" fill="#FF1010"/>
-    <path d="M35.7437 16.8565C35.8626 16.8759 35.9814 16.8904 36.1003 16.9049C36.1953 16.9194 36.2904 16.9291 36.3855 16.9436C36.5424 16.963 36.6993 16.9823 36.8562 16.9969C36.918 17.0017 36.9798 17.0114 37.0463 17.0162C37.2175 17.0355 37.3934 17.0452 37.574 17.0646C38.3679 17.142 39.371 17.1662 39.371 17.1662C39.2189 17.1565 39.0668 17.142 38.9194 17.1275C38.8814 17.1275 38.8386 17.1178 38.8006 17.113C38.7673 17.113 38.734 17.1033 38.7007 17.1033C38.5819 17.0888 38.4583 17.0694 38.3394 17.0501C38.3394 17.0501 38.3394 17.0501 38.3347 17.0501C38.1207 17.0114 37.9163 16.963 37.7166 16.9098C37.5597 16.8662 37.4076 16.8178 37.2555 16.7695C37.2079 16.755 37.1652 16.7356 37.1176 16.7211C37.0083 16.6824 36.9037 16.6388 36.7991 16.6001C36.7563 16.5808 36.7088 16.5614 36.666 16.5469C36.5234 16.484 36.3855 16.4211 36.2524 16.3486C35.6439 16.0341 35.0972 15.6519 34.6027 15.2165C34.56 15.1826 34.5219 15.1391 34.4839 15.1052C30.1435 14.1763 28.0802 12.2944 26.4401 10.7994C26.0407 10.4366 25.6604 10.0931 25.2706 9.77865C25.2183 9.84154 25.1707 9.90443 25.1185 9.97216C24.9568 10.1802 24.7904 10.3931 24.624 10.6108C24.5385 10.7172 24.4529 10.8333 24.3673 10.9446C24.7286 11.23 25.1042 11.5687 25.5321 11.9606C27.3053 13.5813 29.7584 15.8116 35.0734 16.755C35.0829 16.755 35.0924 16.7549 35.1019 16.7598C35.3111 16.7985 35.5203 16.8324 35.739 16.8614L35.7437 16.8565Z" fill="#50B848"/>
-    <path d="M39.8397 15.7339C35.8225 15.7339 33.9875 12.6376 32.3711 9.90422C31.1826 7.89647 30.0607 6 28.2018 6C26.5427 6 25.3019 7.41268 23.947 9.15917C23.9232 9.1882 23.9042 9.21239 23.8804 9.24142C23.7616 9.3914 23.6475 9.5462 23.5239 9.70102C23.3527 9.92356 23.1816 10.1461 23.0057 10.3687C22.9867 10.3928 22.9677 10.4219 22.9439 10.4461C20.7153 13.295 17.9164 15.7242 14.206 15.7242H9.75001V17.1708C11.9022 17.1708 12.0539 17.1805 14.206 17.1805C15.0474 17.1805 15.8271 17.0885 16.5545 16.9192C16.5687 16.9192 16.5877 16.9095 16.602 16.9095C17.125 16.7837 17.6194 16.6193 18.09 16.4257C18.1043 16.4209 18.1233 16.4112 18.1376 16.4016C20.8759 15.2453 22.749 13.0102 24.2322 11.0992C24.275 11.0411 24.3178 10.9879 24.3606 10.9347C24.4462 10.8234 24.5317 10.7122 24.6173 10.6009C24.7837 10.3832 24.9501 10.1703 25.1117 9.96227C25.164 9.89454 25.2116 9.83165 25.2639 9.76875C26.3002 8.45767 27.2415 7.44654 28.1971 7.44654C29.2667 7.44654 30.1462 8.93178 31.1684 10.6541C32.0146 12.0861 33.0272 13.7842 34.4772 15.0953C34.5199 15.134 34.5532 15.1727 34.596 15.2066C35.0904 15.6372 35.6371 16.0242 36.2457 16.3387C36.3788 16.4064 36.5214 16.4741 36.6593 16.537C36.702 16.5564 36.7496 16.5757 36.7924 16.5902C36.897 16.6338 37.0016 16.6725 37.1109 16.7112C37.1584 16.7257 37.2012 16.745 37.2488 16.7596C37.4009 16.8128 37.553 16.8612 37.7099 16.8999C37.9096 16.9531 38.114 17.0015 38.3279 17.0402C38.3279 17.0402 38.3279 17.0402 38.3327 17.0402C38.4515 17.0595 38.5704 17.0789 38.694 17.0934C38.7273 17.0934 38.7606 17.1031 38.7938 17.1031C38.8319 17.1079 38.8746 17.1127 38.9127 17.1176C39.0648 17.1369 39.2169 17.1514 39.3738 17.1563C39.3738 17.1563 39.3833 17.1563 39.3881 17.1563C39.4023 17.1563 39.4214 17.1563 39.4356 17.1563C39.4642 17.1563 39.4974 17.1563 39.5307 17.1563C39.6305 17.1563 39.7304 17.1659 39.835 17.1659H42.25V15.7146L39.8397 15.7339Z" fill="#0074FF"/>
-  </svg>
-</div>
+<div class="aurora"><div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div></div>
 
 <div class="shell">
 <!-- HEADER -->
 <header class="hdr">
-  <div class="hdr-inner">
-    <button class="btn-back hidden" id="btnBack" onclick="goBack()">
-      <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
-    </button>
-    <div class="logo-wrap">
-      <svg class="logo-mark" viewBox="0 0 52 32" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M11.7828 15.734H14.2074C14.4593 15.734 14.7018 15.7244 14.9443 15.705C15.9997 14.9551 16.9505 13.9053 17.7777 13.0248C19.1801 11.525 20.3971 10.2285 22.0991 10.2285C22.3843 10.2285 22.7409 10.301 23.0023 10.3736C23.1782 10.1511 23.3494 9.92368 23.5205 9.70597C23.6394 9.55116 23.7582 9.39634 23.8771 9.24636C23.9009 9.21734 23.9199 9.19316 23.9436 9.16413C23.4207 8.94642 22.7504 8.77708 22.0991 8.77708C19.8029 8.77708 18.2626 10.422 16.7698 12.0137C15.2295 13.6586 13.6369 15.4921 11.0792 15.734H11.7828Z" fill="#50B848"/><path d="M16.6039 16.914C17.1031 17.1946 17.5547 17.5091 17.9778 17.8526C21.957 18.7815 23.9917 20.4167 25.6318 21.7374C26.2451 22.2309 26.8251 22.6953 27.4384 23.0679C27.7711 22.7486 28.1134 22.3954 28.4747 22.0132C27.8329 21.6794 27.2197 21.1859 26.5018 20.6102C24.7143 19.1733 22.4989 17.3881 18.1395 16.4109C18.1252 16.4157 18.1062 16.4254 18.0919 16.4351C17.6213 16.6286 17.1269 16.7931 16.6039 16.9189V16.914Z" fill="#FF9D00"/><path d="M39.8397 15.7339C35.8225 15.7339 33.9875 12.6376 32.3711 9.90422C31.1826 7.89647 30.0607 6 28.2018 6C26.5427 6 25.3019 7.41268 23.947 9.15917C23.9232 9.1882 23.9042 9.21239 23.8804 9.24142C23.7616 9.3914 23.6475 9.5462 23.5239 9.70102C23.3527 9.92356 23.1816 10.1461 23.0057 10.3687C22.9867 10.3928 22.9677 10.4219 22.9439 10.4461C20.7153 13.295 17.9164 15.7242 14.206 15.7242H9.75001V17.1708C11.9022 17.1708 12.0539 17.1805 14.206 17.1805C15.0474 17.1805 15.8271 17.0885 16.5545 16.9192C16.5687 16.9192 16.5877 16.9095 16.602 16.9095C17.125 16.7837 17.6194 16.6193 18.09 16.4257C18.1043 16.4209 18.1233 16.4112 18.1376 16.4016C20.8759 15.2453 22.749 13.0102 24.2322 11.0992C24.275 11.0411 24.3178 10.9879 24.3606 10.9347C24.4462 10.8234 24.5317 10.7122 24.6173 10.6009C24.7837 10.3832 24.9501 10.1703 25.1117 9.96227C25.164 9.89454 25.2116 9.83165 25.2639 9.76875C26.3002 8.45767 27.2415 7.44654 28.1971 7.44654C29.2667 7.44654 30.1462 8.93178 31.1684 10.6541C32.0146 12.0861 33.0272 13.7842 34.4772 15.0953C34.5199 15.134 34.5532 15.1727 34.596 15.2066C35.0904 15.6372 35.6371 16.0242 36.2457 16.3387C36.3788 16.4064 36.5214 16.4741 36.6593 16.537C36.702 16.5564 36.7496 16.5757 36.7924 16.5902C36.897 16.6338 37.0016 16.6725 37.1109 16.7112C37.1584 16.7257 37.2012 16.745 37.2488 16.7596C37.4009 16.8128 37.553 16.8612 37.7099 16.8999C37.9096 16.9531 38.114 17.0015 38.3279 17.0402C38.4515 17.0595 38.5704 17.0789 38.694 17.0934C38.8319 17.1079 38.8746 17.1127 38.9127 17.1176C39.0648 17.1369 39.2169 17.1514 39.3738 17.1563C39.4642 17.1563 39.4974 17.1563 39.5307 17.1563C39.6305 17.1563 39.7304 17.1659 39.835 17.1659H42.25V15.7146L39.8397 15.7339Z" fill="#0074FF"/></svg>
-      <span class="logo-name">JoomPulse</span>
-    </div>
-    <div class="prog">
-      <div class="seg"><div class="seg-fill" id="p0"></div></div>
-      <div class="seg"><div class="seg-fill" id="p1"></div></div>
-      <div class="seg"><div class="seg-fill" id="p2"></div></div>
-    </div>
-    <div class="hdr-actions">
-      <button class="btn-icon active" id="btnEN" onclick="setLang('en')">EN</button>
-      <button class="btn-icon" id="btnPT" onclick="setLang('pt')">PT</button>
-      <button class="btn-icon" id="btnTheme" onclick="toggleTheme()">
-        <svg id="iSun" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path stroke-linecap="round" d="M12 2v2M12 20v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M2 12h2M20 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
-        <svg id="iMoon" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="display:none"><path stroke-linecap="round" stroke-linejoin="round" d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
-      </button>
-    </div>
+<div class="hdr-inner">
+  <button class="btn-back hidden" id="btnBack" onclick="goBack()">
+    <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
+  </button>
+
+  <div class="logo-wrap">
+    <!-- Wave mark inline -->
+    <svg class="logo-mark" viewBox="0 0 52 32" fill="none"><path d="M11.78 15.73h2.43c.25 0 .5-.01.74-.03 1.06-.75 2.01-1.8 2.84-2.68 1.4-1.5 2.62-2.8 4.32-2.8.28 0 .64.07.9.15.18-.22.35-.45.52-.67.12-.15.24-.31.36-.46l.07-.08c-.52-.22-1.19-.39-1.84-.39-2.3 0-3.84 1.64-5.33 3.24-1.54 1.64-3.13 3.48-5.69 3.72h.7z" fill="#50B848"/><path d="M16.6 16.91c.5.28.95.59 1.38.94 3.98.93 6.01 2.56 7.65 3.88.61.49 1.19.96 1.81 1.33.33-.32.67-.67 1.03-1.05-.64-.33-1.25-.83-1.97-1.4-1.79-1.44-4-3.22-8.36-4.2l-.05.03c-.47.19-.96.36-1.49.47z" fill="#FF9D00"/><path d="M39.84 15.73c-4.02 0-5.85-3.1-7.47-5.83C31.18 7.9 30.06 6 28.2 6c-1.66 0-2.9 1.41-4.25 3.16l-.08.08c-.12.15-.23.3-.35.46-.17.22-.34.45-.52.67l-.08.08c-2.23 2.85-5.03 5.28-8.74 5.28H9.75v1.45c2.15 0 2.3.01 4.46.01.84 0 1.62-.09 2.35-.26l.04-.01c.52-.13 1.02-.29 1.49-.48l.05-.03c2.74-1.16 4.61-3.39 6.09-5.3.04-.06.08-.11.12-.17.09-.11.17-.22.26-.34.17-.2.33-.41.49-.61.05-.07.1-.13.15-.2 1.04-1.31 1.98-2.33 2.94-2.33 1.07 0 1.95 1.49 2.97 3.21.85 1.43 1.86 3.13 3.31 4.42l.12.09c.49.43 1.04.82 1.65 1.13l.24.12.13.05.32.12.14.05c.15.05.3.1.46.14.2.05.4.1.61.13h.01l.36.05.31.03.3.01c.1.01.19.01.29.01h2.41V15.73h-2.41z" fill="#0074FF"/><path d="M39.37 17.18h-.42l-.1-.01-.99-.06-.36-.03-.18-.02-.17-.02-.16-.01-.13-.01-.08-.02-.16-.01-.15-.01-.14-.02-.13-.01-.22-.03-.23-.03-3.01 1.09-.11.11-.11.12c-.34.38-.68.73-1 1.06-.94.9-1.78 1.49-2.71 1.49-1.28 0-2.23-1.3-3.42-2.95-.91-1.25-1.93-2.65-3.31-3.77-.42-.34-.87-.65-1.37-.92l-.05.01c-.73.17-1.51.26-2.35.26h-1.56c3.93.36 5.83 2.96 7.52 5.29 1.32 1.81 2.56 3.53 4.55 3.53 1.56 0 2.81-.99 4.11-2.3.33-.33.66-.68.99-1.04l.17-.18c1.87-1.98 4.14-4.28 7.72-5.06.54-.11 1.11-.2 1.72-.23h-.04z" fill="#FF1010"/><path d="M35.74 16.86l.37.05.24.03.24.02.15.01.18.02.16.02.75.06s-.15-.01-.3-.03l-.14-.01-.07-.01-.09-.01-.28-.04c-.2-.04-.4-.08-.59-.13-.16-.04-.31-.09-.46-.14l-.14-.05-.32-.12-.05-.02c-.21-.04-.42-.1-.62-.15-.15-.04-.3-.09-.44-.13l-.14-.05-.1-.04c-.11-.04-.21-.08-.3-.11-.04-.02-.09-.04-.13-.05-.13-.06-.26-.12-.38-.19-.61-.31-1.16-.69-1.66-1.12l-.11-.1c-4.35-.93-6.41-2.71-8.05-4.21-.38-.34-.75-.68-1.14-.98l-.15.2-.44.56-.25.33c.36.29.73.62 1.16 1.01 1.77 1.62 4.22 3.85 9.54 4.79l.1.01.39.08z" fill="#50B848"/></svg>
+    <span class="logo-name">JoomPulse</span>
   </div>
+
+  <div class="prog">
+    <div class="seg"><div class="seg-fill" id="p0"></div></div>
+    <div class="seg"><div class="seg-fill" id="p1"></div></div>
+    <div class="seg"><div class="seg-fill" id="p2"></div></div>
+  </div>
+
+  <div class="hdr-r">
+    <button class="pill on" id="bEN" onclick="setLang('en')">EN</button>
+    <button class="pill" id="bPT" onclick="setLang('pt')">PT</button>
+    <button class="pill" onclick="toggleTheme()" id="bTheme">☀️</button>
+  </div>
+</div>
 </header>
 
-<!-- BODY -->
+<!-- MAIN -->
 <main class="body">
 <div class="card">
 
-<!-- ═══ S0: SPLASH ═══ -->
+<!-- ════ S0 SPLASH ════ -->
 <div class="step active" id="s0">
 <div class="splash">
-  <img src="pulse_logo_text.svg" class="splash-logo" alt="JoomPulse">
-  <h1 class="splash-h" data-en="Discover products that <em>sell year-round</em>" data-pt="Descubra produtos que <em>vendem o ano todo</em>">Discover products that <em>sell year-round</em></h1>
-  <p class="splash-sub" data-en="In 2 minutes we'll build your personalized analysis with the best products for your profile." data-pt="Em 2 minutos vamos criar sua análise personalizada com os melhores produtos para o seu perfil.">In 2 minutes we'll build your personalized analysis with the best products for your profile.</p>
-  <div class="social-row">
-    <div class="social-pill"><span class="dot"></span><span data-en="+12,000 active sellers" data-pt="+12.000 vendedores ativos">+12,000 active sellers</span></div>
-    <div class="social-pill"><span class="dot" style="background:#FF9D00"></span><span data-en="4.8 ★ rating" data-pt="4.8 ★ avaliação">4.8 ★ rating</span></div>
+  <img src="pulse_logo_text.svg" class="sp-logo" alt="JoomPulse">
+  <h1 class="sp-h" data-en="Discover products that <em>sell year-round</em>" data-pt="Descubra produtos que <em>vendem o ano todo</em>">Discover products that <em>sell year-round</em></h1>
+  <p class="sp-sub" data-en="2-minute quiz → personalized product analysis for your store." data-pt="Quiz de 2 minutos → análise personalizada de produtos para sua loja.">2-minute quiz → personalized product analysis for your store.</p>
+  <div class="sp-pills">
+    <div class="sp-pill"><span class="dot"></span><span data-en="+12,000 active sellers" data-pt="+12.000 vendedores">+12,000 active sellers</span></div>
+    <div class="sp-pill"><span class="dot" style="background:#FF9D00"></span><span data-en="4.8★ App Store" data-pt="4.8★ App Store">4.8★ App Store</span></div>
   </div>
-  <div class="ld-wrap">
-    <div class="ld-top"><span id="ldTxt" data-en="Exploring your potential..." data-pt="Explorando seu potencial...">Exploring your potential...</span><span id="ldPct">0%</span></div>
-    <div class="ld-bar"><div class="ld-fill" id="ldFill"></div></div>
-  </div>
-  <div class="ld-items">
-    <div class="ld-item" id="li0"><span data-en="📦 Trending products now" data-pt="📦 Produtos trending agora">📦 Trending products now</span><span class="ld-val" id="lv0">—</span></div>
-    <div class="ld-item" id="li1"><span data-en="📈 Avg ML growth" data-pt="📈 Crescimento médio no ML">📈 Avg ML growth</span><span class="ld-val" id="lv1">—</span></div>
-    <div class="ld-item" id="li2"><span data-en="💰 Revenue potential" data-pt="💰 Potencial de receita">💰 Revenue potential</span><span class="ld-val" id="lv2">—</span></div>
+  <div class="sp-ld">
+    <div class="sp-ld-top"><span id="ldT" data-en="Scanning market..." data-pt="Analisando mercado...">Scanning market...</span><span id="ldP">0%</span></div>
+    <div class="sp-ld-bar"><div class="sp-ld-fill" id="ldF"></div></div>
+    <div class="sp-stats">
+      <div class="sp-stat" id="ss0"><span class="sp-stat-l" data-en="📦 Trending products now" data-pt="📦 Produtos trending agora">📦 Trending products now</span><span class="sp-stat-v" id="sv0">—</span></div>
+      <div class="sp-stat" id="ss1"><span class="sp-stat-l" data-en="📈 Avg ML growth" data-pt="📈 Crescimento médio ML">📈 Avg ML growth</span><span class="sp-stat-v" id="sv1">—</span></div>
+      <div class="sp-stat" id="ss2"><span class="sp-stat-l" data-en="💰 Revenue potential" data-pt="💰 Potencial de receita">💰 Revenue potential</span><span class="sp-stat-v" id="sv2">—</span></div>
+    </div>
   </div>
 </div>
 </div>
 
-<!-- ═══ S1: Q1 — Already selling? ═══ -->
+<!-- ════ S1 Q1 ════ -->
 <div class="step" id="s1">
-<div class="q-inner">
-  <div class="q-meta" data-en="Question 1 of 8" data-pt="Pergunta 1 de 8">Question 1 of 8</div>
-  <h2 class="q-h" data-en="Do you already have a store on Mercado Livre?" data-pt="Você já tem uma loja no Mercado Livre hoje?">Do you already have a store on Mercado Livre?</h2>
-  <div class="opts">
-    <div class="opt" onclick="pick(this,'q1','yes','🚀 Great! You already have experience — let\'s turbocharge your sales!','🚀 Ótimo! Você já tem experiência — vamos turbinar suas vendas!','s2')">
-      <span class="opt-em">🏪</span><div class="opt-body"><div class="opt-label" data-en="Yes, I sell on ML" data-pt="Sim, já vendo no ML">Yes, I sell on ML</div><div class="opt-desc" data-en="My store is active" data-pt="Minha loja está ativa">My store is active</div></div><div class="radio"><div class="radio-dot"></div></div>
-    </div>
-    <div class="opt" onclick="pick(this,'q1','no','💡 Perfect! Let\'s find the best products to start on the right foot!','💡 Perfeito! Vamos encontrar os melhores produtos para você começar bem!','s2')">
-      <span class="opt-em">🌱</span><div class="opt-body"><div class="opt-label" data-en="Not yet" data-pt="Ainda não vendo">Not yet</div><div class="opt-desc" data-en="I want to start or I'm researching" data-pt="Quero começar ou estou pesquisando">I want to start or I'm researching</div></div><div class="radio"><div class="radio-dot"></div></div>
-    </div>
-    <div class="opt" onclick="pick(this,'q1','other','🎯 Got it! Let\'s find the best opportunities for you!','🎯 Entendido! Vamos encontrar as melhores oportunidades para você!','s2')">
-      <span class="opt-em">🔄</span><div class="opt-body"><div class="opt-label" data-en="I sell on other marketplaces" data-pt="Vendo em outros marketplaces">I sell on other marketplaces</div><div class="opt-desc" data-en="Shopee, Amazon, etc." data-pt="Shopee, Amazon, etc.">Shopee, Amazon, etc.</div></div><div class="radio"><div class="radio-dot"></div></div>
-    </div>
+<div class="q">
+  <div class="q-step" data-en="Question 1 of 8" data-pt="Pergunta 1 de 8">Question 1 of 8</div>
+  <h2 class="q-h" data-en="Do you already have a store on Mercado Livre?" data-pt="Você já tem uma loja no Mercado Livre?">Do you already have a store on Mercado Livre?</h2>
+  <div class="opts" id="oq1">
+    <div class="opt" onclick="pick(this,'q1','yes','🚀 Great! You have experience — let\'s turbocharge your sales!','🚀 Ótimo! Você tem experiência — vamos turbinar suas vendas!','s2')"><span class="opt-em">🏪</span><div class="opt-body"><div class="opt-label" data-en="Yes, I sell on ML" data-pt="Sim, já vendo no ML">Yes, I sell on ML</div><div class="opt-desc" data-en="My store is active" data-pt="Minha loja está ativa">My store is active</div></div><div class="radio"><div class="radio-dot"></div></div></div>
+    <div class="opt" onclick="pick(this,'q1','no','💡 Perfect! Let\'s find the best products to start right!','💡 Perfeito! Vamos encontrar os melhores produtos para começar bem!','s2')"><span class="opt-em">🌱</span><div class="opt-body"><div class="opt-label" data-en="Not yet" data-pt="Ainda não vendo">Not yet</div><div class="opt-desc" data-en="I want to start" data-pt="Quero começar">I want to start</div></div><div class="radio"><div class="radio-dot"></div></div></div>
+    <div class="opt" onclick="pick(this,'q1','other','🎯 Got it! Let\'s find the best opportunities for you!','🎯 Entendido! Vamos encontrar as melhores oportunidades!','s2')"><span class="opt-em">🔄</span><div class="opt-body"><div class="opt-label" data-en="I sell on other platforms" data-pt="Vendo em outros marketplaces">I sell on other platforms</div><div class="opt-desc" data-en="Shopee, Amazon, etc." data-pt="Shopee, Amazon, etc.">Shopee, Amazon, etc.</div></div><div class="radio"><div class="radio-dot"></div></div></div>
   </div>
   <div class="feedback" id="fb-q1"></div>
-  <div class="auto-hint" id="ah-q1" data-en="Moving on automatically..." data-pt="Avançando automaticamente...">Moving on automatically...</div>
+  <div class="auto-hint" id="ah-q1" data-en="Moving on..." data-pt="Avançando...">Moving on...</div>
 </div>
 </div>
 
-<!-- ═══ S2: INTER — Social proof ═══ -->
+<!-- ════ S2 INTER social proof ════ -->
 <div class="step" id="s2">
-<div class="inter-inner">
+<div class="inter">
   <div class="inter-icon">🎯</div>
   <div class="inter-tag" data-en="You're in the right place" data-pt="Você está no lugar certo">You're in the right place</div>
-  <h2 class="inter-h" data-en="+12,000 sellers already discovered their <em>best products</em>" data-pt="+12.000 vendedores já descobriram seus <em>produtos campeões</em>">+12,000 sellers already discovered their <em>best products</em></h2>
-  <p class="inter-body" data-en="JoomPulse analyzes real Mercado Livre data to find high-demand, low-competition products — before anyone else." data-pt="O JoomPulse analisa dados reais do Mercado Livre para encontrar produtos com alta demanda e baixa concorrência — antes de qualquer um.">JoomPulse analyzes real Mercado Livre data to find high-demand, low-competition products — before anyone else.</p>
-  <div class="avs"><div class="av">MR</div><div class="av" style="background:#FF9D00">JC</div><div class="av" style="background:#50B848">FS</div><div class="av" style="background:#FF1010">LT</div><div class="av more">+12k</div></div>
+  <h2 class="inter-h" data-en="+12,000 sellers found their <em>champion products</em>" data-pt="+12.000 vendedores descobriram seus <em>produtos campeões</em>">+12,000 sellers found their <em>champion products</em></h2>
+  <p class="inter-body" data-en="JoomPulse analyzes real ML data to find high-demand, low-competition products — before anyone else." data-pt="O JoomPulse analisa dados reais do ML para encontrar produtos com alta demanda e baixa concorrência — antes de qualquer um.">JoomPulse analyzes real ML data to find high-demand, low-competition products — before anyone else.</p>
+  <div class="avs"><div class="av" style="background:#0074FF">MR</div><div class="av" style="background:#FF9D00">JC</div><div class="av" style="background:#50B848">FS</div><div class="av" style="background:#FF1010">LT</div><div class="av" style="background:#6b7280;font-size:10px">+12k</div></div>
   <p class="avs-cap" data-en="Active sellers on JoomPulse" data-pt="Vendedores ativos no JoomPulse">Active sellers on JoomPulse</p>
   <div class="stats">
-    <div class="stat"><div class="stat-n">3.2x</div><div class="stat-l" data-en="more sales avg" data-pt="mais vendas em média">more sales avg</div></div>
+    <div class="stat"><div class="stat-n">3.2×</div><div class="stat-l" data-en="more sales on avg" data-pt="mais vendas em média">more sales on avg</div></div>
     <div class="stat"><div class="stat-n">87%</div><div class="stat-l" data-en="pick the right product" data-pt="acertam o produto">pick the right product</div></div>
     <div class="stat"><div class="stat-n">14d</div><div class="stat-l" data-en="to see results" data-pt="para ver resultados">to see results</div></div>
   </div>
-  <button class="btn-cont show" onclick="goTo('s3')"><span data-en="Continue" data-pt="Continuar">Continue</span> →</button>
+  <button class="btn-cont" onclick="goTo('s3')"><span data-en="Continue" data-pt="Continuar">Continue</span> →</button>
 </div>
 </div>
 
-<!-- ═══ S3: Q2 — Revenue ═══ -->
+<!-- ════ S3 Q2 Revenue ════ -->
 <div class="step" id="s3">
-<div class="q-inner">
-  <div class="q-meta" data-en="Question 2 of 8" data-pt="Pergunta 2 de 8">Question 2 of 8</div>
+<div class="q">
+  <div class="q-step" data-en="Question 2 of 8" data-pt="Pergunta 2 de 8">Question 2 of 8</div>
   <h2 class="q-h" data-en="What's your monthly revenue?" data-pt="Qual é o faturamento mensal do seu negócio?">What's your monthly revenue?</h2>
-  <div class="opts">
-    <div class="opt" onclick="pick(this,'q2','0','💪 Great start! Many of our best sellers started from zero!','💪 Ótimo começo! Muitos dos nossos melhores vendedores começaram do zero!','s4')"><span class="opt-em">🌱</span><div class="opt-body"><div class="opt-label" data-en="No revenue yet" data-pt="Ainda não faturei">No revenue yet</div><div class="opt-desc" data-en="Just starting out" data-pt="Estou começando">Just starting out</div></div><div class="radio"><div class="radio-dot"></div></div></div>
-    <div class="opt" onclick="pick(this,'q2','5k','📈 Good start! With the right products you can double this in 3 months!','📈 Bom começo! Com os produtos certos você pode dobrar isso em 3 meses!','s4')"><span class="opt-em">💵</span><div class="opt-body"><div class="opt-label" data-en="Up to R$5,000/mo" data-pt="Até R$5.000/mês">Up to R$5,000/mo</div></div><div class="radio"><div class="radio-dot"></div></div></div>
-    <div class="opt" onclick="pick(this,'q2','20k','🚀 Growing! Let\'s identify the products that will scale your business!','🚀 Crescendo! Vamos identificar os produtos que vão escalar seu negócio!','s4')"><span class="opt-em">💰</span><div class="opt-body"><div class="opt-label" data-en="R$5,000–R$20,000/mo" data-pt="R$5.000–R$20.000/mês">R$5,000–R$20,000/mo</div></div><div class="radio"><div class="radio-dot"></div></div></div>
-    <div class="opt" onclick="pick(this,'q2','50k','⭐ Impressive! You\'re an experienced seller — let\'s find your next stars!','⭐ Impressionante! Você é experiente — vamos encontrar suas próximas estrelas!','s4')"><span class="opt-em">🏆</span><div class="opt-body"><div class="opt-label" data-en="R$20,000–R$50,000/mo" data-pt="R$20.000–R$50.000/mês">R$20,000–R$50,000/mo</div></div><div class="radio"><div class="radio-dot"></div></div></div>
-    <div class="opt" onclick="pick(this,'q2','50k+','🥇 Top seller! Let\'s keep you always one step ahead of the competition!','🥇 Top seller! Vamos manter você sempre à frente da concorrência!','s4')"><span class="opt-em">💎</span><div class="opt-body"><div class="opt-label" data-en="Above R$50,000/mo" data-pt="Acima de R$50.000/mês">Above R$50,000/mo</div></div><div class="radio"><div class="radio-dot"></div></div></div>
+  <div class="opts" id="oq2">
+    <div class="opt" onclick="pick(this,'q2','0','💪 Great start! Many top sellers started from zero!','💪 Ótimo começo! Muitos top sellers começaram do zero!','s4')"><span class="opt-em">🌱</span><div class="opt-body"><div class="opt-label" data-en="No revenue yet" data-pt="Ainda não faturei">No revenue yet</div></div><div class="radio"><div class="radio-dot"></div></div></div>
+    <div class="opt" onclick="pick(this,'q2','5k','📈 Good start! Right products can double this in 3 months!','📈 Bom começo! Com os produtos certos você pode dobrar em 3 meses!','s4')"><span class="opt-em">💵</span><div class="opt-body"><div class="opt-label" data-en="Up to R$5,000/mo" data-pt="Até R$5.000/mês">Up to R$5,000/mo</div></div><div class="radio"><div class="radio-dot"></div></div></div>
+    <div class="opt" onclick="pick(this,'q2','20k','🚀 Growing fast! Let\'s identify products to scale further!','🚀 Crescendo! Vamos identificar os produtos para escalar mais!','s4')"><span class="opt-em">💰</span><div class="opt-body"><div class="opt-label" data-en="R$5k–R$20k/mo" data-pt="R$5.000–R$20.000/mês">R$5k–R$20k/mo</div></div><div class="radio"><div class="radio-dot"></div></div></div>
+    <div class="opt" onclick="pick(this,'q2','50k','⭐ Impressive! Let\'s find your next winning products!','⭐ Impressionante! Vamos encontrar suas próximas estrelas!','s4')"><span class="opt-em">🏆</span><div class="opt-body"><div class="opt-label" data-en="R$20k–R$50k/mo" data-pt="R$20.000–R$50.000/mês">R$20k–R$50k/mo</div></div><div class="radio"><div class="radio-dot"></div></div></div>
+    <div class="opt" onclick="pick(this,'q2','50k+','🥇 Top seller! Let\'s keep you always ahead of competition!','🥇 Top seller! Vamos manter você sempre à frente da concorrência!','s4')"><span class="opt-em">💎</span><div class="opt-body"><div class="opt-label" data-en="Above R$50k/mo" data-pt="Acima de R$50.000/mês">Above R$50k/mo</div></div><div class="radio"><div class="radio-dot"></div></div></div>
   </div>
   <div class="feedback" id="fb-q2"></div>
-  <div class="auto-hint" id="ah-q2" data-en="Moving on automatically..." data-pt="Avançando automaticamente...">Moving on automatically...</div>
+  <div class="auto-hint" id="ah-q2" data-en="Moving on..." data-pt="Avançando...">Moving on...</div>
 </div>
 </div>
 
-<!-- ═══ S4: Q3 — SKUs ═══ -->
+<!-- ════ S4 Q3 SKUs ════ -->
 <div class="step" id="s4">
-<div class="q-inner">
-  <div class="q-meta" data-en="Question 3 of 8" data-pt="Pergunta 3 de 8">Question 3 of 8</div>
-  <h2 class="q-h" data-en="How many products (SKUs) do you have?" data-pt="Quantos produtos (SKUs) você tem atualmente?">How many products (SKUs) do you have?</h2>
-  <div class="opts">
-    <div class="opt" onclick="pick(this,'q3','1','🎯 Full focus! With the right product you can dominate a category!','🎯 Foco total! Com o produto certo você pode dominar uma categoria!','s5')"><span class="opt-em">1️⃣</span><div class="opt-body"><div class="opt-label" data-en="1 product" data-pt="1 produto">1 product</div></div><div class="radio"><div class="radio-dot"></div></div></div>
-    <div class="opt" onclick="pick(this,'q3','2-10','🔍 Diversified! Let\'s identify which have the most potential!','🔍 Diversificado! Vamos identificar quais têm mais potencial!','s5')"><span class="opt-em">📦</span><div class="opt-body"><div class="opt-label" data-en="2–10 products" data-pt="2 a 10 produtos">2–10 products</div></div><div class="radio"><div class="radio-dot"></div></div></div>
-    <div class="opt" onclick="pick(this,'q3','11-50','💡 Great mix! Let\'s optimize your catalog with the most profitable items!','💡 Ótimo mix! Vamos otimizar seu catálogo com os mais rentáveis!','s5')"><span class="opt-em">🗂️</span><div class="opt-body"><div class="opt-label" data-en="11–50 products" data-pt="11 a 50 produtos">11–50 products</div></div><div class="radio"><div class="radio-dot"></div></div></div>
-    <div class="opt" onclick="pick(this,'q3','51-200','🏆 Solid catalog! Let\'s make sure you\'re betting on champions!','🏆 Catálogo sólido! Vamos garantir que você está apostando nos campeões!','s5')"><span class="opt-em">🏭</span><div class="opt-body"><div class="opt-label" data-en="51–200 products" data-pt="51 a 200 produtos">51–200 products</div></div><div class="radio"><div class="radio-dot"></div></div></div>
+<div class="q">
+  <div class="q-step" data-en="Question 3 of 8" data-pt="Pergunta 3 de 8">Question 3 of 8</div>
+  <h2 class="q-h" data-en="How many products (SKUs) do you have?" data-pt="Quantos produtos (SKUs) você tem?">How many products (SKUs) do you have?</h2>
+  <div class="opts" id="oq3">
+    <div class="opt" onclick="pick(this,'q3','1','🎯 Laser focus! With the right product you can dominate a category!','🎯 Foco total! Com o produto certo você domina uma categoria!','s5')"><span class="opt-em">1️⃣</span><div class="opt-body"><div class="opt-label" data-en="1 product" data-pt="1 produto">1 product</div></div><div class="radio"><div class="radio-dot"></div></div></div>
+    <div class="opt" onclick="pick(this,'q3','2-10','🔍 Nice mix! Let\'s find which have the most potential!','🔍 Bom mix! Vamos identificar quais têm mais potencial!','s5')"><span class="opt-em">📦</span><div class="opt-body"><div class="opt-label" data-en="2–10 products" data-pt="2 a 10 produtos">2–10 products</div></div><div class="radio"><div class="radio-dot"></div></div></div>
+    <div class="opt" onclick="pick(this,'q3','11-50','💡 Strong catalog! Let\'s optimize with the most profitable items!','💡 Catálogo forte! Vamos otimizar com os mais rentáveis!','s5')"><span class="opt-em">🗂️</span><div class="opt-body"><div class="opt-label" data-en="11–50 products" data-pt="11 a 50 produtos">11–50 products</div></div><div class="radio"><div class="radio-dot"></div></div></div>
+    <div class="opt" onclick="pick(this,'q3','51-200','🏆 Solid catalog! Make sure you\'re betting on the champions!','🏆 Catálogo sólido! Vamos garantir que você aposta nos campeões!','s5')"><span class="opt-em">🏭</span><div class="opt-body"><div class="opt-label" data-en="51–200 products" data-pt="51 a 200 produtos">51–200 products</div></div><div class="radio"><div class="radio-dot"></div></div></div>
     <div class="opt" onclick="pick(this,'q3','200+','🚀 Big operation! JoomPulse was built to scale businesses like yours!','🚀 Operação grande! O JoomPulse foi feito para escalar negócios como o seu!','s5')"><span class="opt-em">🌐</span><div class="opt-body"><div class="opt-label" data-en="200+ products" data-pt="Mais de 200 produtos">200+ products</div></div><div class="radio"><div class="radio-dot"></div></div></div>
   </div>
   <div class="feedback" id="fb-q3"></div>
-  <div class="auto-hint" id="ah-q3" data-en="Moving on automatically..." data-pt="Avançando automaticamente...">Moving on automatically...</div>
+  <div class="auto-hint" id="ah-q3" data-en="Moving on..." data-pt="Avançando...">Moving on...</div>
 </div>
 </div>
 
-<!-- ═══ S5: INTER — How it works ═══ -->
+<!-- ════ S5 INTER features ════ -->
 <div class="step" id="s5">
-<div class="inter-inner">
+<div class="inter">
   <div class="inter-icon">🔬</div>
   <div class="inter-tag" data-en="How JoomPulse works" data-pt="Como o JoomPulse funciona">How JoomPulse works</div>
-  <h2 class="inter-h" data-en="Technology that <em>scans the market</em> for you" data-pt="Tecnologia que <em>analisa o mercado</em> por você">Technology that <em>scans the market</em> for you</h2>
-  <p class="inter-body" data-en="While you answer, our AI is already mapping Mercado Livre opportunities in real time." data-pt="Enquanto você responde, nossa IA já está mapeando oportunidades do Mercado Livre em tempo real.">While you answer, our AI is already mapping Mercado Livre opportunities in real time.</p>
+  <h2 class="inter-h" data-en="AI that <em>scans the market</em> 24/7 for you" data-pt="IA que <em>analisa o mercado</em> 24/7 por você">AI that <em>scans the market</em> 24/7 for you</h2>
   <div class="feats">
-    <div class="feat"><span class="feat-ic">📊</span><div class="feat-tx"><span data-en="Real-time demand analysis" data-pt="Análise de demanda em tempo real">Real-time demand analysis</span><small data-en="We monitor searches, sales and trends 24/7" data-pt="Monitoramos buscas, vendas e tendências 24h por dia">We monitor searches, sales and trends 24/7</small></div></div>
-    <div class="feat"><span class="feat-ic">🎯</span><div class="feat-tx"><span data-en="Opportunity score per product" data-pt="Score de oportunidade por produto">Opportunity score per product</span><small data-en="We calculate demand ÷ competition for each niche" data-pt="Calculamos demanda ÷ concorrência para cada nicho">We calculate demand ÷ competition for each niche</small></div></div>
-    <div class="feat"><span class="feat-ic">⚡</span><div class="feat-tx"><span data-en="Trending product alerts" data-pt="Alertas de produtos em alta">Trending product alerts</span><small data-en="You get notified before competition enters the market" data-pt="Você recebe antes da concorrência entrar no mercado">You get notified before competition enters the market</small></div></div>
+    <div class="feat"><span class="feat-ic">📊</span><div class="feat-tx"><span data-en="Real-time demand analysis" data-pt="Análise de demanda em tempo real">Real-time demand analysis</span><small data-en="Searches, sales, trends monitored 24/7" data-pt="Buscas, vendas e tendências monitoradas 24h">Searches, sales, trends monitored 24/7</small></div></div>
+    <div class="feat"><span class="feat-ic">🎯</span><div class="feat-tx"><span data-en="Opportunity score per product" data-pt="Score de oportunidade por produto">Opportunity score per product</span><small data-en="Demand ÷ competition = your edge" data-pt="Demanda ÷ concorrência = sua vantagem">Demand ÷ competition = your edge</small></div></div>
+    <div class="feat"><span class="feat-ic">⚡</span><div class="feat-tx"><span data-en="Early trend alerts" data-pt="Alertas de tendências antecipadas">Early trend alerts</span><small data-en="Know before the competition enters" data-pt="Saiba antes da concorrência entrar">Know before the competition enters</small></div></div>
   </div>
-  <button class="btn-cont show" onclick="goTo('s6')"><span data-en="Continue" data-pt="Continuar">Continue</span> →</button>
+  <button class="btn-cont" onclick="goTo('s6')"><span data-en="Continue" data-pt="Continuar">Continue</span> →</button>
 </div>
 </div>
 
-<!-- ═══ S6: Q4 — Category ═══ -->
+<!-- ════ S6 Q4 Category ════ -->
 <div class="step" id="s6">
-<div class="q-inner">
-  <div class="q-meta" data-en="Question 4 of 8" data-pt="Pergunta 4 de 8">Question 4 of 8</div>
+<div class="q">
+  <div class="q-step" data-en="Question 4 of 8" data-pt="Pergunta 4 de 8">Question 4 of 8</div>
   <h2 class="q-h" data-en="What's your main selling category?" data-pt="Em qual categoria principal você vende?">What's your main selling category?</h2>
-  <div class="opts">
-    <div class="opt" onclick="pick(this,'q4','eletro','⚡ Hot category! Lots of opportunities in electronics right now!','⚡ Categoria quente! Há muitas oportunidades em eletrônicos agora!','s7')"><span class="opt-em">📱</span><div class="opt-body"><div class="opt-label" data-en="Electronics & Tech" data-pt="Eletrônicos & Tecnologia">Electronics & Tech</div></div><div class="radio"><div class="radio-dot"></div></div></div>
-    <div class="opt" onclick="pick(this,'q4','moda','👗 Fashion is one of the highest-volume categories on ML!','👗 Moda é uma das categorias com maior volume no ML!','s7')"><span class="opt-em">👕</span><div class="opt-body"><div class="opt-label" data-en="Fashion & Accessories" data-pt="Moda & Acessórios">Fashion & Accessories</div></div><div class="radio"><div class="radio-dot"></div></div></div>
-    <div class="opt" onclick="pick(this,'q4','casa','🏡 Trending! Home & garden grew 47% last quarter!','🏡 Em alta! Casa e jardim cresceu 47% no último trimestre!','s7')"><span class="opt-em">🏠</span><div class="opt-body"><div class="opt-label" data-en="Home, Garden & Decor" data-pt="Casa, Jardim & Decoração">Home, Garden & Decor</div></div><div class="radio"><div class="radio-dot"></div></div></div>
-    <div class="opt" onclick="pick(this,'q4','saude','💊 Growing market! Health & beauty has excellent margins!','💊 Mercado crescente! Saúde e beleza tem margens excelentes!','s7')"><span class="opt-em">💊</span><div class="opt-body"><div class="opt-label" data-en="Health & Beauty" data-pt="Saúde & Beleza">Health & Beauty</div></div><div class="radio"><div class="radio-dot"></div></div></div>
-    <div class="opt" onclick="pick(this,'q4','esporte','🏋️ Great niche! Sports has consistent, loyal demand!','🏋️ Ótimo nicho! Esportes tem demanda constante e fiel!','s7')"><span class="opt-em">⚽</span><div class="opt-body"><div class="opt-label" data-en="Sports & Leisure" data-pt="Esporte & Lazer">Sports & Leisure</div></div><div class="radio"><div class="radio-dot"></div></div></div>
-    <div class="opt" onclick="pick(this,'q4','outros','🎯 Let\'s find the best opportunities for your category!','🎯 Vamos encontrar as melhores oportunidades para a sua categoria!','s7')"><span class="opt-em">📦</span><div class="opt-body"><div class="opt-label" data-en="Other category" data-pt="Outra categoria">Other category</div></div><div class="radio"><div class="radio-dot"></div></div></div>
+  <div class="opts" id="oq4">
+    <div class="opt" onclick="pick(this,'q4','tech','⚡ Hot category! Huge opportunities in electronics right now!','⚡ Categoria quente! Muitas oportunidades em eletrônicos agora!','s7')"><span class="opt-em">📱</span><div class="opt-body"><div class="opt-label" data-en="Electronics & Tech" data-pt="Eletrônicos & Tecnologia">Electronics & Tech</div></div><div class="radio"><div class="radio-dot"></div></div></div>
+    <div class="opt" onclick="pick(this,'q4','fashion','👗 Fashion — one of the highest-volume categories on ML!','👗 Moda — uma das categorias com maior volume no ML!','s7')"><span class="opt-em">👕</span><div class="opt-body"><div class="opt-label" data-en="Fashion & Accessories" data-pt="Moda & Acessórios">Fashion & Accessories</div></div><div class="radio"><div class="radio-dot"></div></div></div>
+    <div class="opt" onclick="pick(this,'q4','home','🏡 Home & Garden grew 47% last quarter!','🏡 Casa e jardim cresceu 47% no último trimestre!','s7')"><span class="opt-em">🏠</span><div class="opt-body"><div class="opt-label" data-en="Home, Garden & Decor" data-pt="Casa, Jardim & Decoração">Home, Garden & Decor</div></div><div class="radio"><div class="radio-dot"></div></div></div>
+    <div class="opt" onclick="pick(this,'q4','health','💊 Growing market with excellent margins!','💊 Mercado crescente com margens excelentes!','s7')"><span class="opt-em">💊</span><div class="opt-body"><div class="opt-label" data-en="Health & Beauty" data-pt="Saúde & Beleza">Health & Beauty</div></div><div class="radio"><div class="radio-dot"></div></div></div>
+    <div class="opt" onclick="pick(this,'q4','sports','⚽ Consistent, loyal demand — a great niche!','⚽ Demanda constante e fiel — ótimo nicho!','s7')"><span class="opt-em">⚽</span><div class="opt-body"><div class="opt-label" data-en="Sports & Leisure" data-pt="Esporte & Lazer">Sports & Leisure</div></div><div class="radio"><div class="radio-dot"></div></div></div>
+    <div class="opt" onclick="pick(this,'q4','other','🎯 We\'ll find the best opportunities for your category!','🎯 Vamos encontrar as melhores oportunidades para sua categoria!','s7')"><span class="opt-em">📦</span><div class="opt-body"><div class="opt-label" data-en="Other category" data-pt="Outra categoria">Other category</div></div><div class="radio"><div class="radio-dot"></div></div></div>
   </div>
   <div class="feedback" id="fb-q4"></div>
-  <div class="auto-hint" id="ah-q4" data-en="Moving on automatically..." data-pt="Avançando automaticamente...">Moving on automatically...</div>
+  <div class="auto-hint" id="ah-q4" data-en="Moving on..." data-pt="Avançando...">Moving on...</div>
 </div>
 </div>
 
-<!-- ═══ S7: Q5 — Time selling ═══ -->
+<!-- ════ S7 Q5 Time selling ════ -->
 <div class="step" id="s7">
-<div class="q-inner">
-  <div class="q-meta" data-en="Question 5 of 8" data-pt="Pergunta 5 de 8">Question 5 of 8</div>
-  <h2 class="q-h" data-en="How long have you been selling on Mercado Livre?" data-pt="Há quanto tempo você vende no Mercado Livre?">How long have you been selling on Mercado Livre?</h2>
-  <div class="opts">
-    <div class="opt" onclick="pick(this,'q5','new','🌟 Perfect timing! Starting with the right products makes all the difference!','🌟 Momento perfeito! Começar com os produtos certos faz toda a diferença!','s8')"><span class="opt-em">🌱</span><div class="opt-body"><div class="opt-label" data-en="Haven't started yet" data-pt="Ainda não comecei">Haven't started yet</div></div><div class="radio"><div class="radio-dot"></div></div></div>
-    <div class="opt" onclick="pick(this,'q5','6m','🚀 You\'re in the discovery phase — JoomPulse will accelerate your growth!','🚀 Você está na fase de descoberta — o JoomPulse vai acelerar seu crescimento!','s8')"><span class="opt-em">📅</span><div class="opt-body"><div class="opt-label" data-en="Less than 6 months" data-pt="Menos de 6 meses">Less than 6 months</div></div><div class="radio"><div class="radio-dot"></div></div></div>
-    <div class="opt" onclick="pick(this,'q5','2y','📈 You have a solid base! Time to scale with the right products!','📈 Você já tem uma base sólida! Hora de escalar com os produtos certos!','s8')"><span class="opt-em">🏅</span><div class="opt-body"><div class="opt-label" data-en="6 months–2 years" data-pt="6 meses a 2 anos">6 months–2 years</div></div><div class="radio"><div class="radio-dot"></div></div></div>
-    <div class="opt" onclick="pick(this,'q5','5y','🏆 You\'re a veteran! Let\'s keep you always ahead of the competition!','🏆 Você é um veterano! Vamos manter você sempre à frente da concorrência!','s8')"><span class="opt-em">⭐</span><div class="opt-body"><div class="opt-label" data-en="2–5 years" data-pt="2 a 5 anos">2–5 years</div></div><div class="radio"><div class="radio-dot"></div></div></div>
-    <div class="opt" onclick="pick(this,'q5','5y+','💎 Long-time top seller! Your experience + our AI = unbeatable combo!','💎 Top seller de longa data! Sua experiência + nossa IA = combinação imbatível!','s8')"><span class="opt-em">💎</span><div class="opt-body"><div class="opt-label" data-en="More than 5 years" data-pt="Mais de 5 anos">More than 5 years</div></div><div class="radio"><div class="radio-dot"></div></div></div>
+<div class="q">
+  <div class="q-step" data-en="Question 5 of 8" data-pt="Pergunta 5 de 8">Question 5 of 8</div>
+  <h2 class="q-h" data-en="How long have you been selling on ML?" data-pt="Há quanto tempo você vende no Mercado Livre?">How long have you been selling on ML?</h2>
+  <div class="opts" id="oq5">
+    <div class="opt" onclick="pick(this,'q5','new','🌟 Perfect timing! Right products from day 1 make all the difference!','🌟 Momento perfeito! Começar com os produtos certos faz toda a diferença!','s8')"><span class="opt-em">🌱</span><div class="opt-body"><div class="opt-label" data-en="Haven't started yet" data-pt="Ainda não comecei">Haven't started yet</div></div><div class="radio"><div class="radio-dot"></div></div></div>
+    <div class="opt" onclick="pick(this,'q5','6m','🚀 Still in discovery — JoomPulse will 10× your growth speed!','🚀 Ainda descobrindo — o JoomPulse vai acelerar 10× seu crescimento!','s8')"><span class="opt-em">📅</span><div class="opt-body"><div class="opt-label" data-en="Less than 6 months" data-pt="Menos de 6 meses">Less than 6 months</div></div><div class="radio"><div class="radio-dot"></div></div></div>
+    <div class="opt" onclick="pick(this,'q5','2y','📈 Solid base! Time to scale with the right products!','📈 Base sólida! Hora de escalar com os produtos certos!','s8')"><span class="opt-em">🏅</span><div class="opt-body"><div class="opt-label" data-en="6 months–2 years" data-pt="6 meses a 2 anos">6 months–2 years</div></div><div class="radio"><div class="radio-dot"></div></div></div>
+    <div class="opt" onclick="pick(this,'q5','5y','🏆 Veteran! Let\'s keep you always one step ahead!','🏆 Veterano! Vamos manter você sempre um passo à frente!','s8')"><span class="opt-em">⭐</span><div class="opt-body"><div class="opt-label" data-en="2–5 years" data-pt="2 a 5 anos">2–5 years</div></div><div class="radio"><div class="radio-dot"></div></div></div>
+    <div class="opt" onclick="pick(this,'q5','5y+','💎 Long-time top seller! Your experience + our AI = unbeatable!','💎 Top seller experiente! Sua experiência + nossa IA = imbatível!','s8')"><span class="opt-em">💎</span><div class="opt-body"><div class="opt-label" data-en="More than 5 years" data-pt="Mais de 5 anos">More than 5 years</div></div><div class="radio"><div class="radio-dot"></div></div></div>
   </div>
   <div class="feedback" id="fb-q5"></div>
-  <div class="auto-hint" id="ah-q5" data-en="Moving on automatically..." data-pt="Avançando automaticamente...">Moving on automatically...</div>
+  <div class="auto-hint" id="ah-q5" data-en="Moving on..." data-pt="Avançando...">Moving on...</div>
 </div>
 </div>
 
-<!-- ═══ S8: Q6 — Biggest challenge ═══ -->
+<!-- ════ S8 Q6 Challenge ════ -->
 <div class="step" id="s8">
-<div class="q-inner">
-  <div class="q-meta" data-en="Question 6 of 8" data-pt="Pergunta 6 de 8">Question 6 of 8</div>
-  <h2 class="q-h" data-en="What's your biggest challenge on Mercado Livre?" data-pt="Qual é o seu maior desafio no Mercado Livre?">What's your biggest challenge on Mercado Livre?</h2>
-  <div class="opts">
-    <div class="opt" onclick="pick(this,'q6','product','🎯 Challenge #1! 78% of sellers lose money on wrong products — that\'s exactly what JoomPulse solves!','🎯 Desafio #1! 78% dos vendedores perdem dinheiro com produto errado — é exatamente o que o JoomPulse resolve!','s9')"><span class="opt-em">🔍</span><div class="opt-body"><div class="opt-label" data-en="Finding the right product to sell" data-pt="Encontrar o produto certo para vender">Finding the right product to sell</div></div><div class="radio"><div class="radio-dot"></div></div></div>
-    <div class="opt" onclick="pick(this,'q6','competition','⚔️ Competition is fierce — but our opportunity score puts you ahead!','⚔️ A concorrência é feroz — mas nosso score de oportunidade te coloca à frente!','s9')"><span class="opt-em">⚔️</span><div class="opt-body"><div class="opt-label" data-en="Too much competition in my niche" data-pt="Muita concorrência no meu nicho">Too much competition in my niche</div></div><div class="radio"><div class="radio-dot"></div></div></div>
-    <div class="opt" onclick="pick(this,'q6','price','💰 Pricing is a science! Let\'s find products where you have margin to compete!','💰 Preço é ciência! Vamos encontrar produtos onde você tem margem para competir!','s9')"><span class="opt-em">💰</span><div class="opt-body"><div class="opt-label" data-en="Pricing & low margins" data-pt="Precificação e margem baixa">Pricing & low margins</div></div><div class="radio"><div class="radio-dot"></div></div></div>
+<div class="q">
+  <div class="q-step" data-en="Question 6 of 8" data-pt="Pergunta 6 de 8">Question 6 of 8</div>
+  <h2 class="q-h" data-en="What's your biggest challenge?" data-pt="Qual é o seu maior desafio?">What's your biggest challenge?</h2>
+  <div class="opts" id="oq6">
+    <div class="opt" onclick="pick(this,'q6','product','🎯 Challenge #1 for 78% of sellers — exactly what JoomPulse solves!','🎯 Desafio #1 de 78% dos vendedores — exatamente o que o JoomPulse resolve!','s9')"><span class="opt-em">🔍</span><div class="opt-body"><div class="opt-label" data-en="Finding the right product" data-pt="Encontrar o produto certo">Finding the right product</div></div><div class="radio"><div class="radio-dot"></div></div></div>
+    <div class="opt" onclick="pick(this,'q6','competition','⚔️ Our opportunity score keeps you ahead of the competition!','⚔️ Nosso score de oportunidade te mantém à frente da concorrência!','s9')"><span class="opt-em">⚔️</span><div class="opt-body"><div class="opt-label" data-en="Too much competition" data-pt="Muita concorrência">Too much competition</div></div><div class="radio"><div class="radio-dot"></div></div></div>
+    <div class="opt" onclick="pick(this,'q6','price','💰 Let\'s find products where you have real margin to win!','💰 Vamos encontrar produtos onde você tem margem para ganhar!','s9')"><span class="opt-em">💰</span><div class="opt-body"><div class="opt-label" data-en="Pricing & low margins" data-pt="Precificação e margem baixa">Pricing & low margins</div></div><div class="radio"><div class="radio-dot"></div></div></div>
     <div class="opt" onclick="pick(this,'q6','visibility','📣 Right product + great listing = traffic explosion!','📣 Produto certo + bom anúncio = explosão de tráfego!','s9')"><span class="opt-em">📣</span><div class="opt-body"><div class="opt-label" data-en="Low visibility on listings" data-pt="Pouca visibilidade nos anúncios">Low visibility on listings</div></div><div class="radio"><div class="radio-dot"></div></div></div>
-    <div class="opt" onclick="pick(this,'q6','inventory','📦 Smart inventory management starts with choosing the right product!','📦 Gestão de estoque inteligente começa com a escolha certa do produto!','s9')"><span class="opt-em">📦</span><div class="opt-body"><div class="opt-label" data-en="Stock & logistics management" data-pt="Gestão de estoque e logística">Stock & logistics management</div></div><div class="radio"><div class="radio-dot"></div></div></div>
+    <div class="opt" onclick="pick(this,'q6','inventory','📦 Smart inventory starts with choosing the right product!','📦 Estoque inteligente começa com a escolha certa do produto!','s9')"><span class="opt-em">📦</span><div class="opt-body"><div class="opt-label" data-en="Inventory & logistics" data-pt="Estoque e logística">Inventory & logistics</div></div><div class="radio"><div class="radio-dot"></div></div></div>
   </div>
   <div class="feedback" id="fb-q6"></div>
-  <div class="auto-hint" id="ah-q6" data-en="Moving on automatically..." data-pt="Avançando automaticamente...">Moving on automatically...</div>
+  <div class="auto-hint" id="ah-q6" data-en="Moving on..." data-pt="Avançando...">Moving on...</div>
 </div>
 </div>
 
-<!-- ═══ S9: INTER — Testimonial ═══ -->
+<!-- ════ S9 INTER testimonial ════ -->
 <div class="step" id="s9">
-<div class="inter-inner">
+<div class="inter">
   <div class="inter-icon">💬</div>
-  <div class="inter-tag" data-en="Real result" data-pt="Resultado real">Real result</div>
+  <div class="inter-tag" data-en="Real results" data-pt="Resultados reais">Real results</div>
   <h2 class="inter-h" data-en="Sellers like you already <em>transformed</em> their results" data-pt="Vendedores como você já <em>transformaram</em> seus resultados">Sellers like you already <em>transformed</em> their results</h2>
   <div class="testi">
-    <div class="testi-q" data-en='"I was losing money on wrong products. With JoomPulse I found a niche no one was exploring and made R$28,000 in my first month with the new product."' data-pt='"Eu estava perdendo dinheiro com produtos errados. Com o JoomPulse descobri um nicho que ninguém explorava e faturei R$28.000 no primeiro mês com o produto novo."'>"I was losing money on wrong products. With JoomPulse I found a niche no one was exploring and made R$28,000 in my first month with the new product."</div>
+    <div class="testi-q" data-en='"I was losing money on wrong products. With JoomPulse I found a niche nobody was in and made R$28,000 in my first month with the new product."' data-pt='"Estava perdendo dinheiro com produtos errados. Com o JoomPulse descobri um nicho que ninguém explorava e faturei R$28.000 no primeiro mês com o produto novo."'>"I was losing money on wrong products. With JoomPulse I found a niche nobody was in and made R$28,000 in my first month."</div>
     <div class="testi-au"><div class="testi-av">MR</div><div><div class="testi-name">Marcos Rodrigues</div><div class="testi-role" data-en="Seller — Electronics, SP" data-pt="Vendedor — Eletrônicos, SP">Seller — Electronics, SP</div><div class="testi-stars">★★★★★</div></div></div>
   </div>
   <div class="testi">
-    <div class="testi-q" data-en='"In 3 weeks I identified 5 products with high demand and low competition. My revenue grew 3x. Best investment I made for my store."' data-pt='"Em 3 semanas identifiquei 5 produtos com alta demanda e baixa concorrência. Meu faturamento cresceu 3x. Melhor investimento que fiz para minha loja."'>"In 3 weeks I identified 5 products with high demand and low competition. My revenue grew 3x. Best investment I made for my store."</div>
+    <div class="testi-q" data-en='"In 3 weeks I found 5 high-demand, low-competition products. My revenue grew 3×. Best investment for my store."' data-pt='"Em 3 semanas achei 5 produtos com alta demanda e baixa concorrência. Meu faturamento cresceu 3×. Melhor investimento para minha loja."'>"In 3 weeks I found 5 high-demand, low-competition products. Revenue grew 3×."</div>
     <div class="testi-au"><div class="testi-av" style="background:#FF9D00">JC</div><div><div class="testi-name">Juliana Costa</div><div class="testi-role" data-en="Seller — Fashion, RJ" data-pt="Vendedora — Moda, RJ">Seller — Fashion, RJ</div><div class="testi-stars">★★★★★</div></div></div>
   </div>
-  <button class="btn-cont show" onclick="goTo('s10')"><span data-en="Next question" data-pt="Próxima pergunta">Next question</span> →</button>
+  <button class="btn-cont" onclick="goTo('s10')"><span data-en="Next question" data-pt="Próxima pergunta">Next question</span> →</button>
 </div>
 </div>
 
-<!-- ═══ S10: Q7 — What blocks you ═══ -->
+<!-- ════ S10 Q7 What blocks ════ -->
 <div class="step" id="s10">
-<div class="q-inner">
-  <div class="q-meta" data-en="Question 7 of 8" data-pt="Pergunta 7 de 8">Question 7 of 8</div>
+<div class="q">
+  <div class="q-step" data-en="Question 7 of 8" data-pt="Pergunta 7 de 8">Question 7 of 8</div>
   <h2 class="q-h" data-en="What stops you from finding the right product?" data-pt="O que mais te impede de encontrar o produto certo?">What stops you from finding the right product?</h2>
-  <div class="opts">
-    <div class="opt" onclick="pick(this,'q7','data','📊 Data is key! JoomPulse delivers ready-made analysis — no spreadsheets needed!','📊 Dados são a chave! O JoomPulse te entrega análises prontas — sem planilhas!','s11')"><span class="opt-em">📊</span><div class="opt-body"><div class="opt-label" data-en="Lack of reliable data" data-pt="Falta de dados confiáveis">Lack of reliable data</div><div class="opt-desc" data-en="I don't know what's actually selling" data-pt="Não sei o que está vendendo de verdade">I don't know what's actually selling</div></div><div class="radio"><div class="radio-dot"></div></div></div>
-    <div class="opt" onclick="pick(this,'q7','time','⏰ Time is precious! With JoomPulse, find opportunities in minutes, not hours!','⏰ Tempo é precioso! Com o JoomPulse, você encontra oportunidades em minutos, não horas!','s11')"><span class="opt-em">⏰</span><div class="opt-body"><div class="opt-label" data-en="Not enough time to research" data-pt="Falta de tempo para pesquisar">Not enough time to research</div><div class="opt-desc" data-en="Manual research takes too long" data-pt="Pesquisa manual demora muito">Manual research takes too long</div></div><div class="radio"><div class="radio-dot"></div></div></div>
-    <div class="opt" onclick="pick(this,'q7','capital','💵 Smart capital! With the right products, invest less and earn more!','💵 Capital inteligente! Com os produtos certos, você investe menos e ganha mais!','s11')"><span class="opt-em">💵</span><div class="opt-body"><div class="opt-label" data-en="Limited capital to test" data-pt="Capital limitado para testar">Limited capital to test</div><div class="opt-desc" data-en="Can't risk on the wrong product" data-pt="Não posso arriscar no produto errado">Can't risk on the wrong product</div></div><div class="radio"><div class="radio-dot"></div></div></div>
-    <div class="opt" onclick="pick(this,'q7','saturated','💡 Saturated? There are hundreds of unexplored sub-niches — we\'ll show you which!','💡 Saturado? Existem centenas de sub-nichos inexplorados — e vamos te mostrar quais!','s11')"><span class="opt-em">🔐</span><div class="opt-body"><div class="opt-label" data-en="Niches feel too saturated" data-pt="Nichos muito saturados">Niches feel too saturated</div><div class="opt-desc" data-en="Everything seems too competitive" data-pt="Tudo parece concorrido demais">Everything seems too competitive</div></div><div class="radio"><div class="radio-dot"></div></div></div>
+  <div class="opts" id="oq7">
+    <div class="opt" onclick="pick(this,'q7','data','📊 JoomPulse delivers ready-made analysis — no spreadsheets needed!','📊 O JoomPulse te entrega análises prontas — sem precisar de planilhas!','s11')"><span class="opt-em">📊</span><div class="opt-body"><div class="opt-label" data-en="Lack of reliable data" data-pt="Falta de dados confiáveis">Lack of reliable data</div></div><div class="radio"><div class="radio-dot"></div></div></div>
+    <div class="opt" onclick="pick(this,'q7','time','⏰ Find opportunities in minutes, not hours!','⏰ Encontre oportunidades em minutos, não horas!','s11')"><span class="opt-em">⏰</span><div class="opt-body"><div class="opt-label" data-en="Not enough time to research" data-pt="Falta de tempo para pesquisar">Not enough time to research</div></div><div class="radio"><div class="radio-dot"></div></div></div>
+    <div class="opt" onclick="pick(this,'q7','capital','💵 With the right products: invest less, earn more!','💵 Com os produtos certos: invista menos e ganhe mais!','s11')"><span class="opt-em">💵</span><div class="opt-body"><div class="opt-label" data-en="Limited capital to test" data-pt="Capital limitado para testar">Limited capital to test</div></div><div class="radio"><div class="radio-dot"></div></div></div>
+    <div class="opt" onclick="pick(this,'q7','saturated','💡 Hundreds of unexplored sub-niches exist — we\'ll show you which!','💡 Existem centenas de sub-nichos inexplorados — vamos te mostrar quais!','s11')"><span class="opt-em">🔐</span><div class="opt-body"><div class="opt-label" data-en="Niches feel too saturated" data-pt="Nichos muito saturados">Niches feel too saturated</div></div><div class="radio"><div class="radio-dot"></div></div></div>
   </div>
   <div class="feedback" id="fb-q7"></div>
-  <div class="auto-hint" id="ah-q7" data-en="Moving on automatically..." data-pt="Avançando automaticamente...">Moving on automatically...</div>
+  <div class="auto-hint" id="ah-q7" data-en="Moving on..." data-pt="Avançando...">Moving on...</div>
 </div>
 </div>
 
-<!-- ═══ S11: Q8 — Lost money ═══ -->
+<!-- ════ S11 Q8 Lost money ════ -->
 <div class="step" id="s11">
-<div class="q-inner">
-  <div class="q-meta" data-en="Question 8 of 8" data-pt="Pergunta 8 de 8">Question 8 of 8</div>
-  <h2 class="q-h" data-en="Have you ever lost money investing in the wrong product?" data-pt="Você já perdeu dinheiro investindo no produto errado?">Have you ever lost money investing in the wrong product?</h2>
-  <p class="q-sub" data-en="78% of sellers have been through this." data-pt="78% dos vendedores já passaram por isso.">78% of sellers have been through this.</p>
-  <div class="opts">
-    <div class="opt" onclick="pick(this,'q8','yes-a-lot','💪 This will never happen again! JoomPulse exists to prevent exactly this.','💪 Isso nunca mais vai acontecer! O JoomPulse existe para evitar exatamente isso.','s12')"><span class="opt-em">😤</span><div class="opt-body"><div class="opt-label" data-en="Yes, quite a lot" data-pt="Sim, já perdi bastante">Yes, quite a lot</div><div class="opt-desc" data-en="It was a frustrating experience" data-pt="Foi uma experiência frustrante">It was a frustrating experience</div></div><div class="radio"><div class="radio-dot"></div></div></div>
-    <div class="opt" onclick="pick(this,'q8','yes-some','🛡️ Any loss is avoidable with the right data. We\'ll protect you!','🛡️ Qualquer perda é evitável com os dados certos. Vamos te proteger!','s12')"><span class="opt-em">😕</span><div class="opt-body"><div class="opt-label" data-en="Yes, a little" data-pt="Sim, alguma coisa">Yes, a little</div><div class="opt-desc" data-en="Small losses here and there" data-pt="Pequenas perdas aqui e ali">Small losses here and there</div></div><div class="radio"><div class="radio-dot"></div></div></div>
-    <div class="opt" onclick="pick(this,'q8','no','✅ Amazing! You\'re careful — let\'s make sure it stays that way!','✅ Incrível! Você é cuidadoso — vamos garantir que continue assim!','s12')"><span class="opt-em">✅</span><div class="opt-body"><div class="opt-label" data-en="No, not yet" data-pt="Não, ainda não">No, not yet</div><div class="opt-desc" data-en="I've been careful" data-pt="Tenho sido cuidadoso">I've been careful</div></div><div class="radio"><div class="radio-dot"></div></div></div>
-    <div class="opt" onclick="pick(this,'q8','not-started','🌟 Let\'s make sure you start with the right product from day 1!','🌟 Vamos garantir que você comece com o produto certo desde o primeiro dia!','s12')"><span class="opt-em">🌱</span><div class="opt-body"><div class="opt-label" data-en="I haven't started selling yet" data-pt="Ainda não comecei a vender">I haven't started selling yet</div></div><div class="radio"><div class="radio-dot"></div></div></div>
+<div class="q">
+  <div class="q-step" data-en="Question 8 of 8" data-pt="Pergunta 8 de 8">Question 8 of 8</div>
+  <h2 class="q-h" data-en="Have you ever lost money on the wrong product?" data-pt="Você já perdeu dinheiro investindo no produto errado?">Have you ever lost money on the wrong product?</h2>
+  <div class="opts" id="oq8">
+    <div class="opt" onclick="pick(this,'q8','yes-a-lot','💪 Never again! JoomPulse exists to prevent exactly this.','💪 Nunca mais! O JoomPulse existe para evitar exatamente isso.','s12')"><span class="opt-em">😤</span><div class="opt-body"><div class="opt-label" data-en="Yes, quite a lot" data-pt="Sim, já perdi bastante">Yes, quite a lot</div></div><div class="radio"><div class="radio-dot"></div></div></div>
+    <div class="opt" onclick="pick(this,'q8','yes-some','🛡️ Any loss is avoidable with the right data. We\'ve got you!','🛡️ Qualquer perda é evitável com os dados certos. Vamos te proteger!','s12')"><span class="opt-em">😕</span><div class="opt-body"><div class="opt-label" data-en="Yes, a little" data-pt="Sim, alguma coisa">Yes, a little</div></div><div class="radio"><div class="radio-dot"></div></div></div>
+    <div class="opt" onclick="pick(this,'q8','no','✅ Amazing — let\'s make sure it stays that way!','✅ Incrível — vamos garantir que continue assim!','s12')"><span class="opt-em">✅</span><div class="opt-body"><div class="opt-label" data-en="No, not yet" data-pt="Não, ainda não">No, not yet</div></div><div class="radio"><div class="radio-dot"></div></div></div>
+    <div class="opt" onclick="pick(this,'q8','not-started','🌟 Let\'s make sure you start with the right product from day 1!','🌟 Vamos garantir que você começa com o produto certo desde o primeiro dia!','s12')"><span class="opt-em">🌱</span><div class="opt-body"><div class="opt-label" data-en="I haven't started selling" data-pt="Ainda não comecei a vender">I haven't started selling</div></div><div class="radio"><div class="radio-dot"></div></div></div>
   </div>
   <div class="feedback" id="fb-q8"></div>
-  <div class="auto-hint" id="ah-q8" data-en="Moving on automatically..." data-pt="Avançando automaticamente...">Moving on automatically...</div>
+  <div class="auto-hint" id="ah-q8" data-en="Analyzing your profile..." data-pt="Analisando seu perfil...">Analyzing your profile...</div>
 </div>
 </div>
 
-<!-- ═══ S12: LOADING A ═══ -->
+<!-- ════ S12 LOADING A ════ -->
 <div class="step" id="s12">
-<div class="loading-inner">
-  <div class="loading-h" data-en="Analyzing your <em>seller profile</em>..." data-pt="Analisando seu <em>perfil de vendedor</em>...">Analyzing your <em>seller profile</em>...</div>
-  <p class="loading-sub" data-en="Crossing your data with 2M+ products on ML" data-pt="Cruzando seus dados com +2 milhões de produtos no ML">Crossing your data with 2M+ products on ML</p>
-  <div class="ld2-bar"><div class="ld2-fill" id="lf-a"></div></div>
-  <div class="ld2-label"><span id="lfa-txt" data-en="Identifying opportunities..." data-pt="Identificando oportunidades...">Identifying opportunities...</span><span id="lfa-pct">0%</span></div>
+<div class="loading">
+  <h2 class="ld-h" data-en="Analyzing your <em>seller profile</em>..." data-pt="Analisando seu <em>perfil de vendedor</em>...">Analyzing your <em>seller profile</em>...</h2>
+  <p class="ld-sub" data-en="Crossing your answers with 2M+ ML products" data-pt="Cruzando suas respostas com +2M de produtos no ML">Crossing your answers with 2M+ ML products</p>
+  <div class="ld-track"><div class="ld-fill" id="la-fill"></div></div>
+  <div class="ld-meta"><span id="la-txt" data-en="Identifying opportunities..." data-pt="Identificando oportunidades...">Identifying opportunities...</span><span id="la-pct">0%</span></div>
+  <div class="proof-post">
+    <div class="pp-top"><div class="pp-av">FS</div><div><div class="pp-name">Felipe Santos</div><div class="pp-date" data-en="2 days ago via JoomPulse" data-pt="2 dias atrás via JoomPulse">2 days ago via JoomPulse</div></div></div>
+    <div class="pp-body" data-en="Found a product with 0 competitors and 8,400 monthly searches. First month result:" data-pt="Encontrei um produto com 0 concorrentes e 8.400 buscas mensais. Resultado do primeiro mês:">Found a product with 0 competitors and 8,400 monthly searches. First month result:</div>
+    <div class="pp-num">R$ 31.200</div>
+    <div class="pp-reactions">👍 342 &nbsp; 💬 89 comments &nbsp; 🔁 Share</div>
+  </div>
   <div class="facts">
-    <div class="fact" id="fa0"><div class="fact-dot"></div><span data-en="Mapping categories with highest demand" data-pt="Mapeando categorias com maior demanda">Mapping categories with highest demand</span><span class="fact-check">✓</span></div>
+    <div class="fact" id="fa0"><div class="fact-dot"></div><span data-en="Mapping high-demand categories" data-pt="Mapeando categorias com alta demanda">Mapping high-demand categories</span><span class="fact-check">✓</span></div>
     <div class="fact" id="fa1"><div class="fact-dot"></div><span data-en="Calculating opportunity score" data-pt="Calculando score de oportunidade">Calculating opportunity score</span><span class="fact-check">✓</span></div>
     <div class="fact" id="fa2"><div class="fact-dot"></div><span data-en="Analyzing niche competition" data-pt="Analisando concorrência nos nichos">Analyzing niche competition</span><span class="fact-check">✓</span></div>
     <div class="fact" id="fa3"><div class="fact-dot"></div><span data-en="Identifying trending products" data-pt="Identificando produtos em alta">Identifying trending products</span><span class="fact-check">✓</span></div>
@@ -586,31 +595,37 @@ body{min-height:100%;background:var(--bg);color:var(--txt);font-family:var(--fb)
 </div>
 </div>
 
-<!-- ═══ S13: Q9 — Revenue goal ═══ -->
+<!-- ════ S13 Q9 Revenue goal ════ -->
 <div class="step" id="s13">
-<div class="q-inner">
-  <div class="q-meta" data-en="Last step" data-pt="Última etapa">Last step</div>
+<div class="q">
+  <div class="q-step" data-en="Last step" data-pt="Última etapa">Last step</div>
   <h2 class="q-h" data-en="What's your revenue goal for the next 6 months?" data-pt="Qual é sua meta de faturamento nos próximos 6 meses?">What's your revenue goal for the next 6 months?</h2>
-  <div class="opts">
-    <div class="opt" onclick="pickFinal(this,'q9','10k','🎯 Achievable goal! With the right products you\'ll get there in 60–90 days!','🎯 Meta alcançável! Com os produtos certos você chega lá em 60–90 dias!','R$10k')"><span class="opt-em">🎯</span><div class="opt-body"><div class="opt-label" data-en="Up to R$10,000/mo" data-pt="Até R$10.000/mês">Up to R$10,000/mo</div><div class="opt-desc" data-en="Start strong and grow" data-pt="Começar bem e crescer">Start strong and grow</div></div><div class="radio"><div class="radio-dot"></div></div></div>
-    <div class="opt" onclick="pickFinal(this,'q9','30k','🚀 Ambitious and achievable! We have success stories in exactly this range!','🚀 Ambiciosa e alcançável! Temos cases de sucesso exatamente nessa faixa!','R$30k')"><span class="opt-em">🚀</span><div class="opt-body"><div class="opt-label" data-en="R$10,000–R$30,000/mo" data-pt="R$10.000–R$30.000/mês">R$10,000–R$30,000/mo</div></div><div class="radio"><div class="radio-dot"></div></div></div>
-    <div class="opt" onclick="pickFinal(this,'q9','100k','🏆 Big operation level! Let\'s map the path to get there!','🏆 Esse é o nível das grandes operações! Vamos traçar o caminho para chegar lá!','R$100k')"><span class="opt-em">🏆</span><div class="opt-body"><div class="opt-label" data-en="R$30,000–R$100,000/mo" data-pt="R$30.000–R$100.000/mês">R$30,000–R$100,000/mo</div></div><div class="radio"><div class="radio-dot"></div></div></div>
-    <div class="opt" onclick="pickFinal(this,'q9','100k+','💎 Big vision! You think like Brazil\'s top sellers!','💎 Visão grande! Você pensa como os maiores sellers do Brasil!','R$150k+')"><span class="opt-em">💎</span><div class="opt-body"><div class="opt-label" data-en="Above R$100,000/mo" data-pt="Acima de R$100.000/mês">Above R$100,000/mo</div><div class="opt-desc" data-en="I want to really scale" data-pt="Quero escalar de verdade">I want to really scale</div></div><div class="radio"><div class="radio-dot"></div></div></div>
+  <div class="opts" id="oq9">
+    <div class="opt" onclick="pickFinal(this,'10k','🎯 Achievable! Right products get you there in 60–90 days!','🎯 Alcançável! Com os produtos certos você chega lá em 60–90 dias!','R$10k')"><span class="opt-em">🎯</span><div class="opt-body"><div class="opt-label" data-en="Up to R$10,000/mo" data-pt="Até R$10.000/mês">Up to R$10,000/mo</div></div><div class="radio"><div class="radio-dot"></div></div></div>
+    <div class="opt" onclick="pickFinal(this,'30k','🚀 Ambitious and achievable — we have success cases in this exact range!','🚀 Ambiciosa e alcançável — temos casos de sucesso exatamente nessa faixa!','R$30k')"><span class="opt-em">🚀</span><div class="opt-body"><div class="opt-label" data-en="R$10k–R$30k/mo" data-pt="R$10.000–R$30.000/mês">R$10k–R$30k/mo</div></div><div class="radio"><div class="radio-dot"></div></div></div>
+    <div class="opt" onclick="pickFinal(this,'100k','🏆 Big league! Let\'s map the path to get there!','🏆 Liga grande! Vamos traçar o caminho para chegar lá!','R$100k')"><span class="opt-em">🏆</span><div class="opt-body"><div class="opt-label" data-en="R$30k–R$100k/mo" data-pt="R$30.000–R$100.000/mês">R$30k–R$100k/mo</div></div><div class="radio"><div class="radio-dot"></div></div></div>
+    <div class="opt" onclick="pickFinal(this,'100k+','💎 Big vision! You think like Brazil\'s top sellers!','💎 Visão grande! Você pensa como os maiores sellers do Brasil!','R$150k+')"><span class="opt-em">💎</span><div class="opt-body"><div class="opt-label" data-en="Above R$100k/mo" data-pt="Acima de R$100.000/mês">Above R$100k/mo</div></div><div class="radio"><div class="radio-dot"></div></div></div>
   </div>
   <div class="feedback" id="fb-q9"></div>
   <div class="auto-hint" id="ah-q9" data-en="Building your plan..." data-pt="Montando seu plano...">Building your plan...</div>
 </div>
 </div>
 
-<!-- ═══ S14: LOADING B ═══ -->
+<!-- ════ S14 LOADING B ════ -->
 <div class="step" id="s14">
-<div class="loading-inner">
-  <div class="loading-h" data-en="Building your <em>personalized plan</em>..." data-pt="Preparando sua <em>análise personalizada</em>...">Building your <em>personalized plan</em>...</div>
-  <p class="loading-sub" data-en="Almost there! Assembling your exclusive growth plan" data-pt="Quase lá! Estamos montando seu plano exclusivo de crescimento">Almost there! Assembling your exclusive growth plan</p>
-  <div class="ld2-bar"><div class="ld2-fill" id="lf-b"></div></div>
-  <div class="ld2-label"><span id="lfb-txt" data-en="Generating recommendations..." data-pt="Gerando recomendações...">Generating recommendations...</span><span id="lfb-pct">0%</span></div>
+<div class="loading">
+  <h2 class="ld-h" data-en="Building your <em>personalized plan</em>..." data-pt="Preparando sua <em>análise personalizada</em>...">Building your <em>personalized plan</em>...</h2>
+  <p class="ld-sub" data-en="Assembling your exclusive growth plan right now" data-pt="Montando seu plano exclusivo de crescimento agora">Assembling your exclusive growth plan right now</p>
+  <div class="ld-track"><div class="ld-fill" id="lb-fill"></div></div>
+  <div class="ld-meta"><span id="lb-txt" data-en="Generating recommendations..." data-pt="Gerando recomendações...">Generating recommendations...</span><span id="lb-pct">0%</span></div>
+  <div class="proof-post">
+    <div class="pp-top"><div class="pp-av" style="background:linear-gradient(135deg,#FF9D00,#FF1010)">AR</div><div><div class="pp-name">Ana Ribeiro</div><div class="pp-date" data-en="5 days ago via JoomPulse" data-pt="5 dias atrás via JoomPulse">5 days ago via JoomPulse</div></div></div>
+    <div class="pp-body" data-en="JoomPulse found me a product trending +240% in just 3 weeks. I ordered stock and sold out in 4 days. Next 30 days:" data-pt="O JoomPulse me encontrou um produto em alta +240% em 3 semanas. Fiz o pedido e vendi tudo em 4 dias. Próximos 30 dias:">JoomPulse found me a product trending +240%. Sold out in 4 days. Next 30 days:</div>
+    <div class="pp-num">R$ 47.800</div>
+    <div class="pp-reactions">👍 521 &nbsp; 💬 143 comments &nbsp; 🔁 Share</div>
+  </div>
   <div class="facts">
-    <div class="fact" id="fb0"><div class="fact-dot"></div><span data-en="Selecting best products for you" data-pt="Selecionando os melhores produtos para você">Selecting best products for you</span><span class="fact-check">✓</span></div>
+    <div class="fact" id="fb0"><div class="fact-dot"></div><span data-en="Selecting best products for your profile" data-pt="Selecionando os melhores produtos para seu perfil">Selecting best products for your profile</span><span class="fact-check">✓</span></div>
     <div class="fact" id="fb1"><div class="fact-dot"></div><span data-en="Calculating revenue projection" data-pt="Calculando projeção de receita">Calculating revenue projection</span><span class="fact-check">✓</span></div>
     <div class="fact" id="fb2"><div class="fact-dot"></div><span data-en="Building personalized strategy" data-pt="Montando estratégia personalizada">Building personalized strategy</span><span class="fact-check">✓</span></div>
     <div class="fact" id="fb3"><div class="fact-dot"></div><span data-en="Finalizing your growth plan" data-pt="Finalizando seu plano de crescimento">Finalizing your growth plan</span><span class="fact-check">✓</span></div>
@@ -618,27 +633,27 @@ body{min-height:100%;background:var(--bg);color:var(--txt);font-family:var(--fb)
 </div>
 </div>
 
-<!-- ═══ S15: RESULT ═══ -->
+<!-- ════ S15 RESULT ════ -->
 <div class="step" id="s15">
-<div class="result-inner">
-  <div class="result-tag">✅ <span data-en="Your analysis is ready" data-pt="Sua análise está pronta">Your analysis is ready</span></div>
-  <h2 class="result-h" data-en="Your <em>personalized</em> growth plan" data-pt="Seu plano de crescimento <em>personalizado</em>">Your <em>personalized</em> growth plan</h2>
-  <p class="result-sub" data-en="Based on your profile, we identified high-potential opportunities to scale on Mercado Livre." data-pt="Baseado no seu perfil, identificamos oportunidades de alto potencial para você escalar no Mercado Livre.">Based on your profile, we identified high-potential opportunities to scale on Mercado Livre.</p>
+<div class="result">
+  <div class="res-tag">✅ <span data-en="Your analysis is ready" data-pt="Sua análise está pronta">Your analysis is ready</span></div>
+  <h2 class="res-h" data-en="Your <em>personalized</em> growth plan" data-pt="Seu plano de crescimento <em>personalizado</em>">Your <em>personalized</em> growth plan</h2>
+  <p class="res-sub" data-en="Based on your profile, we identified high-potential opportunities to scale on Mercado Livre." data-pt="Baseado no seu perfil, identificamos oportunidades de alto potencial para você escalar no Mercado Livre.">Based on your profile, we identified high-potential opportunities to scale on Mercado Livre.</p>
   <div class="metrics">
-    <div class="metric"><div class="metric-l" data-en="Products found" data-pt="Produtos identificados">Products found</div><div class="metric-v">47</div><div class="metric-t" data-en="↑ high potential" data-pt="↑ alto potencial">↑ high potential</div></div>
-    <div class="metric"><div class="metric-l" data-en="Revenue potential" data-pt="Potencial de receita">Revenue potential</div><div class="metric-v" id="resRev">R$28k</div><div class="metric-t" data-en="↑ in 90 days" data-pt="↑ em 90 dias">↑ in 90 days</div></div>
-    <div class="metric"><div class="metric-l" data-en="Opportunity score" data-pt="Score de oportunidade">Opportunity score</div><div class="metric-v">9.4</div><div class="metric-t" data-en="↑ above average" data-pt="↑ acima da média">↑ above average</div></div>
-    <div class="metric"><div class="metric-l" data-en="Niche competition" data-pt="Concorrência no nicho">Niche competition</div><div class="metric-v" data-en="Low" data-pt="Baixa">Low</div><div class="metric-t" data-en="✓ window open" data-pt="✓ janela aberta">✓ window open</div></div>
+    <div class="metric"><div class="met-l" data-en="Products found" data-pt="Produtos identificados">Products found</div><div class="met-v">47</div><div class="met-t">↑ high potential</div></div>
+    <div class="metric"><div class="met-l" data-en="Revenue potential" data-pt="Potencial de receita">Revenue potential</div><div class="met-v" id="resRev">R$28k</div><div class="met-t">↑ in 90 days</div></div>
+    <div class="metric"><div class="met-l" data-en="Opportunity score" data-pt="Score de oportunidade">Opportunity score</div><div class="met-v">9.4</div><div class="met-t">↑ above avg</div></div>
+    <div class="metric"><div class="met-l" data-en="Niche competition" data-pt="Concorrência">Niche competition</div><div class="met-v" data-en="Low" data-pt="Baixa">Low</div><div class="met-t">✓ window open</div></div>
   </div>
   <div class="plan-list">
-    <div class="plan-li"><span class="plan-ic">📦</span><span data-en="Access to 500+ trending products in real time" data-pt="Acesso a +500 produtos trending em tempo real">Access to 500+ trending products in real time</span></div>
+    <div class="plan-li"><span class="plan-ic">📦</span><span data-en="500+ trending products in real time" data-pt="+500 produtos trending em tempo real">500+ trending products in real time</span></div>
     <div class="plan-li"><span class="plan-ic">📊</span><span data-en="Demand & competition analysis per product" data-pt="Análise de demanda e concorrência por produto">Demand & competition analysis per product</span></div>
-    <div class="plan-li"><span class="plan-ic">⚡</span><span data-en="Opportunity alerts before competition" data-pt="Alertas de oportunidades antes da concorrência">Opportunity alerts before competition</span></div>
+    <div class="plan-li"><span class="plan-ic">⚡</span><span data-en="Early opportunity alerts" data-pt="Alertas de oportunidades antecipados">Early opportunity alerts</span></div>
     <div class="plan-li"><span class="plan-ic">🎯</span><span data-en="Opportunity score for every niche" data-pt="Score de oportunidade para cada nicho">Opportunity score for every niche</span></div>
   </div>
-  <div class="countdown">⏱ <span data-en="Special offer expires in" data-pt="Oferta especial expira em">Special offer expires in</span> <span class="cdt" id="cdt">10:00</span></div>
+  <div class="cdown">⏱ <span data-en="Special offer expires in" data-pt="Oferta expira em">Special offer expires in</span>&nbsp;<span class="cdt" id="cdt">10:00</span></div>
   <a href="index.html" class="btn-cta"><span data-en="Access JoomPulse for free" data-pt="Acessar JoomPulse gratuitamente">Access JoomPulse for free</span> →</a>
-  <div class="result-guar">🔒 <span data-en="Free to start · No credit card required" data-pt="Grátis para começar · Sem cartão de crédito">Free to start · No credit card required</span></div>
+  <div class="res-guar">🔒 <span data-en="Free to start · No credit card" data-pt="Grátis para começar · Sem cartão">Free to start · No credit card</span></div>
 </div>
 </div>
 
@@ -647,218 +662,155 @@ body{min-height:100%;background:var(--bg);color:var(--txt);font-family:var(--fb)
 </div><!-- /shell -->
 
 <script>
-// ── STATE ──────────────────────────────────────────────
-let cur = 's0';
-const ans = {};
-let lang = 'en';
-const BACK = {s1:'',s2:'s1',s3:'s2',s4:'s3',s5:'s4',s6:'s5',s7:'s6',s8:'s7',s9:'s8',s10:'s9',s11:'s10',s13:'s11'};
-// Steps in order for progress
-const STEPS = ['s0','s1','s2','s3','s4','s5','s6','s7','s8','s9','s10','s11','s12','s13','s14','s15'];
+const STEPS=['s0','s1','s2','s3','s4','s5','s6','s7','s8','s9','s10','s11','s12','s13','s14','s15'];
+const BACK={s1:'',s2:'s1',s3:'s2',s4:'s3',s5:'s4',s6:'s5',s7:'s6',s8:'s7',s9:'s8',s10:'s9',s11:'s10',s13:'s11'};
+let cur='s0', lang='en';
 
-// ── PROGRESS ──────────────────────────────────────────
-function updateProgress(sid) {
-  const i = STEPS.indexOf(sid);
-  const pct = i / (STEPS.length - 1);
-  const s0 = Math.min(100, pct * 300);
-  const s1 = Math.max(0, Math.min(100, (pct * 300) - 100));
-  const s2 = Math.max(0, Math.min(100, (pct * 300) - 200));
-  document.getElementById('p0').style.width = s0 + '%';
-  document.getElementById('p1').style.width = s1 + '%';
-  document.getElementById('p2').style.width = s2 + '%';
+// ── Progress ──────────────────────────────────────────
+function updateProg(sid){
+  const i=STEPS.indexOf(sid)/(STEPS.length-1);
+  const p=v=>Math.min(100,Math.max(0,v));
+  document.getElementById('p0').style.width=p(i*300)+'%';
+  document.getElementById('p1').style.width=p(i*300-100)+'%';
+  document.getElementById('p2').style.width=p(i*300-200)+'%';
 }
 
-// ── NAVIGATION ────────────────────────────────────────
-function goTo(sid) {
-  const prev = document.getElementById(cur);
-  prev.classList.add('leaving');
-  setTimeout(() => { prev.classList.remove('active','leaving'); }, 200);
-  setTimeout(() => {
-    cur = sid;
-    const next = document.getElementById(sid);
+// ── Navigation ────────────────────────────────────────
+function goTo(sid){
+  const prev=document.getElementById(cur);
+  prev.classList.add('out');
+  setTimeout(()=>{
+    prev.classList.remove('active','out');
+    cur=sid;
+    const next=document.getElementById(sid);
     next.classList.add('active');
-    updateProgress(sid);
-    const backBtn = document.getElementById('btnBack');
-    backBtn.classList.toggle('hidden', !BACK[sid]);
+    updateProg(sid);
+    document.getElementById('btnBack').classList.toggle('hidden',!BACK[sid]);
     window.scrollTo({top:0,behavior:'smooth'});
-    if (sid === 's12') startLoadingA();
-    if (sid === 's14') startLoadingB();
-    if (sid === 's15') startCountdown();
-  }, 220);
+    if(sid==='s12') startLdA();
+    if(sid==='s14') startLdB();
+    if(sid==='s15') startCdt();
+  },220);
 }
+function goBack(){if(BACK[cur])goTo(BACK[cur]);}
 
-function goBack() {
-  const prev = BACK[cur];
-  if (prev) goTo(prev);
-}
-
-// ── OPTION SELECTION (auto-advance) ─────────────────
-function pick(el, qid, val, fbEN, fbPT, next) {
-  // Clear selection in group
-  el.closest('.opts').querySelectorAll('.opt').forEach(o => o.classList.remove('sel'));
+// ── Option pick (auto-advance) ────────────────────────
+function pick(el,qid,val,fbEN,fbPT,next){
+  el.closest('.opts').querySelectorAll('.opt').forEach(o=>o.classList.remove('sel'));
   el.classList.add('sel');
-  ans[qid] = val;
-
-  const fbEl = document.getElementById('fb-' + qid);
-  const ahEl = document.getElementById('ah-' + qid);
-  if (fbEl) { fbEl.textContent = '✨ ' + (lang === 'en' ? fbEN : fbPT); fbEl.classList.add('show'); }
-  if (ahEl) ahEl.classList.add('show');
-
-  // Auto-advance after 1.2s
-  setTimeout(() => goTo(next), 1200);
+  const fb=document.getElementById('fb-'+qid);
+  if(fb){fb.textContent='✨ '+(lang==='en'?fbEN:fbPT);fb.classList.add('show');}
+  const ah=document.getElementById('ah-'+qid);
+  if(ah)ah.classList.add('show');
+  setTimeout(()=>goTo(next),1300);
 }
-
-// ── LAST QUESTION (with revenue goal) ───────────────
-function pickFinal(el, qid, val, fbEN, fbPT, revLabel) {
-  el.closest('.opts').querySelectorAll('.opt').forEach(o => o.classList.remove('sel'));
+function pickFinal(el,val,fbEN,fbPT,rev){
+  el.closest('.opts').querySelectorAll('.opt').forEach(o=>o.classList.remove('sel'));
   el.classList.add('sel');
-  ans[qid] = val;
-
-  const revEl = document.getElementById('resRev');
-  if (revEl) revEl.textContent = revLabel;
-
-  const fbEl = document.getElementById('fb-' + qid);
-  const ahEl = document.getElementById('ah-' + qid);
-  if (fbEl) { fbEl.textContent = '✨ ' + (lang === 'en' ? fbEN : fbPT); fbEl.classList.add('show'); }
-  if (ahEl) ahEl.classList.add('show');
-
-  setTimeout(() => goTo('s14'), 1200);
+  const r=document.getElementById('resRev');
+  if(r)r.textContent=rev;
+  const fb=document.getElementById('fb-q9');
+  if(fb){fb.textContent='✨ '+(lang==='en'?fbEN:fbPT);fb.classList.add('show');}
+  const ah=document.getElementById('ah-q9');
+  if(ah)ah.classList.add('show');
+  setTimeout(()=>goTo('s14'),1300);
 }
 
-// ── SPLASH LOADING ────────────────────────────────────
-function runSplash() {
-  const fill = document.getElementById('ldFill');
-  const pct  = document.getElementById('ldPct');
-  const txt  = document.getElementById('ldTxt');
-  const labels = {
-    en: ['Scanning ML market...','Checking trends...','Almost ready!'],
-    pt: ['Analisando o mercado...','Verificando tendências...','Quase pronto!']
-  };
-  const items = [
-    {id:'li0',vid:'lv0',val:'2,847',delay:700},
-    {id:'li1',vid:'lv1',val:'+34%', delay:1400},
-    {id:'li2',vid:'lv2',val:'R$28k',delay:2100},
-  ];
-  let p = 0;
-  const iv = setInterval(() => {
-    p += 2.2;
-    if (p >= 100) { p = 100; clearInterval(iv); }
-    fill.style.width = p + '%';
-    pct.textContent = Math.round(p) + '%';
-    const li = Math.min(Math.floor((p/100)*labels.en.length), labels.en.length-1);
-    txt.textContent = labels[lang][li];
-  }, 45);
-  items.forEach(it => {
-    setTimeout(() => {
-      document.getElementById(it.id).classList.add('show');
-      document.getElementById(it.vid).textContent = it.val;
-    }, it.delay);
-  });
-  // Auto-advance to Q1 after loading completes
-  setTimeout(() => goTo('s1'), 3800);
+// ── Splash ────────────────────────────────────────────
+function runSplash(){
+  const fill=document.getElementById('ldF'),pctEl=document.getElementById('ldP'),txtEl=document.getElementById('ldT');
+  const phEN=['Scanning market...','Checking trends...','Almost ready!'];
+  const phPT=['Analisando mercado...','Verificando tendências...','Quase pronto!'];
+  let p=0;
+  const iv=setInterval(()=>{
+    p+=2.5;if(p>=100){p=100;clearInterval(iv);}
+    fill.style.width=p+'%';pctEl.textContent=Math.round(p)+'%';
+    txtEl.textContent=(lang==='en'?phEN:phPT)[Math.min(2,Math.floor(p/35))];
+  },45);
+  [{id:'ss0',vid:'sv0',val:'2,847',d:700},{id:'ss1',vid:'sv1',val:'+34%',d:1400},{id:'ss2',vid:'sv2',val:'R$28k',d:2100}]
+    .forEach(it=>{setTimeout(()=>{document.getElementById(it.id).classList.add('show');document.getElementById(it.vid).textContent=it.val;},it.d);});
+  setTimeout(()=>goTo('s1'),3800);
 }
 
-// ── LOADING A ─────────────────────────────────────────
-function startLoadingA() {
-  const fill = document.getElementById('lf-a');
-  const pct  = document.getElementById('lfa-pct');
-  const txt  = document.getElementById('lfa-txt');
-  const phasesEN = ['Identifying opportunities...','Calculating scores...','Filtering niches...','Completing analysis...'];
-  const phasesPT = ['Identificando oportunidades...','Calculando scores...','Filtrando nichos...','Concluindo análise...'];
-  const targets = [28,55,80,100];
-  const ids = ['fa0','fa1','fa2','fa3'];
-  ids.forEach((id,i) => {
-    setTimeout(() => document.getElementById(id).classList.add('show'), i*850+300);
-    setTimeout(() => document.getElementById(id).classList.add('done'), i*850+1000);
+// ── Loading helpers ───────────────────────────────────
+function animBar(fillEl,pctEl,target){
+  const cur=parseFloat(fillEl.style.width)||0,steps=25,inc=(target-cur)/steps;
+  let s=0;const iv=setInterval(()=>{s++;const v=Math.min(target,cur+inc*s);fillEl.style.width=v+'%';pctEl.textContent=Math.round(v)+'%';if(s>=steps)clearInterval(iv);},22);
+}
+function runLoader(fillId,pctId,txtId,factIds,phasesEN,phasesPT,targets,cb){
+  const fill=document.getElementById(fillId),pctEl=document.getElementById(pctId),txtEl=document.getElementById(txtId);
+  factIds.forEach((id,i)=>{
+    setTimeout(()=>document.getElementById(id).classList.add('show'),i*850+300);
+    setTimeout(()=>document.getElementById(id).classList.add('done'),i*850+1050);
   });
-  let pi = 0;
-  function runPhase() {
-    if (pi >= targets.length) { setTimeout(() => goTo('s13'), 500); return; }
-    txt.textContent = (lang==='en'?phasesEN:phasesPT)[pi];
-    animBar(fill, pct, targets[pi]);
-    pi++;
-    setTimeout(runPhase, pi < targets.length ? 900 : 700);
+  let pi=0;
+  function next(){
+    if(pi>=targets.length){setTimeout(cb,500);return;}
+    txtEl.textContent=(lang==='en'?phasesEN:phasesPT)[pi];
+    animBar(fill,pctEl,targets[pi++]);
+    setTimeout(next,900);
   }
-  setTimeout(runPhase, 200);
+  setTimeout(next,200);
+}
+function startLdA(){
+  runLoader('la-fill','la-pct','la-txt',['fa0','fa1','fa2','fa3'],
+    ['Identifying opportunities...','Calculating scores...','Filtering niches...','Completing analysis...'],
+    ['Identificando oportunidades...','Calculando scores...','Filtrando nichos...','Concluindo análise...'],
+    [28,55,82,100],()=>goTo('s13'));
+}
+function startLdB(){
+  runLoader('lb-fill','lb-pct','lb-txt',['fb0','fb1','fb2','fb3'],
+    ['Generating recommendations...','Calculating projections...','Building strategy...','Finalizing plan...'],
+    ['Gerando recomendações...','Calculando projeções...','Montando estratégia...','Finalizando plano...'],
+    [30,60,85,100],()=>goTo('s15'));
 }
 
-// ── LOADING B ─────────────────────────────────────────
-function startLoadingB() {
-  const fill = document.getElementById('lf-b');
-  const pct  = document.getElementById('lfb-pct');
-  const txt  = document.getElementById('lfb-txt');
-  const phasesEN = ['Generating recommendations...','Calculating projections...','Building strategy...','Finalizing plan...'];
-  const phasesPT = ['Gerando recomendações...','Calculando projeções...','Montando estratégia...','Finalizando plano...'];
-  const targets = [30,60,85,100];
-  const ids = ['fb0','fb1','fb2','fb3'];
-  ids.forEach((id,i) => {
-    setTimeout(() => document.getElementById(id).classList.add('show'), i*800+300);
-    setTimeout(() => document.getElementById(id).classList.add('done'), i*800+900);
-  });
-  let pi = 0;
-  function runPhase() {
-    if (pi >= targets.length) { setTimeout(() => goTo('s15'), 500); return; }
-    txt.textContent = (lang==='en'?phasesEN:phasesPT)[pi];
-    animBar(fill, pct, targets[pi]);
-    pi++;
-    setTimeout(runPhase, 800);
+// ── Countdown ─────────────────────────────────────────
+function startCdt(){
+  let s=600;const el=document.getElementById('cdt');
+  setInterval(()=>{if(s<=0)return;s--;el.textContent=String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0');},1000);
+}
+
+// ── Language ──────────────────────────────────────────
+function setLang(l){
+  lang=l;
+  document.getElementById('bEN').classList.toggle('on',l==='en');
+  document.getElementById('bPT').classList.toggle('on',l==='pt');
+  document.querySelectorAll('[data-'+l+']').forEach(el=>el.innerHTML=el.getAttribute('data-'+l));
+}
+
+// ── Theme (light version) ────────────────────────────
+let dark=true;
+function toggleTheme(){
+  dark=!dark;
+  if(dark){
+    document.body.style.background='';
+    document.body.style.backgroundImage='';
+    document.querySelector('.aurora').style.display='';
+    document.querySelector('body').style.color='#fff';
+    document.querySelector('.card').style.background='#fff';
+    document.getElementById('bTheme').textContent='☀️';
+  }else{
+    document.body.style.background='#F0F4FA';
+    document.body.style.backgroundImage='none';
+    document.querySelector('.aurora').style.display='none';
+    document.body.style.color='#000A1A';
+    document.querySelector('.card').style.background='#fff';
+    document.querySelector('.card').style.border='2px solid #0074FF';
+    document.getElementById('bTheme').textContent='🌙';
+    // make header visible
+    document.querySelector('.hdr').style.background='#F0F4FA';
+    document.querySelectorAll('.pill').forEach(p=>p.style.background='rgba(0,116,255,0.08)');
   }
-  setTimeout(runPhase, 200);
 }
 
-function animBar(fillEl, pctEl, target) {
-  const current = parseFloat(fillEl.style.width) || 0;
-  const steps = 20;
-  const inc = (target - current) / steps;
-  let s = 0;
-  const iv = setInterval(() => {
-    s++;
-    const v = Math.min(target, current + inc * s);
-    fillEl.style.width = v + '%';
-    pctEl.textContent = Math.round(v) + '%';
-    if (s >= steps) clearInterval(iv);
-  }, 20);
-}
-
-// ── COUNTDOWN ─────────────────────────────────────────
-function startCountdown() {
-  let s = 600;
-  const el = document.getElementById('cdt');
-  setInterval(() => {
-    if (s <= 0) return;
-    s--;
-    el.textContent = String(Math.floor(s/60)).padStart(2,'0') + ':' + String(s%60).padStart(2,'0');
-  }, 1000);
-}
-
-// ── LANGUAGE ──────────────────────────────────────────
-function setLang(l) {
-  lang = l;
-  document.getElementById('btnEN').classList.toggle('active', l==='en');
-  document.getElementById('btnPT').classList.toggle('active', l==='pt');
-  document.querySelectorAll('[data-' + l + ']').forEach(el => {
-    el.innerHTML = el.getAttribute('data-' + l);
-  });
-}
-
-// ── THEME ─────────────────────────────────────────────
-function toggleTheme() {
-  const dark = document.body.getAttribute('data-theme') === 'dark';
-  document.body.setAttribute('data-theme', dark ? 'light' : 'dark');
-  document.getElementById('iSun').style.display  = dark ? '' : 'none';
-  document.getElementById('iMoon').style.display = dark ? 'none' : '';
-}
-
-// ── INIT ──────────────────────────────────────────────
-(function() {
-  const p = new URLSearchParams(location.search);
-  if (p.get('theme') === 'dark') {
-    document.body.setAttribute('data-theme','dark');
-    document.getElementById('iSun').style.display  = 'none';
-    document.getElementById('iMoon').style.display = '';
-  }
-  if (p.get('lang') === 'pt') setLang('pt');
-  updateProgress('s0');
-  setTimeout(runSplash, 400);
+// ── Init ──────────────────────────────────────────────
+(function(){
+  const p=new URLSearchParams(location.search);
+  if(p.get('lang')==='pt')setLang('pt');
+  if(p.get('theme')==='light')toggleTheme();
+  updateProg('s0');
+  setTimeout(runSplash,500);
 })();
 </script>
 </body>
