@@ -436,6 +436,7 @@ body::before{
 <!-- MAIN -->
 <main class="body">
 <div class="card">
+  <div class="card-inner">
 
 <!-- ════ S0 SPLASH ════ -->
 <div class="step active" id="s0">
@@ -727,6 +728,212 @@ body::before{
 </div>
 </div>
 
+  </div><!-- /card-inner -->
+  <div id="capy-wrap">
+    <div class="capy-pose" id="capy-q">
+      <svg width="110" height="160" viewBox="0 0 110 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="q-body" cx="40%" cy="35%" r="60%"><stop offset="0%" stop-color="#DFA050"/><stop offset="100%" stop-color="#8B5219"/></radialGradient>
+    <radialGradient id="q-snout" cx="50%" cy="40%" r="55%"><stop offset="0%" stop-color="#E8BC6C"/><stop offset="100%" stop-color="#C68B3E"/></radialGradient>
+    <radialGradient id="q-torso" cx="40%" cy="30%" r="60%"><stop offset="0%" stop-color="#C8853A"/><stop offset="100%" stop-color="#7A4A18"/></radialGradient>
+    <filter id="q-shadow"><feDropShadow dx="0" dy="4" stdDeviation="4" flood-color="rgba(0,0,0,0.25)"/></filter>
+    <clipPath id="q-shirt-clip"><ellipse cx="55" cy="118" rx="22" ry="18"/></clipPath>
+  </defs>
+  <!-- ? speech bubble -->
+  <ellipse cx="55" cy="28" rx="24" ry="18" fill="#0074FF" opacity="0.95"/>
+  <text x="55" y="35" font-size="20" fill="white" text-anchor="middle" font-family="Arial" font-weight="bold">?</text>
+  <polygon points="48,44 58,44 53,54" fill="#0074FF"/>
+  <!-- Left arm up -->
+  <ellipse cx="28" cy="105" rx="7" ry="14" transform="rotate(-45 28 105)" fill="url(#q-torso)" filter="url(#q-shadow)"/>
+  <!-- Right arm up -->
+  <ellipse cx="82" cy="105" rx="7" ry="14" transform="rotate(45 82 105)" fill="url(#q-torso)" filter="url(#q-shadow)"/>
+  <!-- Ears -->
+  <ellipse cx="36" cy="68" rx="8" ry="7" fill="#9A5C2A"/>
+  <ellipse cx="74" cy="68" rx="8" ry="7" fill="#9A5C2A"/>
+  <ellipse cx="36" cy="68" rx="5" ry="4.5" fill="#C17F3B"/>
+  <ellipse cx="74" cy="68" rx="5" ry="4.5" fill="#C17F3B"/>
+  <!-- Head -->
+  <rect x="22" y="63" width="66" height="54" rx="20" fill="url(#q-body)" filter="url(#q-shadow)"/>
+  <!-- Surprised eyebrows -->
+  <path d="M33 76 Q38 70 43 76" stroke="#5A2D00" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+  <path d="M67 76 Q72 70 77 76" stroke="#5A2D00" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+  <!-- Eyes wide -->
+  <circle cx="40" cy="82" r="6" fill="#1A0800"/>
+  <circle cx="70" cy="82" r="6" fill="#1A0800"/>
+  <circle cx="42" cy="80" r="2" fill="white"/>
+  <circle cx="72" cy="80" r="2" fill="white"/>
+  <!-- Snout -->
+  <rect x="27" y="96" width="56" height="22" rx="11" fill="url(#q-snout)"/>
+  <!-- Nostrils -->
+  <ellipse cx="40" cy="107" rx="4" ry="3" fill="#6B3A1A"/>
+  <ellipse cx="70" cy="107" rx="4" ry="3" fill="#6B3A1A"/>
+  <!-- Body torso -->
+  <ellipse cx="55" cy="118" rx="22" ry="18" fill="url(#q-torso)"/>
+  <!-- Shirt: left ML yellow, right Shopee orange -->
+  <rect x="33" y="100" width="22" height="36" fill="#FFD600" clip-path="url(#q-shirt-clip)"/>
+  <text x="43" y="122" font-size="7" fill="#1A0800" text-anchor="middle" font-family="Arial" font-weight="bold">ML</text>
+  <rect x="55" y="100" width="24" height="36" fill="#EE4D2D" clip-path="url(#q-shirt-clip)"/>
+  <text x="66" y="122" font-size="5.5" fill="white" text-anchor="middle" font-family="Arial" font-weight="bold">Shopee</text>
+  <!-- Legs -->
+  <rect x="40" y="132" width="12" height="16" rx="6" fill="url(#q-torso)"/>
+  <rect x="58" y="132" width="12" height="16" rx="6" fill="url(#q-torso)"/>
+</svg>
+    </div>
+    <div class="capy-pose" id="capy-p">
+      <svg width="110" height="160" viewBox="0 0 110 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="p-body" cx="40%" cy="35%" r="60%"><stop offset="0%" stop-color="#DFA050"/><stop offset="100%" stop-color="#8B5219"/></radialGradient>
+    <radialGradient id="p-snout" cx="50%" cy="40%" r="55%"><stop offset="0%" stop-color="#E8BC6C"/><stop offset="100%" stop-color="#C68B3E"/></radialGradient>
+    <radialGradient id="p-torso" cx="40%" cy="30%" r="60%"><stop offset="0%" stop-color="#C8853A"/><stop offset="100%" stop-color="#7A4A18"/></radialGradient>
+    <filter id="p-shadow"><feDropShadow dx="0" dy="4" stdDeviation="4" flood-color="rgba(0,0,0,0.25)"/></filter>
+    <clipPath id="p-shirt-clip"><ellipse cx="58" cy="118" rx="22" ry="18"/></clipPath>
+  </defs>
+  <!-- 💡 bubble top-right -->
+  <circle cx="82" cy="28" r="16" fill="#FFF9C4" stroke="#FFD600" stroke-width="2"/>
+  <text x="82" y="34" font-size="14" text-anchor="middle">💡</text>
+  <!-- Left arm extended pointing left -->
+  <ellipse cx="18" cy="108" rx="18" ry="6" fill="url(#p-torso)" filter="url(#p-shadow)"/>
+  <!-- Pointing finger tip -->
+  <ellipse cx="4" cy="108" rx="5" ry="4" fill="url(#p-snout)"/>
+  <!-- Right arm relaxed down -->
+  <ellipse cx="85" cy="122" rx="6" ry="12" transform="rotate(15 85 122)" fill="url(#p-torso)"/>
+  <!-- Ears -->
+  <ellipse cx="40" cy="70" rx="8" ry="7" fill="#9A5C2A"/>
+  <ellipse cx="78" cy="70" rx="8" ry="7" fill="#9A5C2A"/>
+  <ellipse cx="40" cy="70" rx="5" ry="4.5" fill="#C17F3B"/>
+  <ellipse cx="78" cy="70" rx="5" ry="4.5" fill="#C17F3B"/>
+  <!-- Head (slightly tilted forward) -->
+  <rect x="26" y="65" width="66" height="54" rx="20" fill="url(#p-body)" filter="url(#p-shadow)"/>
+  <!-- Happy eyebrows -->
+  <path d="M36 79 Q41 74 46 79" stroke="#5A2D00" stroke-width="2" stroke-linecap="round" fill="none"/>
+  <path d="M70 79 Q75 74 80 79" stroke="#5A2D00" stroke-width="2" stroke-linecap="round" fill="none"/>
+  <!-- Eyes happy -->
+  <circle cx="43" cy="85" r="5.5" fill="#1A0800"/>
+  <circle cx="74" cy="85" r="5.5" fill="#1A0800"/>
+  <circle cx="45" cy="83" r="1.8" fill="white"/>
+  <circle cx="76" cy="83" r="1.8" fill="white"/>
+  <!-- Snout -->
+  <rect x="31" y="98" width="56" height="22" rx="11" fill="url(#p-snout)"/>
+  <!-- Nostrils -->
+  <ellipse cx="44" cy="109" rx="4" ry="3" fill="#6B3A1A"/>
+  <ellipse cx="74" cy="109" rx="4" ry="3" fill="#6B3A1A"/>
+  <!-- Smile -->
+  <path d="M46 115 Q59 121 72 115" stroke="#6B3A1A" stroke-width="2" stroke-linecap="round" fill="none"/>
+  <!-- Body torso -->
+  <ellipse cx="58" cy="118" rx="22" ry="18" fill="url(#p-torso)"/>
+  <!-- Shirt -->
+  <rect x="36" y="100" width="22" height="36" fill="#FFD600" clip-path="url(#p-shirt-clip)"/>
+  <text x="46" y="122" font-size="7" fill="#1A0800" text-anchor="middle" font-family="Arial" font-weight="bold">ML</text>
+  <rect x="58" y="100" width="24" height="36" fill="#EE4D2D" clip-path="url(#p-shirt-clip)"/>
+  <text x="69" y="122" font-size="5.5" fill="white" text-anchor="middle" font-family="Arial" font-weight="bold">Shopee</text>
+  <!-- Legs -->
+  <rect x="43" y="132" width="12" height="16" rx="6" fill="url(#p-torso)"/>
+  <rect x="61" y="132" width="12" height="16" rx="6" fill="url(#p-torso)"/>
+</svg>
+    </div>
+    <div class="capy-pose" id="capy-t">
+      <svg width="110" height="160" viewBox="0 0 110 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="t-body" cx="40%" cy="35%" r="60%"><stop offset="0%" stop-color="#DFA050"/><stop offset="100%" stop-color="#8B5219"/></radialGradient>
+    <radialGradient id="t-snout" cx="50%" cy="40%" r="55%"><stop offset="0%" stop-color="#E8BC6C"/><stop offset="100%" stop-color="#C68B3E"/></radialGradient>
+    <radialGradient id="t-torso" cx="40%" cy="30%" r="60%"><stop offset="0%" stop-color="#C8853A"/><stop offset="100%" stop-color="#7A4A18"/></radialGradient>
+    <filter id="t-shadow"><feDropShadow dx="0" dy="4" stdDeviation="4" flood-color="rgba(0,0,0,0.25)"/></filter>
+    <clipPath id="t-shirt-clip"><ellipse cx="58" cy="118" rx="22" ry="18"/></clipPath>
+  </defs>
+  <!-- ⏳ bubble top-right -->
+  <circle cx="82" cy="28" r="16" fill="#EEF6FF" stroke="#0074FF" stroke-width="2"/>
+  <text x="82" y="34" font-size="14" text-anchor="middle">⏳</text>
+  <!-- Left arm extended pointing left -->
+  <ellipse cx="18" cy="108" rx="18" ry="6" fill="url(#t-torso)" filter="url(#t-shadow)"/>
+  <ellipse cx="4" cy="108" rx="5" ry="4" fill="url(#t-snout)"/>
+  <!-- Right arm relaxed -->
+  <ellipse cx="85" cy="122" rx="6" ry="12" transform="rotate(15 85 122)" fill="url(#t-torso)"/>
+  <!-- Ears -->
+  <ellipse cx="40" cy="70" rx="8" ry="7" fill="#9A5C2A"/>
+  <ellipse cx="78" cy="70" rx="8" ry="7" fill="#9A5C2A"/>
+  <ellipse cx="40" cy="70" rx="5" ry="4.5" fill="#C17F3B"/>
+  <ellipse cx="78" cy="70" rx="5" ry="4.5" fill="#C17F3B"/>
+  <!-- Head -->
+  <rect x="26" y="65" width="66" height="54" rx="20" fill="url(#t-body)" filter="url(#t-shadow)"/>
+  <!-- Eyebrows neutral -->
+  <path d="M36 80 Q41 76 46 80" stroke="#5A2D00" stroke-width="2" stroke-linecap="round" fill="none"/>
+  <path d="M70 80 Q75 76 80 80" stroke="#5A2D00" stroke-width="2" stroke-linecap="round" fill="none"/>
+  <!-- Eyes -->
+  <circle cx="43" cy="86" r="5.5" fill="#1A0800"/>
+  <circle cx="74" cy="86" r="5.5" fill="#1A0800"/>
+  <circle cx="45" cy="84" r="1.8" fill="white"/>
+  <circle cx="76" cy="84" r="1.8" fill="white"/>
+  <!-- Snout -->
+  <rect x="31" y="99" width="56" height="22" rx="11" fill="url(#t-snout)"/>
+  <!-- Nostrils -->
+  <ellipse cx="44" cy="110" rx="4" ry="3" fill="#6B3A1A"/>
+  <ellipse cx="74" cy="110" rx="4" ry="3" fill="#6B3A1A"/>
+  <!-- Body torso -->
+  <ellipse cx="58" cy="118" rx="22" ry="18" fill="url(#t-torso)"/>
+  <!-- Shirt -->
+  <rect x="36" y="100" width="22" height="36" fill="#FFD600" clip-path="url(#t-shirt-clip)"/>
+  <text x="46" y="122" font-size="7" fill="#1A0800" text-anchor="middle" font-family="Arial" font-weight="bold">ML</text>
+  <rect x="58" y="100" width="24" height="36" fill="#EE4D2D" clip-path="url(#t-shirt-clip)"/>
+  <text x="69" y="122" font-size="5.5" fill="white" text-anchor="middle" font-family="Arial" font-weight="bold">Shopee</text>
+  <!-- Legs -->
+  <rect x="43" y="132" width="12" height="16" rx="6" fill="url(#t-torso)"/>
+  <rect x="61" y="132" width="12" height="16" rx="6" fill="url(#t-torso)"/>
+</svg>
+    </div>
+    <div class="capy-pose" id="capy-c">
+      <svg width="110" height="160" viewBox="0 0 110 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="c-body" cx="40%" cy="35%" r="60%"><stop offset="0%" stop-color="#DFA050"/><stop offset="100%" stop-color="#8B5219"/></radialGradient>
+    <radialGradient id="c-snout" cx="50%" cy="40%" r="55%"><stop offset="0%" stop-color="#E8BC6C"/><stop offset="100%" stop-color="#C68B3E"/></radialGradient>
+    <radialGradient id="c-torso" cx="40%" cy="30%" r="60%"><stop offset="0%" stop-color="#C8853A"/><stop offset="100%" stop-color="#7A4A18"/></radialGradient>
+    <filter id="c-shadow"><feDropShadow dx="0" dy="4" stdDeviation="4" flood-color="rgba(0,0,0,0.25)"/></filter>
+    <clipPath id="c-shirt-clip"><ellipse cx="55" cy="118" rx="22" ry="18"/></clipPath>
+  </defs>
+  <!-- Confetti dots -->
+  <circle cx="15" cy="35" r="5" fill="#FF1010" opacity="0.85"/>
+  <circle cx="30" cy="20" r="4" fill="#FFD600" opacity="0.85"/>
+  <circle cx="80" cy="18" r="5" fill="#50B848" opacity="0.85"/>
+  <circle cx="95" cy="40" r="4" fill="#0074FF" opacity="0.85"/>
+  <circle cx="20" cy="55" r="3" fill="#FF9D00" opacity="0.85"/>
+  <circle cx="90" cy="60" r="3.5" fill="#EE4D2D" opacity="0.85"/>
+  <!-- 🎉 text -->
+  <text x="55" y="32" font-size="18" text-anchor="middle">🎉</text>
+  <!-- Arms raised -->
+  <ellipse cx="25" cy="96" rx="7" ry="15" transform="rotate(-55 25 96)" fill="url(#c-torso)" filter="url(#c-shadow)"/>
+  <ellipse cx="85" cy="96" rx="7" ry="15" transform="rotate(55 85 96)" fill="url(#c-torso)" filter="url(#c-shadow)"/>
+  <!-- Ears -->
+  <ellipse cx="36" cy="65" rx="8" ry="7" fill="#9A5C2A"/>
+  <ellipse cx="74" cy="65" rx="8" ry="7" fill="#9A5C2A"/>
+  <ellipse cx="36" cy="65" rx="5" ry="4.5" fill="#C17F3B"/>
+  <ellipse cx="74" cy="65" rx="5" ry="4.5" fill="#C17F3B"/>
+  <!-- Head -->
+  <rect x="22" y="60" width="66" height="54" rx="20" fill="url(#c-body)" filter="url(#c-shadow)"/>
+  <!-- Happy arc eyebrows -->
+  <path d="M32 73 Q37 67 42 73" stroke="#5A2D00" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+  <path d="M68 73 Q73 67 78 73" stroke="#5A2D00" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+  <!-- Eyes happy squint -->
+  <path d="M34 80 Q40 76 46 80" stroke="#1A0800" stroke-width="3" stroke-linecap="round" fill="none"/>
+  <path d="M65 80 Q71 76 77 80" stroke="#1A0800" stroke-width="3" stroke-linecap="round" fill="none"/>
+  <!-- Snout -->
+  <rect x="27" y="93" width="56" height="22" rx="11" fill="url(#c-snout)"/>
+  <!-- Nostrils -->
+  <ellipse cx="40" cy="104" rx="4" ry="3" fill="#6B3A1A"/>
+  <ellipse cx="70" cy="104" rx="4" ry="3" fill="#6B3A1A"/>
+  <!-- Big smile -->
+  <path d="M38 110 Q55 120 72 110" stroke="#6B3A1A" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+  <!-- Body torso -->
+  <ellipse cx="55" cy="118" rx="22" ry="18" fill="url(#c-torso)"/>
+  <!-- Shirt -->
+  <rect x="33" y="100" width="22" height="36" fill="#FFD600" clip-path="url(#c-shirt-clip)"/>
+  <text x="43" y="122" font-size="7" fill="#1A0800" text-anchor="middle" font-family="Arial" font-weight="bold">ML</text>
+  <rect x="55" y="100" width="24" height="36" fill="#EE4D2D" clip-path="url(#c-shirt-clip)"/>
+  <text x="66" y="122" font-size="5.5" fill="white" text-anchor="middle" font-family="Arial" font-weight="bold">Shopee</text>
+  <!-- Legs -->
+  <rect x="40" y="132" width="12" height="16" rx="6" fill="url(#c-torso)"/>
+  <rect x="58" y="132" width="12" height="16" rx="6" fill="url(#c-torso)"/>
+</svg>
+    </div>
+  </div>
 </div><!-- /card -->
 </main>
 </div><!-- /shell -->
@@ -756,6 +963,25 @@ function updateProg(sid){
   }
 }
 
+// ── Capybara mascot ───────────────────────────────────
+const CAPY_MAP = {
+  s1:'q',s3:'q',s4:'q',s6:'q',s7:'q',s8:'q',s10:'q',s11:'q',s13:'q',
+  s2:'p',s5:'p',s9:'p',
+  s12:'t',s14:'t',
+  s15:'c'
+};
+function updateCapy(sid){
+  ['q','p','t','c'].forEach(p=>{
+    const el=document.getElementById('capy-'+p);
+    if(el)el.classList.remove('active');
+  });
+  const pose=CAPY_MAP[sid];
+  if(pose){
+    const el=document.getElementById('capy-'+pose);
+    if(el){el.style.animation='none';el.offsetHeight;el.style.animation='';el.classList.add('active');}
+  }
+}
+
 // ── Navigation ────────────────────────────────────────
 function goTo(sid){
   const prev=document.getElementById(cur);
@@ -766,6 +992,7 @@ function goTo(sid){
     const next=document.getElementById(sid);
     next.classList.add('active');
     updateProg(sid);
+    updateCapy(sid);
     document.getElementById('btnBack').classList.toggle('hidden',!BACK[sid]);
     window.scrollTo({top:0,behavior:'smooth'});
     if(sid==='s12') startLdA();
@@ -891,6 +1118,7 @@ function toggleTheme(){
   if(p.get('lang')==='pt')setLang('pt');
   if(p.get('theme')==='light')toggleTheme();
   updateProg('s0');
+  updateCapy('s0');
   setTimeout(runSplash,500);
 })();
 </script>
