@@ -130,46 +130,45 @@ body::before{
 @keyframes sIn{from{opacity:0;transform:translateY(20px) scale(.98)}to{opacity:1;transform:none}}
 @keyframes sOut{from{opacity:1;transform:none}to{opacity:0;transform:translateY(-16px) scale(.98)}}
 
-/* ═══ SPLASH ═══ */
-.splash{padding:40px 28px 36px;display:flex;flex-direction:column;align-items:center;text-align:center}
-.sp-logo{height:28px;margin-bottom:24px}
-.sp-h{font-family:var(--fh);font-weight:700;font-size:clamp(32px,8vw,46px);
-  line-height:1.05;letter-spacing:-.8px;color:#000A1A;margin-bottom:12px}
-.sp-h em{font-style:normal;
-  background:linear-gradient(120deg,#0074FF,#50B848);
+/* ═══ FULL-SCREEN SPLASH (Zeely-style) ═══ */
+#s0{width:100%}
+.splash-fs{
+  width:100%;min-height:calc(100vh - 60px);display:flex;flex-direction:column;
+  align-items:center;justify-content:center;text-align:center;padding:32px 24px 56px;
+}
+.sp-logo-fs{height:26px;margin-bottom:38px;filter:brightness(0) invert(1)}
+.sp-h-fs{
+  font-family:var(--fh);font-weight:700;
+  font-size:clamp(38px,9.5vw,60px);line-height:1.0;letter-spacing:-1.6px;
+  color:#fff;margin-bottom:44px;max-width:600px;
+}
+.sp-h-fs em{font-style:normal;
+  background:linear-gradient(120deg,#3b8eff,#50B848);
   -webkit-background-clip:text;background-clip:text;color:transparent}
-.sp-sub{font-size:14px;color:rgba(0,10,26,.55);line-height:1.5;margin-bottom:22px}
-
-/* Pills row */
-.sp-pills{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:28px}
-.sp-pill{display:inline-flex;align-items:center;gap:6px;background:#F0F6FF;
-  border:1px solid rgba(0,116,255,.15);border-radius:99px;
-  padding:7px 14px;font-size:12.5px;font-weight:600;color:#0050cc}
-.sp-pill .dot{width:6px;height:6px;border-radius:50%;background:var(--green);flex-shrink:0}
-
-/* Loading sim */
-.sp-ld{width:100%;max-width:340px;margin-bottom:28px}
-.sp-ld-top{display:flex;justify-content:space-between;font-size:12px;font-weight:600;
-  color:rgba(0,10,26,.45);margin-bottom:9px}
-.sp-ld-bar{height:7px;background:#E8F0FF;border-radius:99px;overflow:hidden;margin-bottom:16px}
-.sp-ld-fill{height:100%;background:linear-gradient(90deg,#0074FF,#50B848);
-  border-radius:99px;width:0%;transition:width .35s ease}
-.sp-stats{display:flex;flex-direction:column;gap:8px}
-.sp-stat{display:flex;align-items:center;justify-content:space-between;
-  background:#F7FAFF;border-radius:11px;padding:10px 14px;
-  opacity:0;transform:translateY(8px);transition:opacity .3s,transform .3s}
-.sp-stat.show{opacity:1;transform:none}
-.sp-stat-l{font-size:13px;font-weight:500;color:rgba(0,10,26,.65)}
-.sp-stat-v{font-family:var(--fh);font-weight:700;font-size:16px;
-  background:linear-gradient(120deg,#0074FF,#50B848);
-  -webkit-background-clip:text;background-clip:text;color:transparent}
+.sp-ld-fs{width:100%;max-width:460px;margin-bottom:24px}
+.sp-ld-top-fs{display:flex;justify-content:space-between;font-size:13.5px;font-weight:600;
+  color:rgba(255,255,255,.6);margin-bottom:11px}
+.sp-bar-fs{height:6px;background:rgba(255,255,255,.1);border-radius:99px;overflow:hidden}
+.sp-bar-fill-fs{height:100%;background:linear-gradient(90deg,#0074FF,#50B848);
+  border-radius:99px;width:0%;transition:width .3s ease;box-shadow:0 0 12px rgba(0,116,255,.7)}
+.sp-weeks{display:flex;flex-direction:column;gap:10px;width:100%;max-width:320px}
+.sp-week{
+  background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:13px;
+  padding:13px 20px;font-size:15px;color:rgba(255,255,255,.65);text-align:left;
+  display:flex;justify-content:space-between;align-items:center;
+  opacity:0;transform:translateY(14px) scale(.96);transition:opacity .45s,transform .45s;
+}
+.sp-week strong{color:#fff;font-weight:700;font-family:var(--fh)}
+.sp-week.show{opacity:1;transform:none}
+.sp-week.win{border-color:rgba(80,184,72,.5);background:rgba(80,184,72,.1)}
+.sp-week.win strong{color:#6fe065}
 
 /* ═══ QUESTION ═══ */
-.q{padding:28px 24px 24px}
+.q{padding:30px 26px 26px}
 .q-step{font-size:11px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;
-  color:#0074FF;margin-bottom:14px;opacity:.8}
-.q-h{font-family:var(--fh);font-weight:700;font-size:clamp(20px,5vw,26px);
-  line-height:1.18;letter-spacing:-.4px;color:#000A1A;margin-bottom:20px}
+  color:#0074FF;margin-bottom:14px;opacity:.8;text-align:left}
+.q-h{font-family:var(--fh);font-weight:700;font-size:clamp(23px,6vw,31px);
+  line-height:1.1;letter-spacing:-.6px;color:#000A1A;margin-bottom:22px;text-align:left}
 
 /* Options */
 .opts{display:flex;flex-direction:column;gap:9px;margin-bottom:16px}
@@ -220,25 +219,78 @@ body::before{
   opacity:0;transition:opacity .3s}
 .auto-hint.show{opacity:1}
 
-/* ═══ CONTINUE BTN (inter screens only) ═══ */
-.btn-cont{width:100%;padding:15px;border-radius:13px;border:none;cursor:pointer;
-  font-family:var(--fh);font-weight:700;font-size:15.5px;color:#fff;
-  background:#0074FF;display:flex;align-items:center;justify-content:center;gap:8px;
-  box-shadow:0 8px 24px rgba(0,116,255,.45);transition:.18s}
-.btn-cont:hover{background:#0065e0;transform:translateY(-1px);box-shadow:0 12px 32px rgba(0,116,255,.55)}
+/* ═══ CONTINUE BTN (Zeely-style: dark, bold) ═══ */
+.btn-cont{width:100%;padding:16px;border-radius:14px;border:none;cursor:pointer;
+  font-family:var(--fh);font-weight:700;font-size:16px;color:#fff;
+  background:#000A1A;display:flex;align-items:center;justify-content:center;gap:8px;
+  transition:.18s}
+.btn-cont:hover{background:#15233b;transform:translateY(-1px)}
+.btn-cont span+span,.btn-cont .arr{color:#3b8eff}
 
 /* ═══ INTERMEDIATE ═══ */
-.inter{padding:36px 24px 28px;display:flex;flex-direction:column;align-items:center;text-align:center}
-.inter-icon{font-size:56px;margin-bottom:18px;animation:icoIn .5s cubic-bezier(.34,1.56,.64,1)}
+.inter{padding:34px 26px 28px;display:flex;flex-direction:column;align-items:flex-start;text-align:left}
+.inter-icon{font-size:52px;margin-bottom:16px;align-self:center;animation:icoIn .5s cubic-bezier(.34,1.56,.64,1)}
 @keyframes icoIn{from{opacity:0;transform:scale(.4) rotate(-15deg)}to{opacity:1;transform:none}}
 .inter-tag{font-size:10.5px;font-weight:700;letter-spacing:1.3px;text-transform:uppercase;
   color:#0074FF;background:#EEF6FF;border-radius:99px;padding:5px 13px;margin-bottom:14px}
-.inter-h{font-family:var(--fh);font-weight:700;font-size:clamp(21px,5vw,27px);
-  line-height:1.18;letter-spacing:-.35px;color:#000A1A;margin-bottom:10px}
+.inter-h{font-family:var(--fh);font-weight:700;font-size:clamp(24px,6.2vw,32px);
+  line-height:1.08;letter-spacing:-.7px;color:#000A1A;margin-bottom:20px}
 .inter-h em{font-style:normal;
   background:linear-gradient(120deg,#0074FF,#50B848);
   -webkit-background-clip:text;background-clip:text;color:transparent}
-.inter-body{font-size:14.5px;color:rgba(0,10,26,.6);line-height:1.6;max-width:380px;margin-bottom:24px}
+.inter-body{font-size:14.5px;color:rgba(0,10,26,.6);line-height:1.6;margin-bottom:24px}
+
+/* ═══ COMPARISON TABLE ═══ */
+.compare{display:grid;grid-template-columns:1fr 1fr;gap:10px;width:100%;margin-bottom:24px}
+.compare-col{border-radius:16px;padding:15px 14px;display:flex;flex-direction:column;gap:11px}
+.compare-bad{background:#FFF4F4;border:1.5px solid rgba(255,16,16,.18)}
+.compare-good{background:linear-gradient(160deg,#EAF4FF,#E0EEFF);border:2px solid rgba(0,116,255,.3);
+  box-shadow:0 8px 24px rgba(0,116,255,.12)}
+.compare-hd{font-size:12px;font-weight:700;letter-spacing:.2px;margin-bottom:2px}
+.compare-bad .compare-hd{color:#cf1322}
+.compare-good .compare-hd{color:#0074FF}
+.compare-row{display:flex;flex-direction:column;gap:2px}
+.cr-k{font-size:10.5px;color:rgba(0,10,26,.45);font-weight:600;text-transform:uppercase;letter-spacing:.3px}
+.cr-v{font-size:14px;font-weight:700;font-family:var(--fh)}
+.cr-bad{color:#FF4040}
+.cr-good{color:#0074FF}
+
+/* ═══ TOOLS COST VS ═══ */
+.tools-vs{display:grid;grid-template-columns:1fr 1fr;gap:10px;width:100%;margin-bottom:24px}
+.tools-col{border-radius:16px;padding:15px 14px;display:flex;flex-direction:column;gap:9px}
+.tools-left{background:#FFF4F4;border:1.5px solid rgba(255,16,16,.18)}
+.tools-right{background:linear-gradient(160deg,#EAF4FF,#E0EEFF);border:2px solid rgba(0,116,255,.3);
+  box-shadow:0 8px 24px rgba(0,116,255,.12)}
+.tools-hd{font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;
+  color:rgba(0,10,26,.45);margin-bottom:2px}
+.tool-row{display:flex;justify-content:space-between;align-items:center;gap:6px;
+  font-size:12px;color:rgba(0,10,26,.72);font-weight:500}
+.tool-row.jp{font-size:12.5px;color:#0050cc;font-weight:600}
+.tool-price{font-weight:700;color:rgba(0,10,26,.5);font-size:11.5px;white-space:nowrap}
+.tools-total{display:flex;justify-content:space-between;align-items:center;
+  padding-top:9px;margin-top:2px;border-top:1px solid rgba(0,0,0,.08);
+  font-size:12px;font-weight:700;color:rgba(0,10,26,.55);text-transform:uppercase;letter-spacing:.4px}
+.tools-total-v{font-size:18px;font-family:var(--fh)}
+
+/* ═══ REVIEWER / TESTIMONIAL (Zeely-style) ═══ */
+.reviewer{display:flex;align-items:center;gap:12px;margin-bottom:16px}
+.rev-av{width:46px;height:46px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font-family:var(--fh);font-weight:700;font-size:15px;color:#fff;flex-shrink:0}
+.rev-name{font-size:14.5px;font-weight:700;color:#000A1A}
+.rev-role{font-size:12px;color:rgba(0,10,26,.5);margin-top:1px}
+.rev-stars{font-size:12px;color:#FAAD14;margin-top:2px;font-weight:700}
+
+.result-block{background:linear-gradient(160deg,#EAF4FF,#E0EEFF);
+  border:2px solid rgba(0,116,255,.28);border-radius:18px;padding:18px 16px;
+  margin-bottom:22px;width:100%;box-shadow:0 10px 30px rgba(0,116,255,.14)}
+.rb-label{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;
+  text-transform:uppercase;letter-spacing:.8px;color:#0074FF;
+  background:rgba(255,255,255,.7);border-radius:99px;padding:5px 12px;margin-bottom:14px}
+.rb-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.rb-stat{display:flex;flex-direction:column;align-items:center;gap:4px;
+  background:rgba(255,255,255,.65);border-radius:12px;padding:11px 6px}
+.rb-v{font-family:var(--fh);font-weight:700;font-size:19px;color:#0050cc;line-height:1}
+.rb-l{font-size:9.5px;color:rgba(0,10,26,.55);text-align:center;font-weight:600;line-height:1.2}
 
 /* Stats */
 .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;width:100%;margin-bottom:22px}
@@ -430,30 +482,27 @@ body::before{
 
 <!-- MAIN -->
 <main class="body">
-<div class="card">
-  <div class="card-inner">
 
-<!-- ════ S0 SPLASH ════ -->
+<!-- ════ S0 SPLASH (full screen, no card) ════ -->
 <div class="step active" id="s0">
-<div class="splash">
-  <img src="pulse_logo_text.svg" class="sp-logo" alt="JoomPulse">
-  <h1 class="sp-h" data-en="Discover products that <em>sell year-round</em>" data-pt="Descubra produtos que <em>vendem o ano todo</em>">Discover products that <em>sell year-round</em></h1>
-  <p class="sp-sub" data-en="2-minute quiz → personalized product analysis for your store." data-pt="Quiz de 2 minutos → análise personalizada de produtos para sua loja.">2-minute quiz → personalized product analysis for your store.</p>
-  <div class="sp-pills">
-    <div class="sp-pill"><span class="dot"></span><span data-en="+12,000 active sellers" data-pt="+12.000 vendedores">+12,000 active sellers</span></div>
-    <div class="sp-pill"><span class="dot" style="background:#FF9D00"></span><span data-en="4.8★ App Store" data-pt="4.8★ App Store">4.8★ App Store</span></div>
+<div class="splash-fs">
+  <img src="pulse_logo_text.svg" class="sp-logo-fs" alt="JoomPulse">
+  <h1 class="sp-h-fs" data-en="Discover products that<br><em>sell year-round</em>" data-pt="Descubra produtos que<br><em>vendem o ano todo</em>">Discover products that<br><em>sell year-round</em></h1>
+  <div class="sp-ld-fs">
+    <div class="sp-ld-top-fs"><span id="ldT" data-en="Exploring your revenue potential..." data-pt="Explorando seu potencial de receita...">Exploring your revenue potential...</span><span id="ldP">0%</span></div>
+    <div class="sp-bar-fs"><div class="sp-bar-fill-fs" id="ldF"></div></div>
   </div>
-  <div class="sp-ld">
-    <div class="sp-ld-top"><span id="ldT" data-en="Scanning market..." data-pt="Analisando mercado...">Scanning market...</span><span id="ldP">0%</span></div>
-    <div class="sp-ld-bar"><div class="sp-ld-fill" id="ldF"></div></div>
-    <div class="sp-stats">
-      <div class="sp-stat" id="ss0"><span class="sp-stat-l" data-en="📦 Trending products now" data-pt="📦 Produtos trending agora">📦 Trending products now</span><span class="sp-stat-v" id="sv0">—</span></div>
-      <div class="sp-stat" id="ss1"><span class="sp-stat-l" data-en="📈 Avg ML growth" data-pt="📈 Crescimento médio ML">📈 Avg ML growth</span><span class="sp-stat-v" id="sv1">—</span></div>
-      <div class="sp-stat" id="ss2"><span class="sp-stat-l" data-en="💰 Revenue potential" data-pt="💰 Potencial de receita">💰 Revenue potential</span><span class="sp-stat-v" id="sv2">—</span></div>
-    </div>
+  <div class="sp-weeks">
+    <div class="sp-week" id="sw0"><span data-en="Week 1" data-pt="Semana 1">Week 1</span><strong>R$ 3.200</strong></div>
+    <div class="sp-week" id="sw1"><span data-en="Week 2" data-pt="Semana 2">Week 2</span><strong>R$ 11.800</strong></div>
+    <div class="sp-week" id="sw2"><span data-en="Week 3" data-pt="Semana 3">Week 3</span><strong>R$ 24.600</strong></div>
+    <div class="sp-week win" id="sw3"><span data-en="Week 4" data-pt="Semana 4">Week 4</span><strong>R$ 41.200 ✓</strong></div>
   </div>
 </div>
 </div>
+
+<div class="card" id="mainCard">
+  <div class="card-inner">
 
 <!-- ════ S1 Q1 ════ -->
 <div class="step" id="s1">
@@ -470,21 +519,28 @@ body::before{
 </div>
 </div>
 
-<!-- ════ S2 INTER social proof ════ -->
+<!-- ════ S2 INTER comparison ════ -->
 <div class="step" id="s2">
 <div class="inter">
-  <div class="inter-icon">🎯</div>
-  <div class="inter-tag" data-en="You're in the right place" data-pt="Você está no lugar certo">You're in the right place</div>
-  <h2 class="inter-h" data-en="+12,000 sellers found their <em>champion products</em>" data-pt="+12.000 vendedores descobriram seus <em>produtos campeões</em>">+12,000 sellers found their <em>champion products</em></h2>
-  <p class="inter-body" data-en="JoomPulse analyzes real ML data to find high-demand, low-competition products — before anyone else." data-pt="O JoomPulse analisa dados reais do ML para encontrar produtos com alta demanda e baixa concorrência — antes de qualquer um.">JoomPulse analyzes real ML data to find high-demand, low-competition products — before anyone else.</p>
-  <div class="avs"><div class="av" style="background:#0074FF">MR</div><div class="av" style="background:#FF9D00">JC</div><div class="av" style="background:#50B848">FS</div><div class="av" style="background:#FF1010">LT</div><div class="av" style="background:#6b7280;font-size:10px">+12k</div></div>
-  <p class="avs-cap" data-en="Active sellers on JoomPulse" data-pt="Vendedores ativos no JoomPulse">Active sellers on JoomPulse</p>
-  <div class="stats">
-    <div class="stat"><div class="stat-n">3.2×</div><div class="stat-l" data-en="more sales on avg" data-pt="mais vendas em média">more sales on avg</div></div>
-    <div class="stat"><div class="stat-n">87%</div><div class="stat-l" data-en="pick the right product" data-pt="acertam o produto">pick the right product</div></div>
-    <div class="stat"><div class="stat-n">14d</div><div class="stat-l" data-en="to see results" data-pt="para ver resultados">to see results</div></div>
+  <div class="inter-tag" data-en="Why sellers fail" data-pt="Por que vendedores falham">Why sellers fail</div>
+  <h2 class="inter-h" data-en="Most sellers bet on the <em>wrong products</em>" data-pt="A maioria aposta nos <em>produtos errados</em>">Most sellers bet on the <em>wrong products</em></h2>
+  <div class="compare">
+    <div class="compare-col compare-bad">
+      <div class="compare-hd" data-en="❌ Without JoomPulse" data-pt="❌ Sem JoomPulse">❌ Without JoomPulse</div>
+      <div class="compare-row"><span class="cr-k" data-en="Research time" data-pt="Pesquisa">Research time</span><span class="cr-v cr-bad">5h+ / week</span></div>
+      <div class="compare-row"><span class="cr-k" data-en="Success rate" data-pt="Taxa de acerto">Success rate</span><span class="cr-v cr-bad">30%</span></div>
+      <div class="compare-row"><span class="cr-k" data-en="Data" data-pt="Dados">Data</span><span class="cr-v cr-bad" data-en="Outdated" data-pt="Atrasados">Outdated</span></div>
+      <div class="compare-row"><span class="cr-k" data-en="Wrong-bet risk" data-pt="Risco de erro">Wrong-bet risk</span><span class="cr-v cr-bad">High ↑</span></div>
+    </div>
+    <div class="compare-col compare-good">
+      <div class="compare-hd" data-en="✅ With JoomPulse" data-pt="✅ Com JoomPulse">✅ With JoomPulse</div>
+      <div class="compare-row"><span class="cr-k" data-en="Research time" data-pt="Pesquisa">Research time</span><span class="cr-v cr-good">15min / day</span></div>
+      <div class="compare-row"><span class="cr-k" data-en="Success rate" data-pt="Taxa de acerto">Success rate</span><span class="cr-v cr-good">87%</span></div>
+      <div class="compare-row"><span class="cr-k" data-en="Data" data-pt="Dados">Data</span><span class="cr-v cr-good" data-en="Real-time" data-pt="Tempo real">Real-time</span></div>
+      <div class="compare-row"><span class="cr-k" data-en="Wrong-bet risk" data-pt="Risco de erro">Wrong-bet risk</span><span class="cr-v cr-good">Low ↓</span></div>
+    </div>
   </div>
-  <button class="btn-cont" onclick="goTo('s3')"><span data-en="Continue" data-pt="Continuar">Continue</span> →</button>
+  <button class="btn-cont" onclick="goTo('s3')"><span data-en="Continue" data-pt="Continuar">Continue</span> <span class="arr">→</span></button>
 </div>
 </div>
 
@@ -522,18 +578,30 @@ body::before{
 </div>
 </div>
 
-<!-- ════ S5 INTER features ════ -->
+<!-- ════ S5 INTER tools cost ════ -->
 <div class="step" id="s5">
 <div class="inter">
-  <div class="inter-icon">🔬</div>
-  <div class="inter-tag" data-en="How JoomPulse works" data-pt="Como o JoomPulse funciona">How JoomPulse works</div>
-  <h2 class="inter-h" data-en="AI that <em>scans the market</em> 24/7 for you" data-pt="IA que <em>analisa o mercado</em> 24/7 por você">AI that <em>scans the market</em> 24/7 for you</h2>
-  <div class="feats">
-    <div class="feat"><span class="feat-ic">📊</span><div class="feat-tx"><span data-en="Real-time demand analysis" data-pt="Análise de demanda em tempo real">Real-time demand analysis</span><small data-en="Searches, sales, trends monitored 24/7" data-pt="Buscas, vendas e tendências monitoradas 24h">Searches, sales, trends monitored 24/7</small></div></div>
-    <div class="feat"><span class="feat-ic">🎯</span><div class="feat-tx"><span data-en="Opportunity score per product" data-pt="Score de oportunidade por produto">Opportunity score per product</span><small data-en="Demand ÷ competition = your edge" data-pt="Demanda ÷ concorrência = sua vantagem">Demand ÷ competition = your edge</small></div></div>
-    <div class="feat"><span class="feat-ic">⚡</span><div class="feat-tx"><span data-en="Early trend alerts" data-pt="Alertas de tendências antecipadas">Early trend alerts</span><small data-en="Know before the competition enters" data-pt="Saiba antes da concorrência entrar">Know before the competition enters</small></div></div>
+  <div class="inter-tag" data-en="One tool to do it all" data-pt="Uma ferramenta para tudo">One tool to do it all</div>
+  <h2 class="inter-h" data-en="Replace your whole research stack — <em>for less</em>" data-pt="Substitua todo seu kit de pesquisa — <em>por menos</em>">Replace your whole research stack — <em>for less</em></h2>
+  <div class="tools-vs">
+    <div class="tools-col tools-left">
+      <div class="tools-hd" data-en="Current setup" data-pt="Setup atual">Current setup</div>
+      <div class="tool-row"><span data-en="📊 Market research" data-pt="📊 Pesquisa de mercado">📊 Market research</span><span class="tool-price">R$300/mo</span></div>
+      <div class="tool-row"><span data-en="📈 Trend tools" data-pt="📈 Ferramentas de tendência">📈 Trend tools</span><span class="tool-price">R$250/mo</span></div>
+      <div class="tool-row"><span data-en="📋 Spreadsheets" data-pt="📋 Planilhas">📋 Spreadsheets</span><span class="tool-price" data-en="+ hours" data-pt="+ horas">+ hours</span></div>
+      <div class="tool-row"><span data-en="🔍 Manual research" data-pt="🔍 Pesquisa manual">🔍 Manual research</span><span class="tool-price" data-en="5h/week" data-pt="5h/sem">5h/week</span></div>
+      <div class="tools-total"><span data-en="Total" data-pt="Total">Total</span><span class="tools-total-v" style="text-decoration:line-through;color:#FF1010">R$550+</span></div>
+    </div>
+    <div class="tools-col tools-right">
+      <div class="tools-hd" data-en="JoomPulse" data-pt="JoomPulse">JoomPulse</div>
+      <div class="tool-row jp"><span>✅ <span data-en="All in one" data-pt="Tudo em um">All in one</span></span></div>
+      <div class="tool-row jp"><span>✅ <span data-en="Real-time data" data-pt="Dados em tempo real">Real-time data</span></span></div>
+      <div class="tool-row jp"><span>✅ <span data-en="AI opportunity score" data-pt="Score de IA">AI opportunity score</span></span></div>
+      <div class="tool-row jp"><span>✅ <span data-en="15 min / day" data-pt="15 min/dia">15 min / day</span></span></div>
+      <div class="tools-total"><span data-en="Total" data-pt="Total">Total</span><span class="tools-total-v" style="color:#0074FF">R$97</span></div>
+    </div>
   </div>
-  <button class="btn-cont" onclick="goTo('s6')"><span data-en="Continue" data-pt="Continuar">Continue</span> →</button>
+  <button class="btn-cont" onclick="goTo('s6')"><span data-en="Continue" data-pt="Continuar">Continue</span> <span class="arr">→</span></button>
 </div>
 </div>
 
@@ -589,21 +657,28 @@ body::before{
 </div>
 </div>
 
-<!-- ════ S9 INTER testimonial ════ -->
+<!-- ════ S9 INTER testimonial + dashboard ════ -->
 <div class="step" id="s9">
 <div class="inter">
-  <div class="inter-icon">💬</div>
-  <div class="inter-tag" data-en="Real results" data-pt="Resultados reais">Real results</div>
-  <h2 class="inter-h" data-en="Sellers like you already <em>transformed</em> their results" data-pt="Vendedores como você já <em>transformaram</em> seus resultados">Sellers like you already <em>transformed</em> their results</h2>
-  <div class="testi">
-    <div class="testi-q" data-en='"I was losing money on wrong products. With JoomPulse I found a niche nobody was in and made R$28,000 in my first month with the new product."' data-pt='"Estava perdendo dinheiro com produtos errados. Com o JoomPulse descobri um nicho que ninguém explorava e faturei R$28.000 no primeiro mês com o produto novo."'>"I was losing money on wrong products. With JoomPulse I found a niche nobody was in and made R$28,000 in my first month."</div>
-    <div class="testi-au"><div class="testi-av">MR</div><div><div class="testi-name">Marcos Rodrigues</div><div class="testi-role" data-en="Seller — Electronics, SP" data-pt="Vendedor — Eletrônicos, SP">Seller — Electronics, SP</div><div class="testi-stars">★★★★★</div></div></div>
+  <h2 class="inter-h" data-en='"R$28,000 in my first month — with a product <em>nobody was selling</em>"' data-pt='"R$28.000 no primeiro mês — com um produto que <em>ninguém vendia</em>"'>"R$28,000 in my first month — with a product <em>nobody was selling</em>"</h2>
+  <div class="reviewer">
+    <div class="rev-av" style="background:#0074FF">MR</div>
+    <div>
+      <div class="rev-name">Marcos Rodrigues</div>
+      <div class="rev-role" data-en="Seller — Electronics, São Paulo" data-pt="Vendedor — Eletrônicos, São Paulo">Seller — Electronics, São Paulo</div>
+      <div class="rev-stars">★★★★★ <span style="color:rgba(0,10,26,.4);font-weight:400" data-en="1 week ago" data-pt="1 semana atrás">1 week ago</span></div>
+    </div>
   </div>
-  <div class="testi">
-    <div class="testi-q" data-en='"In 3 weeks I found 5 high-demand, low-competition products. My revenue grew 3×. Best investment for my store."' data-pt='"Em 3 semanas achei 5 produtos com alta demanda e baixa concorrência. Meu faturamento cresceu 3×. Melhor investimento para minha loja."'>"In 3 weeks I found 5 high-demand, low-competition products. Revenue grew 3×."</div>
-    <div class="testi-au"><div class="testi-av" style="background:#FF9D00">JC</div><div><div class="testi-name">Juliana Costa</div><div class="testi-role" data-en="Seller — Fashion, RJ" data-pt="Vendedora — Moda, RJ">Seller — Fashion, RJ</div><div class="testi-stars">★★★★★</div></div></div>
+  <div class="result-block">
+    <div class="rb-label" data-en="📊 With JoomPulse" data-pt="📊 Com JoomPulse">📊 With JoomPulse</div>
+    <div class="rb-stats">
+      <div class="rb-stat"><span class="rb-v">0</span><span class="rb-l" data-en="competitors" data-pt="concorrentes">competitors</span></div>
+      <div class="rb-stat"><span class="rb-v">8.4k</span><span class="rb-l" data-en="searches/mo" data-pt="buscas/mês">searches/mo</span></div>
+      <div class="rb-stat"><span class="rb-v">R$28k</span><span class="rb-l" data-en="1st month" data-pt="1º mês">1st month</span></div>
+      <div class="rb-stat"><span class="rb-v">14d</span><span class="rb-l" data-en="to profit" data-pt="p/ lucrar">to profit</span></div>
+    </div>
   </div>
-  <button class="btn-cont" onclick="goTo('s10')"><span data-en="Next question" data-pt="Próxima pergunta">Next question</span> →</button>
+  <button class="btn-cont" onclick="goTo('s10')"><span data-en="Next question" data-pt="Próxima pergunta">Next question</span> <span class="arr">→</span></button>
 </div>
 </div>
 
@@ -986,6 +1061,8 @@ function goTo(sid){
     cur=sid;
     const next=document.getElementById(sid);
     next.classList.add('active');
+    document.getElementById('mainCard').style.display = sid==='s0' ? 'none' : '';
+    document.getElementById('progBar').style.visibility = sid==='s0' ? 'hidden' : 'visible';
     updateProg(sid);
     updateCapy(sid);
     document.getElementById('btnBack').classList.toggle('hidden',!BACK[sid]);
@@ -1022,17 +1099,17 @@ function pickFinal(el,val,fbEN,fbPT,rev){
 // ── Splash ────────────────────────────────────────────
 function runSplash(){
   const fill=document.getElementById('ldF'),pctEl=document.getElementById('ldP'),txtEl=document.getElementById('ldT');
-  const phEN=['Scanning market...','Checking trends...','Almost ready!'];
-  const phPT=['Analisando mercado...','Verificando tendências...','Quase pronto!'];
+  const phEN=['Exploring your revenue potential...','Scanning 2M+ products...','Almost ready!'];
+  const phPT=['Explorando seu potencial...','Analisando +2M produtos...','Quase pronto!'];
   let p=0;
   const iv=setInterval(()=>{
-    p+=2.5;if(p>=100){p=100;clearInterval(iv);}
+    p+=1.7;if(p>=100){p=100;clearInterval(iv);}
     fill.style.width=p+'%';pctEl.textContent=Math.round(p)+'%';
     txtEl.textContent=(lang==='en'?phEN:phPT)[Math.min(2,Math.floor(p/35))];
-  },45);
-  [{id:'ss0',vid:'sv0',val:'2,847',d:700},{id:'ss1',vid:'sv1',val:'+34%',d:1400},{id:'ss2',vid:'sv2',val:'R$28k',d:2100}]
-    .forEach(it=>{setTimeout(()=>{document.getElementById(it.id).classList.add('show');document.getElementById(it.vid).textContent=it.val;},it.d);});
-  setTimeout(()=>goTo('s1'),3800);
+  },42);
+  ['sw0','sw1','sw2','sw3'].forEach((id,i)=>
+    setTimeout(()=>document.getElementById(id).classList.add('show'),600+i*800));
+  setTimeout(()=>goTo('s1'),4400);
 }
 
 // ── Loading helpers ───────────────────────────────────
@@ -1112,6 +1189,8 @@ function toggleTheme(){
   const p=new URLSearchParams(location.search);
   if(p.get('lang')==='pt')setLang('pt');
   if(p.get('theme')==='light')toggleTheme();
+  document.getElementById('mainCard').style.display='none';
+  document.getElementById('progBar').style.visibility='hidden';
   updateProg('s0');
   updateCapy('s0');
   setTimeout(runSplash,500);
