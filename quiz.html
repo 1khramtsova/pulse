@@ -109,8 +109,19 @@ body::before{
   box-shadow:0 32px 80px rgba(0,0,0,.55),0 8px 24px rgba(0,0,0,.3),
     0 0 0 1px rgba(255,255,255,.06),
     0 40px 60px rgba(0,116,255,.18);
-  overflow:hidden;
+  overflow:visible;position:relative;
 }
+.card-inner{border-radius:26px;overflow:hidden;}
+#capy-wrap{position:absolute;bottom:-8px;right:-14px;width:110px;pointer-events:none;z-index:30;}
+.capy-pose{display:none;}
+.capy-pose.active{display:block;animation:capyIn 0.5s cubic-bezier(0.34,1.56,0.64,1) both;}
+#capy-q.active svg{animation:capyBounce 2s ease-in-out infinite;}
+#capy-p.active svg,#capy-t.active svg{animation:capyFloat 3s ease-in-out infinite;}
+#capy-c.active svg{animation:capyCelebrate 0.8s ease-in-out infinite;}
+@keyframes capyIn{from{opacity:0;transform:translateY(30px) scale(.6)}to{opacity:1;transform:none}}
+@keyframes capyBounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+@keyframes capyFloat{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-6px) rotate(3deg)}}
+@keyframes capyCelebrate{0%,100%{transform:translateY(0) rotate(-4deg) scale(1)}50%{transform:translateY(-8px) rotate(4deg) scale(1.05)}}
 
 /* ═══ STEP TRANSITIONS ═══ */
 .step{display:none}
@@ -376,35 +387,37 @@ body::before{
   <div class="prog" id="progBar">
     <div id="mascot">
       <div id="mascot-bubble">👋</div>
-      <!-- Capybara in ML vest -->
-      <svg width="38" height="46" viewBox="0 0 44 52" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <!-- ML yellow vest -->
-        <path d="M11 42 Q22 53 33 42 L31 50 Q22 55 13 50 Z" fill="#FFE600"/>
-        <!-- Body -->
-        <ellipse cx="22" cy="40" rx="12" ry="9" fill="#C68B3E"/>
-        <!-- ML badge on vest -->
-        <circle cx="22" cy="45" r="4" fill="#0074FF"/>
-        <text x="22" y="47" font-size="4" fill="white" text-anchor="middle" font-family="Arial" font-weight="bold">ML</text>
-        <!-- Head (capybara: wide, boxy) -->
-        <rect x="10" y="12" width="24" height="22" rx="9" fill="#C68B3E"/>
-        <!-- Snout / muzzle -->
-        <rect x="12" y="24" width="20" height="11" rx="5" fill="#D4A55A"/>
-        <!-- Nostrils -->
-        <ellipse cx="17.5" cy="29" rx="2" ry="1.5" fill="#7A4A1E"/>
-        <ellipse cx="26.5" cy="29" rx="2" ry="1.5" fill="#7A4A1E"/>
-        <!-- Eyes -->
-        <circle cx="16" cy="19" r="2.8" fill="#1A0A00"/>
-        <circle cx="28" cy="19" r="2.8" fill="#1A0A00"/>
-        <circle cx="17" cy="18" r="0.9" fill="white"/>
-        <circle cx="29" cy="18" r="0.9" fill="white"/>
+      <svg width="40" height="36" viewBox="0 0 40 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <radialGradient id="h-body" cx="40%" cy="35%" r="60%">
+            <stop offset="0%" stop-color="#DFA050"/>
+            <stop offset="100%" stop-color="#8B5219"/>
+          </radialGradient>
+          <radialGradient id="h-snout" cx="50%" cy="40%" r="55%">
+            <stop offset="0%" stop-color="#E8BC6C"/>
+            <stop offset="100%" stop-color="#C68B3E"/>
+          </radialGradient>
+        </defs>
         <!-- Ears -->
-        <ellipse cx="13" cy="13" rx="5" ry="4" fill="#A06030"/>
-        <ellipse cx="31" cy="13" rx="5" ry="4" fill="#A06030"/>
-        <ellipse cx="13" cy="13" rx="3" ry="2.5" fill="#C68B3E"/>
-        <ellipse cx="31" cy="13" rx="3" ry="2.5" fill="#C68B3E"/>
-        <!-- Legs -->
-        <rect x="14" y="47" width="5" height="5" rx="2.5" fill="#A06030"/>
-        <rect x="25" y="47" width="5" height="5" rx="2.5" fill="#A06030"/>
+        <ellipse cx="8" cy="10" rx="6" ry="5" fill="#9A5C2A"/>
+        <ellipse cx="32" cy="10" rx="6" ry="5" fill="#9A5C2A"/>
+        <ellipse cx="8" cy="10" rx="4" ry="3.5" fill="#C17F3B"/>
+        <ellipse cx="32" cy="10" rx="4" ry="3.5" fill="#C17F3B"/>
+        <!-- Head -->
+        <rect x="4" y="7" width="32" height="25" rx="10" fill="url(#h-body)"/>
+        <!-- Snout -->
+        <rect x="8" y="20" width="24" height="12" rx="6" fill="url(#h-snout)"/>
+        <!-- Nostrils -->
+        <ellipse cx="14" cy="26" rx="2.5" ry="2" fill="#6B3A1A"/>
+        <ellipse cx="26" cy="26" rx="2.5" ry="2" fill="#6B3A1A"/>
+        <!-- Eyes -->
+        <circle cx="13" cy="16" r="3.5" fill="#1A0800"/>
+        <circle cx="27" cy="16" r="3.5" fill="#1A0800"/>
+        <circle cx="14.5" cy="14.5" r="1.2" fill="white"/>
+        <circle cx="28.5" cy="14.5" r="1.2" fill="white"/>
+        <!-- ML badge collar -->
+        <rect x="13" y="30" width="14" height="6" rx="3" fill="#FFD600"/>
+        <text x="20" y="35" font-size="4.5" fill="#1A0800" text-anchor="middle" font-family="Arial" font-weight="bold">ML</text>
       </svg>
     </div>
     <div class="seg"><div class="seg-fill" id="p0"></div></div>
