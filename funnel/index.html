@@ -119,7 +119,7 @@ body{
   border:var(--card-bd) var(--card-bd-c);box-shadow:var(--card-shadow);position:relative}
 .card.tight{padding-bottom:30px}
 
-h2.q{font-family:'Sora';font-weight:800;font-size:33px;line-height:1.1;letter-spacing:-1px;color:var(--ink)}
+h2.q{font-family:'Sora';font-weight:700;font-size:31px;line-height:1.14;letter-spacing:-.4px;color:var(--ink)}
 .q-sub{color:var(--mut);font-size:16px;margin-top:14px;line-height:1.45}
 
 /* ----- opções: avatar redondo + label + radio ----- */
@@ -130,7 +130,7 @@ h2.q{font-family:'Sora';font-weight:800;font-size:33px;line-height:1.1;letter-sp
 .opt:hover{background:var(--field)}
 .opt .ic{width:50px;height:50px;border-radius:50%;display:grid;place-items:center;font-size:24px;flex:0 0 auto;
   color:#fff;box-shadow:inset 0 0 0 1px rgba(255,255,255,.18)}
-.opt .lab{flex:1;font-family:'Sora';font-weight:700;font-size:18.5px;color:var(--ink);line-height:1.2}
+.opt .lab{flex:1;font-family:'Sora';font-weight:600;font-size:17.5px;letter-spacing:-.2px;color:var(--ink);line-height:1.25}
 .opt .lab small{display:block;font-family:'Albert Sans';font-weight:500;font-size:13px;color:var(--mut);margin-top:3px}
 .opt .tick{width:26px;height:26px;border-radius:50%;border:2px solid var(--field-line);flex:0 0 auto;
   display:grid;place-items:center;transition:.16s}
@@ -159,7 +159,7 @@ h2.q{font-family:'Sora';font-weight:800;font-size:33px;line-height:1.1;letter-sp
 
 /* ============ INTRO (page, sem cartão) ============ */
 .page{width:100%;max-width:680px;display:flex;flex-direction:column;align-items:center;text-align:center;color:var(--page-ink)}
-.page h1{font-family:'Sora';font-weight:800;font-size:clamp(34px,6vw,58px);line-height:1.04;letter-spacing:-1.6px;max-width:16ch}
+.page h1{font-family:'Sora';font-weight:700;font-size:clamp(32px,5.4vw,52px);line-height:1.1;letter-spacing:-1px;max-width:16ch}
 .page .pload{width:100%;max-width:560px;margin-top:60px}
 .pl-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:14px}
 .pl-head b{font-family:'Sora';font-weight:700;font-size:17px;color:var(--page-ink)}
@@ -194,7 +194,7 @@ h2.q{font-family:'Sora';font-weight:800;font-size:33px;line-height:1.1;letter-sp
   text-transform:uppercase;color:var(--blue);background:var(--accent-soft);padding:6px 12px;border-radius:999px;margin-bottom:14px}
 .eyebrow .dot{width:7px;height:7px;border-radius:50%;background:var(--blue);animation:pulse 1.9s infinite}
 @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(10,108,241,.5)}70%{box-shadow:0 0 0 8px rgba(10,108,241,0)}100%{box-shadow:0 0 0 0 rgba(10,108,241,0)}}
-.inter h2{font-family:'Sora';font-weight:800;font-size:30px;line-height:1.12;letter-spacing:-.8px;color:var(--ink)}
+.inter h2{font-family:'Sora';font-weight:700;font-size:28px;line-height:1.16;letter-spacing:-.4px;color:var(--ink)}
 .inter .lead{color:var(--mut);font-size:15.5px;margin-top:12px;line-height:1.5}
 
 /* social proof grid */
@@ -260,7 +260,7 @@ h2.q{font-family:'Sora';font-weight:800;font-size:33px;line-height:1.1;letter-sp
 /* result */
 .result{text-align:center}
 .result .celebrate{font-size:48px}
-.result h2{font-family:'Sora';font-weight:800;font-size:30px;letter-spacing:-.7px;color:var(--ink);line-height:1.12;margin-top:4px}
+.result h2{font-family:'Sora';font-weight:700;font-size:28px;letter-spacing:-.4px;color:var(--ink);line-height:1.16;margin-top:4px}
 .summary{margin-top:22px;background:var(--field);border:1px solid var(--field-line);border-radius:18px;padding:8px 18px;text-align:left}
 .summary .srow{display:flex;justify-content:space-between;align-items:center;padding:13px 0;border-bottom:1px dashed var(--field-line)}
 .summary .srow:last-child{border:0}
@@ -462,13 +462,7 @@ const BUILD = {
       <div class="pload">
         <div class="pl-head"><b>Analisando seu potencial de faturamento</b><span class="pct" id="pct">0%</span></div>
         <div class="pl-track"><i id="plfill"></i></div>
-        <div class="chips" id="chips">
-          <div class="chip" data-at="0.25"><span>Mês 1 · projeção</span><b>R$ 9.480</b></div>
-          <div class="chip" data-at="0.55"><span>Mês 3 · projeção</span><b>R$ 28.350</b></div>
-          <div class="chip" data-at="0.85"><span>Mês 6 · projeção</span><b>R$ 61.200</b></div>
-        </div>
       </div>
-      <div class="pcta"><button class="cta" id="cta" disabled onclick="next()" style="margin-top:0">Começar agora ${I.arrow}</button></div>
       <p class="micro">⏱️ Leva menos de 2 minutos · 100% gratuito</p>
     </div>`,
 
@@ -638,7 +632,7 @@ function filterCats(v){
 
 /* ---- loaders ---- */
 const AFTER = {
-  intro:(s,el)=>runLoader(el,()=>{ el.querySelector('#cta').disabled=false; }, 3000),
+  intro:(s,el)=>runLoader(el,()=>setTimeout(next,450), 3000),
   analyzing:(s,el)=>runLoader(el,()=>setTimeout(next,500), 2600),
   chart:(s,el)=>setTimeout(()=>el.querySelectorAll('.bar').forEach(b=>b.style.height=b.dataset.h+'%'),120),
 };
